@@ -14,11 +14,11 @@ OL > LI {font-family: arial; line-height: 25px}
 
 #menu {
     width: auto;
-    height: 40px;
+    height: 50px;
     font-size: 16px;
     font-family: arial;
     text-align: left;
-    background-color: #00ffff;
+    background-color: #a9a9a9;
 }
 #menu ul {
     height: auto;
