@@ -1,6 +1,6 @@
 <STYLE TEXT="text/css">
 <!--
-BODY {background: #FFFFFF; font-family: arial}
+BODY {background: #FFFFF0; font-family: arial}
 A:link {color: #000080}
 A:visited {color: #4682B4}
 A {text-decoration: none; font-family: arial}
@@ -18,7 +18,7 @@ OL > LI {font-family: arial; line-height: 25px}
     font-size: 16px;
     font-family: arial;
     text-align: left;
-    background-color: #000080;
+    background-color: #00ffff;
 }
 #menu ul {
     height: auto;
@@ -31,7 +31,7 @@ padding: 20px;
 }
 #menu a {
     text-decoration: none;
-    color: #FFFFFF;
+    color: #FFFFF0;
     padding: 8px 8px 8px 8px;
 }
 -->
