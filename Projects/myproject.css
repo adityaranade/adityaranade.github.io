@@ -15,7 +15,7 @@ OL > LI {font-family: arial; line-height: 25px}
 #menu {
     width: auto;
     height: 50px;
-    font-size: 16px;
+    font-size: 20px;
     font-family: arial;
     text-align: left;
     background-color: #696969;
@@ -31,7 +31,7 @@ padding: 20px;
 }
 #menu a {
     text-decoration: none;
-    color: #FFFFF0;
+    color: #000000;
     padding: 8px 8px 8px 8px;
 }
 -->
