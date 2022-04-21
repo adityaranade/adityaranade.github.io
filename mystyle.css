@@ -1,7 +1,6 @@
 <STYLE TEXT="text/css">
 <!--
-BODY {background-image: url("Ames.jpg"); 
-   background-color: #FFFFF0; font-family: arial}
+BODY {background: #FFFFF0; font-family: arial}
 A:link {color: #000080}
 A:visited {color: #4682B4}
 A {text-decoration: none; font-family: arial}
@@ -38,7 +37,10 @@ padding: 20px;
 
  header {
         background: url(Ames.jpg) no-repeat center;
-        height: 400px;
+        height: 50%;
+        max-height: 800px;
+        width: 100%;
+        max-width: 1200px;
         }
 
 img {
