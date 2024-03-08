@@ -1,5 +1,5 @@
 ---
-title: "Blog"
+title: "My Blog"
 subtitle: "Some fun data analytics projects"
 listing:
   contents: posts 
