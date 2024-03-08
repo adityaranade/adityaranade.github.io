@@ -1,6 +1,6 @@
 ---
-title: "Blog"
-subtitle: "Some fun data analytics projects"
+title: "My Blog"
+subtitle: "My test Some fun data analytics projects"
 listing:
   contents: blog 
   type: default 

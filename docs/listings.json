@@ -1,9 +1,15 @@
 [
   {
+    "listing": "/posts.html",
+    "items": [
+      "/posts/cherry_blossom_prediction/index.html",
+      "/posts/ipl_best_team/index.html",
+      "/posts/fab4/index.html"
+    ]
+  },
+  {
     "listing": "/blog.html",
     "items": [
-      "/blog/cherry_blossom_prediction/index.html",
-      "/blog/ipl_best_team/index.html",
       "/blog/fab4/index.html"
     ]
   }
