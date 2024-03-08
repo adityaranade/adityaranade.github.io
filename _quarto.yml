@@ -9,7 +9,7 @@ website:
       - href: index.qmd
         text: Aditya Ranade
       - teaching.qmd
-      - posts.qmd
+      - blog.qmd
       - publications.qmd
       - miscellaneous.qmd
     right:

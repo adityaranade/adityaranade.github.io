@@ -1,8 +1,8 @@
 ---
-title: "My Blog"
+title: "Blog"
 subtitle: "Some fun data analytics projects"
 listing:
-  contents: posts 
+  contents: blog 
   type: default 
   sort: "date desc" 
   categories: true 

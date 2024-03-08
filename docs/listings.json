@@ -1,16 +1,10 @@
 [
   {
-    "listing": "/posts.html",
-    "items": [
-      "/posts/Fab4/index.html"
-    ]
-  },
-  {
     "listing": "/blog.html",
     "items": [
       "/blog/cherry_blossom_prediction/index.html",
-      "/blog/Fab4/index.html",
-      "/blog/IPL_best_team/index.html"
+      "/blog/ipl_best_team/index.html",
+      "/blog/fab4/index.html"
     ]
   }
 ]
