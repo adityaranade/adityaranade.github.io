@@ -10,7 +10,6 @@ website:
         text: Aditya Ranade
       - teaching.qmd
       - posts.qmd
-      - blog.qmd
       - publications.qmd
       - miscellaneous.qmd
     right:
@@ -33,7 +32,7 @@ website:
 
 format:
   html:
-    theme: sketchy
+    theme: sketchy_2.scss
     highlight-style: pygments
     linkcolor: "#001FFD"
     css: styles.css
