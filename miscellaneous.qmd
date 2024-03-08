@@ -4,23 +4,25 @@ title: "Miscellaneous"
 
 I like to read (mostly fiction). Some of the books I have enjoyed (not in a particular order) are as follows.
 
-- No Motive (short story) (Author : Daphne du Maurier) 
-- The Devotion of Suspect X (Author : Keigo Higashino)   
-- All She was Worth (Author : Miyuki Miyabe) 
-- Salvation of a Saint (Author : Keigo Higashino) 
-- A Midsummer's Equation (Author : Keigo Higashino) 
-- Silent Parade (Author : Keigo Higashino) 
-- Malice (Author : Keigo Higashino) 
-- Newcomer (Author : Keigo Higashino) 
-- A Death in Tokyo (Author : Keigo Higashino) 
-- The Final Curtain (Author : Keigo Higashino) 
-- The Name of the Game is a Kidnapping (Author : Keigo Higashino) 
-- Journey Under the Midnight Sun (Author : Keigo Higashino) 
-- Naoko (Author : Keigo Higashino) 
-- Six-Four (Author : Hideo Yokoyama) 
-- Animal Farm (Author : George Orwell) 
-- The Good Earth (Author : Pearl S. Buck) 
-- The Long Walk: The True Story Of A Trek To Freedom (Author : Slawomir Rawicz) 
-- The Seventh Secret (Author : Irving Wallace) 
-- As Far as My Feet Will Carry Me (Author : Josef Martin Bauer) 
-- The Harry Potter series (Author : J. K. Rowling) 
+| Novel                                              | Author             |
+|----------------------------------------------------|--------------------|
+| No Motive (short story)                            | Daphne du Maurier  |
+| All She was Worth                                  | Miyuki Miyabe      |
+| The Devotion of Suspect X                          | Keigo Higashino    |
+| Salvation of a Saint                               | Keigo Higashino    |
+| A Midsummer's Equation                             | Keigo Higashino    |
+| Silent Parade                                      | Keigo Higashino    |
+| Malice                                             | Keigo Higashino    |
+| Newcomer                                           | Keigo Higashino    |
+| A Death in Tokyo                                   | Keigo Higashino    |
+| The Final Curtain                                  | Keigo Higashino    |
+| The Name of the Game is a Kidnapping               | Keigo Higashino    |
+| Journey Under the Midnight Sun                     | Keigo Higashino    |
+| Naoko                                              | Keigo Higashino    |
+| Six-Four                                           | Hideo Yokoyama     |
+| Animal Farm                                        | George Orwell      |
+| The Good Earth                                     | Pearl S. Buck      |
+| The Long Walk: The True Story Of A Trek To Freedom | Slawomir Rawicz    |
+| The Seventh Secret                                 | Irving Wallace     |
+| As Far as My Feet Will Carry Me                    | Josef Martin Bauer |
+| The Harry Potter series                            | J. K. Rowling      |
