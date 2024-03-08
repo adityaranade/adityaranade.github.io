@@ -10,6 +10,7 @@ website:
         text: Aditya Ranade
       - teaching.qmd
       - blog.qmd
+      - posts.qmd
       - publications.qmd
       - miscellaneous.qmd
     right:
