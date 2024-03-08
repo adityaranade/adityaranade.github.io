@@ -1,0 +1,26 @@
+---
+title: "Aditya Ranade"
+image: profile.jpg
+toc: false
+about:
+  template: jolla
+  image-shape: round
+  image-width: 20em
+  links:
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/aditya-ranade-a3944349/
+      target: _blank
+    - icon: github
+      text: Github
+      href: https://github.com/adityaranade
+      target: _blank
+    - icon: envelope
+      text: Email
+      href: mailto:aranade@iastate.edu
+      target: _blank
+---
+
+------------------------------------------------------------------------
+
+Hello! My name is Aditya Ranade. I am a PhD student in the department of Statistics at Iowa State University. My advisor is [Dr. Jarad Niemi](https://www.stat.iastate.edu/people/jarad-niemi){target="_blank"}. My research interest is application of Bayesian methods. I also try to write about sports analytics during my downtime.
