@@ -26,3 +26,5 @@ I like to read (mostly fiction). Some of the books I have enjoyed (not in a part
 | The Seventh Secret                                 | Irving Wallace     |
 | As Far as My Feet Will Carry Me                    | Josef Martin Bauer |
 | The Harry Potter series                            | J. K. Rowling      |
+
+: {.striped .hover}
