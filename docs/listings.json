@@ -1,5 +1,11 @@
 [
   {
+    "listing": "/posts.html",
+    "items": [
+      "/posts/Fab4/index.html"
+    ]
+  },
+  {
     "listing": "/blog.html",
     "items": [
       "/blog/cherry_blossom_prediction/index.html",
