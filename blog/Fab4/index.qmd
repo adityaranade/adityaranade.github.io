@@ -5,7 +5,7 @@ author: "Aditya Ranade"
 date: "2024-02-29"
 date-modified: last-modified
 categories: [analysis]
-image: "table.png"
+image: "./table.png"
 ---
 
 ::: {style="text-align: justify"}
