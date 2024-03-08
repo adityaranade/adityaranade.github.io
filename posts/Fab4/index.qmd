@@ -2,7 +2,7 @@
 title: "Comparing batting averages of the fabulous four players of Indian test cricket by opposition"
 subtitle: A Bayesian hierarchical model to compare the batting averages of the Indian test cricket team's fabulous four players from late 1990's and early 2000's. 
 author: "Aditya Ranade"
-date: "2024-02-29"
+date: "2022-10-30"
 date-modified: last-modified
 categories: [analysis]
 image: "./table.png"
