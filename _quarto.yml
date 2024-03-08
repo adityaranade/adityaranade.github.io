@@ -9,8 +9,8 @@ website:
       - href: index.qmd
         text: Aditya Ranade
       - teaching.qmd
-      - posts.qmd
       - publications.qmd
+      - posts.qmd
       - miscellaneous.qmd
     right:
       - icon: linkedin
