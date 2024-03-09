@@ -3,7 +3,17 @@ project:
   output-dir: docs
 
 website:
-  title: ""
+  open-graph: true
+  site-url: https://adityaranade.github.io/
+  #cookie-consent:
+  #  type: express
+  #  style: headline
+  #  palette: dark
+  favicon: profile.jpg
+  google-analytics: 
+    tracking-id: "G-LC5NNGZ782"
+    anonymize-ip: true
+  #title: ""
   navbar:
     left:
       - href: index.qmd
