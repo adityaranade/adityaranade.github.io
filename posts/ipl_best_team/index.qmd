@@ -5,7 +5,7 @@ author: "Aditya Ranade"
 date: "2022-11-10"
 date-modified: last-modified
 categories: [analysis]
-image: "./playoff_structure.png"
+image: "./ipl_playoff_structure.png"
 ---
 
 ::: {style="text-align: justify"}
@@ -15,7 +15,7 @@ The tournament is played between various teams based out of different cities in 
 
 The tournament followed a double round-robin format from 2008 - 2021 (except for the year 2011) where each team plays the other team twice (once at each team's 'home' ground). From the year 2022, the teams are divided into two groups and every team plays 14 games (twice against the teams in the same group, twice against one team from other group and once against the other teams from the other group). At the conclusion of the league stage, the top four teams qualify for the playoffs. For the first 3 years (2008-2010), the traditional semifinals and final approach was considered. From 2011, a playoff structure was introduced to award the top two teams with an additional chance to reach the finals. This ensured the competition stays relevant till the last game of the league stage as teams vie for top 2 position. The figure below explains the playoff structure.
 
-![IPL Playoff Structure](playoff_structure.png){fig-align="center"}
+![IPL Playoff Structure](./ipl_playoff_structure.png){fig-align="center"}
 
 The top two teams of the league stage have two chances to reach the final. The thought behind this playoff structure was that the top two teams should not be out of the tournament due to one bad day in the semi-finals.
 
@@ -23,7 +23,7 @@ A question that pops up in the mind is "Does the best team win the tournament". 
 
 We have the data available for 11 years (2011 - 2021) for the league stage standings and the playoff results for the team topping the league stage from IPL official website which can be seen below
 
-![Team finishing first during league stage](table_position1.png){fig-align="center"}
+![Team finishing first during league stage](./table_position1.png){fig-align="center"}
 
 We can observe, the team which tops the league stage has won the tournament only three 3 of 11 times which corresponds to approximately 27.27%. However, this is just the observation from 11 years so cannot be considered as the best indicator of probability. We will consider a Bayesian statistical model to calculate the probability of the team finishing the tournament as winner, runners up and third place.
 
@@ -41,7 +41,7 @@ $$(p_{1}, p_{2}, p_{3}) \sim Dirichlet(\alpha_{1}, \alpha_{2}, \alpha_{3}) $$
 
 We run this model on 11 years of the data available (2011 - 2021) and we get the credible interval for the posterior probabilities of finishing at each of the position
 
-![Credible intervals for probabilities for team finishing first during league stage](pos1.png){fig-align="center"}
+![Credible intervals for probabilities for team finishing first during league stage](./pos1.png){fig-align="center"}
 
 The horizontal line indicates the plausible values for the probability of team finishing in a particular position and black point indicates the estimated value of the probability from the available data and model used.
 
@@ -53,7 +53,7 @@ So probably the best team in the league (team finishing first during league stag
 
 Let us perform the same analysis for the team which finishes at second position in the league stage. We will use the same model used for the team finishing first at the league stage. Using data from 11 years, we get the following plot
 
-![Credible intervals for probabilities for team finishing second during league stage](pos2.png)
+![Credible intervals for probabilities for team finishing second during league stage](./pos2.png)
 
 We can see the probability of being winner is higher than the probability of finishing as runner's up or 3rd place. This means the team finishing second in the league stage will more often go on to win the tournament. Surely a surprising and fascinating result!
 :::

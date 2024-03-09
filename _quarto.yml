@@ -3,17 +3,10 @@ project:
   output-dir: docs
 
 website:
-  open-graph: true
-  site-url: https://adityaranade.github.io/
-  #cookie-consent:
-  #  type: express
-  #  style: headline
-  #  palette: dark
-  favicon: profile.jpg
   google-analytics: 
     tracking-id: "G-LC5NNGZ782"
     anonymize-ip: true
-  #title: ""
+  title: ""
   navbar:
     left:
       - href: index.qmd
@@ -24,15 +17,12 @@ website:
       - miscellaneous.qmd
     right:
       - icon: linkedin
-        text: LinkedIn
         href: https://www.linkedin.com/in/aditya-ranade-a3944349/
         target: _blank
       - icon: github
-        text: Github
         href: https://github.com/adityaranade
         target: _blank
       - icon: envelope
-        text: email
         href: mailto:aranade@iastate.edu
   page-footer:
     background: dark
