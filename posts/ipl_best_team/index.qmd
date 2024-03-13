@@ -3,7 +3,6 @@ title: "Does the best team win the Indian Premier League ?"
 subtitle: "A simple Bayesian analysis to check if the best team wins the league reveals a rather surprising result."
 author: "Aditya Ranade"
 date: "2022-11-10"
-date-modified: last-modified
 categories: [analysis]
 image: "./ipl_playoff_structure.png"
 ---

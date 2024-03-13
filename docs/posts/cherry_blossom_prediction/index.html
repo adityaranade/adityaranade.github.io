@@ -196,12 +196,6 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
       </div>
     </div>
     
-      <div>
-      <div class="quarto-title-meta-heading">Modified</div>
-      <div class="quarto-title-meta-contents">
-        <p class="date-modified">March 7, 2024</p>
-      </div>
-    </div>
       
     </div>
     
@@ -219,16 +213,16 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 
 
 <div style="text-align: justify">
-<p>Cherry Blossom is one of the most scenic visuals one can experience. In the recent past, cherry blossom season marks the arrival of spring season which can be considered as a transition from winter to summer. People try to make plans travel to enjoy this phenomenon. So how about using some simple statistical techniques to try and forecast / predict the peak cherry blossom time ?</p>
+<p>Cherry Blossom is one of the most scenic visuals one can experience. Cherry blossom season marks the arrival of spring season and can be considered as transition from winter to summer. People try to make plans travel to enjoy this phenomenon. So how about using some simple statistical techniques to try and forecast / predict the peak cherry blossom time ?</p>
 </div>
 <div style="text-align: justify">
 <p>Along with some of my fellow PhD classmates, I participated in the International Cherry Blossom Prediction Competition hosted by George Mason university. We explored a lot of models and I am going to show a very basic model which I tried during the early stages. The model is the Autogegressive (AR) model. The notation of this model is AR(1) model is as follows</p>
 </div>
 <p><span class="math display">\[
 Y_{t} = \beta_{1} Y_{t-1} + \epsilon_{t}
-\]</span> where <span class="math inline">\(\beta_{i}\)</span> is the model parameter and <span class="math inline">\(\epsilon_{t}\)</span> is the white noise</p>
+\]</span> where $Y_{t}$ is the bloom day for year $t$, <span class="math inline">\(\beta_{i}\)</span> is the model parameter and <span class="math inline">\(\epsilon_{t}\)</span> is the white noise</p>
 <div style="text-align: justify">
-<p>This simply means the present value of the response variable (in our case the bloom day in this year) is influenced by the previous value fo the response variable (in our case the bloom day of the previous year). If you are aware of the simple linear regression, think of this as the explanatory variable being the same as the predictor variable in rough sense. In the competition, we tried to predict the bloom date for multiple location across the world based on the data available provide by the university. However, for the purpose of this post, I will show the analysis only for one location, Kyoto in Japan.</p>
+<p>This simply means the present value of the response variable $Y$ (in our case the bloom day for this year) is influenced by previous value of the response variable (in our case the bloom day of the previous year). If you are aware of the simple linear regression, think of this as the explanatory variable being the same as the predictor variable in rough sense. In the competition, we tried to predict the bloom date for multiple location across the world based on the data available provide by the university. However, for the purpose of this post, I will show the analysis only for one location, Kyoto in Japan.</p>
 </div>
 <div style="text-align: justify">
 <p>Let us start with first reading in the dataset and loading the R packages required for the analysis</p>
@@ -254,7 +248,7 @@ Y_{t} = \beta_{1} Y_{t-1} + \epsilon_{t}
 </div>
 </div>
 <div style="text-align: justify">
-<p>As we can see from the plot, towards the later end which means in the recent past, the bloom day has started to go down. Let us look at the plot only from the year 1950 onwards.</p>
+<p>As we can see from the plot, towards the later end (in the recent past), the bloom day has started to go down. This means in the recent past, the bloom day is happening earlier than before. Let us look at the plot only from the year 1950.</p>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter data only for year since 1951</span></span>
@@ -270,7 +264,7 @@ Y_{t} = \beta_{1} Y_{t-1} + \epsilon_{t}
 </div>
 </div>
 <div style="text-align: justify">
-<p>As we can see from the plot from year 1951 onward, there seems to be a downward trend which indicates the bloom date is in general going down.</p>
+<p>As we can see from the plot for year 1951 onward, there seems to be a downward trend which indicates the bloom date is in general arriving earlier.</p>
 </div>
 <div style="text-align: justify">
 <p>We will use the data from 1951 to 2022 to predict the bloom date for year 2023 and compare that to actual bloom date. For this, we will use the bloom day as response and the year as the predictor</p>
@@ -279,13 +273,13 @@ Y_{t} = \beta_{1} Y_{t-1} + \epsilon_{t}
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare the data for ARIMA(1,0,0) model</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>y_kyoto <span class="ot">&lt;-</span> kyoto_new<span class="sc">$</span>bloom_doy <span class="co"># bloom day as the response</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Exclude the year 2023 response and explanatory variable to test the model on year 2023</p>
+<p>Exclude the year 2023 from response and explanatory variable to test the model on year 2023</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># First test on 2023 model</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>ytest <span class="ot">&lt;-</span> y_kyoto[<span class="sc">-</span><span class="fu">length</span>(y_kyoto)] <span class="co"># exclude the bloom day for 2023 year</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Model based on year 1951 to 2022</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>fit_kyoto_test <span class="ot">&lt;-</span> <span class="fu">Arima</span>(ytest, <span class="at">order=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>))</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>fit_kyoto_test <span class="ot">&lt;-</span> <span class="fu">Arima</span>(ytest, <span class="at">order=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>)) <span class="co"># order=c(1,0,0) indicates AR(1) model</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>fit_kyoto_test</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Series: ytest 
@@ -316,7 +310,7 @@ AIC=424.69   AICc=425.04   BIC=431.52</code></pre>
 82       97.51654 91.59997 103.4331 88.46792 106.5652</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check actual bloom date for 2023</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>y_kyoto[<span class="fu">length</span>(y_kyoto)] <span class="co">#84 </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>y_kyoto[<span class="fu">length</span>(y_kyoto)] </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 84</code></pre>
 </div>
@@ -369,7 +363,7 @@ Model df: 1.   Total lags used: 10</code></pre>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Now use data upto 2023 to predict 2024</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>fit_kyoto <span class="ot">&lt;-</span> <span class="fu">Arima</span>(y_kyoto, <span class="at">order=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>))</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>fit_kyoto <span class="ot">&lt;-</span> <span class="fu">Arima</span>(y_kyoto, <span class="at">order=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>)) <span class="co"># order=c(1,0,0) indicates AR(1) model</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>fit_kyoto</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Series: y_kyoto 
@@ -401,7 +395,7 @@ AIC=436.32   AICc=436.67   BIC=443.19</code></pre>
 </div>
 </div>
 <div style="text-align: justify">
-<p>The model predicts the cherry blossom to bloom on day 93 which is April 2nd for Kyoto, Tokyo. Now lets look at the diagnostics of the model to see if the model is reasonable.</p>
+<p>The model predicts the cherry blossom to bloom on day 93 which is 2nd April 2024 (due to 2024 being a leap year) for Kyoto, Tokyo. Now lets look at the diagnostics of the model to see if the model is reasonable.</p>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the forecast</span></span>
