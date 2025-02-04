@@ -4,6 +4,12 @@ title: "Teaching"
 
 Following are the courses I have taught. All the courses are taught at Iowa State University unless otherwise mentioned.
 
+-   Spring 2025
+
+    -   (Course Instructor) Introduction to Business Statistics I
+
+<!-- -->
+
 -   Fall 2024
 
     -   (Course Instructor) Introduction to Business Statistics I
