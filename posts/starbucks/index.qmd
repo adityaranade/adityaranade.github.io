@@ -1,8 +1,8 @@
 ---
 title: "Starbucks beverages nutritional information"
-subtitle: "We all like starbucks beverages, but hot nutritional are they?"
+subtitle: "We all like starbucks beverages, but what about the nutritional value of them?"
 author: "Aditya Ranade"
-date: "2022-05-04"
+date: "2025-04-23"
 categories: [analysis]
 image: "./starbucks.jpg"
 ---
