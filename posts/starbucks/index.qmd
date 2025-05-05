@@ -1,0 +1,141 @@
+---
+title: "Starbucks beverages nutritional information"
+subtitle: "We all like starbucks beverages, but hot nutritional are they?"
+author: "Aditya Ranade"
+date: "2022-05-04"
+categories: [analysis]
+image: "./starbucks.jpg"
+---
+
+::: {style="text-align: justify"}
+Starbucks is one of the most valued coffee chain in the world. A lot of people like to consume the beverages available at starbucks. But how good are they in terms of the nutritional value?
+:::
+
+::: {style="text-align: justify"}
+I found this dataset on Kaggle which gives the nutritional information about their beverages. We will look at the exploratory data analysis first and later try some simple models. First let us access and process the data through R.
+:::
+
+```{r}
+#| label: load-packages
+#| echo: true
+#| warning: false
+#| include: true
+
+# Load the packages
+library(reshape2)
+library(ggplot2)
+library(ggh4x)
+library(ggcorrplot)
+library(GGally) # for pairs plot using ggplot framework
+```
+
+```{r}
+#| label: data_processing1
+#| echo: true
+#| warning: false
+#| include: true
+
+# Get starbucks data from github repo
+path <- "https://raw.githubusercontent.com/adityaranade/starbucks/refs/heads/main/data/starbucks-menu-nutrition-drinks.csv"
+data0 <- read.csv(path, header = TRUE)
+
+# Data processing
+colnames(data0) <- c("name", "calories", "fat", 
+                     "carbs", "fiber","protein", 
+                     "sodium")
+
+# Check the first 6 rows of the dataset
+data0 |> head()
+
+# Check the type of data
+data0 |> str()
+
+```
+
+::: {style="text-align: justify"}
+The data from second column should be numeric but shows as character. So we first convert it into numeric form and also exclude the rows with missing information
+:::
+
+```{r}
+#| label: data_processing2
+#| echo: true
+#| warning: false
+#| include: true
+
+# convert the data to numberic second row onwards
+data0$calories <- as.numeric(data0$calories)
+data0$fat <- as.numeric(data0$fat)
+data0$carbs <- as.numeric(data0$carbs)
+data0$fiber <- as.numeric(data0$fiber)
+data0$protein <- as.numeric(data0$protein)
+data0$sodium <- as.numeric(data0$sodium)
+
+# Check the type of data again
+data0 |> str()
+
+# Check the rows which do not have any entries
+ind.na <- which(is.na(data0[,2]))
+length(ind.na) # 85 NA values
+
+# exclude the rows which has NA values 
+data <- data0[-ind.na,]
+```
+
+::: {style="text-align: justify"}
+Now that we have the data ready, let us look at the histogram each of the variables namely calories, fat, carbs, fiber, protein and sodium
+:::
+
+```{r}
+#| label: EDA
+#| echo: true
+#| warning: false
+#| include: true
+
+# Data for histogram
+melted_data <- melt(data, id.vars="name")
+
+# Plot the histogram of all the variables
+ggplot(melted_data,aes(value))+
+  # geom_histogram(aes(y = after_stat(density)),bins = 20)+
+  geom_histogram(bins = 20)+
+  facet_grid2(~variable, scales="free")+theme_bw()
+```
+
+::: {style="text-align: justify"}
+Histogram does not give much information. Let us look at the correlation plot to get an idea of how the variables are correlated with each other.
+:::
+
+```{r}
+#| label: correlation_plot
+#| echo: true
+#| warning: false
+#| include: true
+
+# correlation plot of all the variables
+corr <- round(cor(data[,-1]), 1)
+p.mat <- cor_pmat(mtcars) # correlation p-value
+# Barring the no significant coefficient
+ggcorrplot(corr, hc.order = TRUE,
+           type = "lower", p.mat = p.mat)
+# All positive correlation
+```
+
+::: {style="text-align: justify"}
+All the variables are positively correlated (which indicates when one variable increases, the other variable will increase as well. ) which is not a surprising. Most important part is the correlation of calories with all the other variables are considerably high. Next we look at the pairs plot which will show the bivariate scatter plots as well as the correlation between each variables.
+:::
+
+```{r}
+#| label: pairplots
+#| echo: true
+#| warning: false
+#| include: true
+
+library(GGally)
+ggpairs(data,columns = 2:ncol(data),
+        lower = list(continuous = "smooth"))
+
+```
+
+::: {style="text-align: justify"}
+Most of the bivariate scatter plots indicate a linear relationship between the variables. The most important result according to us is the relationship between calories with all the other variables. We will look at linear models as well as non linear models for predictions.
+:::
