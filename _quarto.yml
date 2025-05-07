@@ -35,7 +35,7 @@ format:
     theme: lux
     highlight-style: pygments
     linkcolor: "#001FFD"
-    css: styles.css
+    #css: styles.css
     toc: true
     page-layout: full
 
