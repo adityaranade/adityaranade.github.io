@@ -28,6 +28,7 @@ library(reshape2)
 library(ggplot2)
 library(ggh4x)
 library(ggcorrplot)
+library(car) # to calculate the VIF values
 library(GGally) # for pairs plot using ggplot framework
 ```
 
@@ -100,7 +101,7 @@ melted_data <- melt(data, id.vars="name")
 ggplot(melted_data,aes(value))+
   # geom_histogram(aes(y = after_stat(density)),bins = 20)+
   geom_histogram(bins = 20)+
-  facet_grid2(~variable, scales="free")+theme_bw()
+  facet_grid2(~variable, scales="free")
 ```
 
 ::: {style="text-align: justify"}
@@ -169,15 +170,28 @@ y_pred <- predict(model, data_test)
 
 # Create a observed vs. predicted plot
 ggplot(NULL,aes(y_pred,data_test$calories))+geom_point()+
-  labs(y = "Observed", x="Predicted")+theme_minimal()+geom_abline()
+  labs(y = "Observed", x="Predicted")+geom_abline()
 
 # Calculate RMSE
 rmse <- (y_pred-data_test$calories)^2 |> sum() |> sqrt()
 rmse
+
+# Check the variance inflation factor
+vif_values <- vif(model)
+vif_values
+
+# Check the assumptions of the data
+# par(mfrow = c(2, 2))
+# plot(model)
 ```
 
-Now we will run the model using the principal components. We use the first four principal components for the model since the first four principal components explain around 96.72 \% variation in the data.
+::: {style="text-align: justify"}
+The model is decent with RMSE 102.33 and the observed vs. predicted plot also looks decent. However the variation inflation factor (VIF) value for protein and sodium is higher than 10 which indicates that these two variables are highly correlated with at least one other input variable and hence the variation of these variables is inflated. This might lead to unreliable models. One way to mitigate the multicollinearity problem is to use principal components in place of the correlated variables. 
+:::
 
+::: {style="text-align: justify"}
+We will create principal components and look how much variation is explained by each of the principal components.
+:::
 
 ```{r}
 #| label: MLR_PC
@@ -194,7 +208,13 @@ attributes(pc)
 print(pc)
 # Check the summary of the principal components
 summary(pc)
+```
 
+::: {style="text-align: justify"}
+The first four principal components explain around 96.72 \% of the variation in the data. We will use the first four principal components for the regression model.
+:::
+
+```{r}
 data_pc <- cbind(data[,1:2],pc$x)
 # training data
 data_pc_train <- data_pc[ind,-1]
@@ -210,11 +230,21 @@ y_pred_pc <- predict(model_pc, data_pc_test)
 
 # Create a observed vs. predicted plot
 ggplot(NULL,aes(y_pred_pc,data_test$calories))+geom_point()+
-  labs(y = "Observed", x="Predicted")+theme_minimal()+geom_abline()
-
+  labs(y = "Observed", x="Predicted")+geom_abline()
 
 # Calculate RMSE
 rmse <- (y_pred_pc-data_pc_test$calories)^2 |> sum() |> sqrt()
 rmse
+
+# Check the variance inflation factor
+vif_values_pc <- vif(model_pc)
+vif_values_pc
+
+# Check the assumptions of the regression data
+# par(mfrow = c(2, 2))
+# plot(model_pc)
 ```
-RMSE for the regression model using the raw data is 102.33 and for the model using the first four principal components is 63.73. So using the principal components is beneficial for predictions.
+
+::: {style="text-align: justify"}
+RMSE for the regression model using the first four principal components is 63.73. The variation inflation factor is less than 1.5 for all the principal components. So using less variables with principal components gives much better predictions.
+:::
