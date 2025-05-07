@@ -2,6 +2,8 @@
 title: "Starbucks beverages nutritional information"
 subtitle: "We all like starbucks beverages, but what about the nutritional value of them?"
 author: "Aditya Ranade"
+highlight-style:
+            light: github
 date: "2025-04-23"
 categories: [analysis]
 image: "./starbucks.jpg"
@@ -137,5 +139,82 @@ ggpairs(data,columns = 2:ncol(data),
 ```
 
 ::: {style="text-align: justify"}
-Most of the bivariate scatter plots indicate a linear relationship between the variables. The most important result according to us is the relationship between calories with all the other variables. We will look at linear models as well as non linear models for predictions.
+Most of the bivariate scatter plots indicate a linear relationship between the variables. The most important result according to us is the relationship between calories with all the other variables. We can now use the dataset for predictions where we try to predict the calories based o  the fat, carb, fiber, protein and sodium content using multiple linear regression.
 :::
+
+```{r}
+#| label: MLR_raw
+#| echo: true
+#| warning: false
+#| include: true
+
+# split the data into training and testing data
+seed <- 23
+set.seed(seed)
+
+ind <- sample(floor(0.8*nrow(data)),
+              replace = FALSE)
+
+# Training dataset
+data_train <- data[ind,-1]
+# Testing dataset
+data_test <- data[-ind,-1]
+
+# Multiple linear regression using raw data
+model <- lm(calories ~ fat + carbs + fiber + protein + sodium, data = data_train)
+summary(model)
+
+# Prediction on the testing dataset
+y_pred <- predict(model, data_test)
+
+# Create a observed vs. predicted plot
+ggplot(NULL,aes(y_pred,data_test$calories))+geom_point()+
+  labs(y = "Observed", x="Predicted")+theme_minimal()+geom_abline()
+
+# Calculate RMSE
+rmse <- (y_pred-data_test$calories)^2 |> sum() |> sqrt()
+rmse
+```
+
+Now we will run the model using the principal components. We use the first four principal components for the model since the first four principal components explain around 96.72 \% variation in the data.
+
+
+```{r}
+#| label: MLR_PC
+#| echo: true
+#| warning: false
+#| include: true
+
+pc <- prcomp(data[,-(1:2)],
+             center = TRUE,
+             scale. = TRUE)
+attributes(pc)
+
+# Check the factor loading of the principal components
+print(pc)
+# Check the summary of the principal components
+summary(pc)
+
+data_pc <- cbind(data[,1:2],pc$x)
+# training data
+data_pc_train <- data_pc[ind,-1]
+# testing data
+data_pc_test <- data_pc[-ind,-1]
+
+# Multiple linear regression using PC
+model_pc <- lm(calories ~ PC1 + PC2 + PC3 + PC4, data = data_pc_train)
+summary(model_pc)
+
+# Prediction on the testing dataset
+y_pred_pc <- predict(model_pc, data_pc_test)
+
+# Create a observed vs. predicted plot
+ggplot(NULL,aes(y_pred_pc,data_test$calories))+geom_point()+
+  labs(y = "Observed", x="Predicted")+theme_minimal()+geom_abline()
+
+
+# Calculate RMSE
+rmse <- (y_pred_pc-data_pc_test$calories)^2 |> sum() |> sqrt()
+rmse
+```
+RMSE for the regression model using the raw data is 102.33 and for the model using the first four principal components is 63.73. So using the principal components is beneficial for predictions.
