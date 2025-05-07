@@ -1,20 +1,22 @@
 ---
-title: "Starbucks beverages nutritional information"
-subtitle: "We all like starbucks beverages, but what about the nutritional value of them?"
+title: "Starbucks food nutritional information"
+subtitle: "We all like starbucks food, but what about the nutritional value of them?"
 author: "Aditya Ranade"
 highlight-style:
             light: github
-date: "2025-04-23"
+date: "2025-05-01"
 categories: [analysis]
-image: "./starbucks_beverages.jpg"
+image: "./starbucks_food.jpg"
 ---
 
 ::: {style="text-align: justify"}
-Starbucks is one of the most valued coffee chain in the world. A lot of people like to consume the beverages available at starbucks. But how good are they in terms of the nutritional value?
+Starbucks is one of the most valued coffee chain in the world. A lot of people like to consume the food available at starbucks. But how good are they in terms of the nutritional value?
 :::
 
 ::: {style="text-align: justify"}
-I found this dataset on Kaggle which gives the nutritional information about their beverages. We will look at the exploratory data analysis first and later try some simple prediction models. First let us access and process the data through R.
+I found this dataset on Kaggle which gives the nutritional information about their food products. In my precious post, I built a multiple linear regression model to predict the calories in beverage based on the nutritional contents of the beverage. Now we will try to do the same for the food products. 
+
+First, we look at the exploratory data analysis and later try some simple regression models. First let us access and process the data through R.
 :::
 
 ```{r}
@@ -39,14 +41,13 @@ library(GGally) # for pairs plot using ggplot framework
 #| include: true
 
 # Get starbucks data from github repo
-path <- "https://raw.githubusercontent.com/adityaranade/starbucks/refs/heads/main/data/starbucks-menu-nutrition-drinks.csv"
+path <- "https://raw.githubusercontent.com/adityaranade/starbucks/refs/heads/main/data/starbucks-menu-nutrition-food.csv"
 data0 <- read.csv(path, header = TRUE)
 
 # Data processing
 # change the column names
 colnames(data0) <- c("name", "calories", "fat", 
-                     "carbs", "fiber","protein", 
-                     "sodium")
+                     "carbs", "fiber","protein")
 
 # Check the first 6 rows of the dataset
 data0 |> head()
@@ -72,17 +73,14 @@ data0$fat <- as.numeric(data0$fat)
 data0$carbs <- as.numeric(data0$carbs)
 data0$fiber <- as.numeric(data0$fiber)
 data0$protein <- as.numeric(data0$protein)
-data0$sodium <- as.numeric(data0$sodium)
 
 # Check the type of data again
 data0 |> str()
 
 # Check the rows which do not have any entries
 ind.na <- which(is.na(data0[,2]))
-length(ind.na) # 85 NA values
-
-# exclude the rows which has NA values 
-data <- data0[-ind.na,]
+length(ind.na) # 0 NA values
+data <- data0
 ```
 
 ::: {style="text-align: justify"}
@@ -100,7 +98,6 @@ melted_data <- melt(data, id.vars="name")
 
 # Plot the histogram of all the variables
 ggplot(melted_data,aes(value))+
-  # geom_histogram(aes(y = after_stat(density)),bins = 20)+
   geom_histogram(bins = 20)+
   facet_grid2(~variable, scales="free")
 ```
@@ -140,7 +137,7 @@ ggpairs(data,columns = 2:ncol(data),
 ```
 
 ::: {style="text-align: justify"}
-Most of the bivariate scatter plots indicate a linear relationship between the variables. The most important result according to us is the relationship between calories with all the other variables. We can now use the dataset for predictions where we try to predict the calories based o the fat, carb, fiber, protein and sodium content using multiple linear regression.
+Most of the bivariate scatter plots indicate a linear relationship between the variables. The most important result according to us is the relationship between calories with all the other variables. We can now use the dataset for predictions where we try to predict the calories based on the fat, carb, fiber and protein content using multiple linear regression.
 :::
 
 ```{r}
@@ -162,7 +159,7 @@ data_train <- data[ind,-1]
 data_test <- data[-ind,-1]
 
 # Multiple linear regression using raw data
-model <- lm(calories ~ fat + carbs + fiber + protein + sodium, data = data_train)
+model <- lm(calories ~ fat + carbs + fiber + protein , data = data_train)
 summary(model)
 
 # Prediction on the testing dataset
@@ -179,72 +176,23 @@ rmse
 # Check the variance inflation factor
 vif_values <- vif(model)
 vif_values
-
-# Check the assumptions of the regression model
-# par(mfrow = c(2, 2))
-# plot(model)
 ```
 
 ::: {style="text-align: justify"}
-The model is decent with RMSE 102.33 and the observed vs. predicted plot also looks decent. However the variation inflation factor (VIF) value for protein and sodium is higher than 10 which indicates that these two variables are highly correlated with at least one other input variable and hence the variation of these variables is inflated. This might lead to unreliable models. One way to mitigate the multicollinearity problem is to use principal components in place of the correlated variables.
-:::
-
-::: {style="text-align: justify"}
-We will create principal components and look how much variation is explained by each of the principal components.
+The model is decent with RMSE 70.17 and the observed vs. predicted plot also looks decent with all the points just around the line. The variation inflation factor (VIF) is also below 2 for all the variables. We will look at the residual plots to check if all the assumptions of multiple linear regression are satisfied.
 :::
 
 ```{r}
-#| label: MLR_PC
+#| label: assumption
 #| echo: true
 #| warning: false
 #| include: true
 
-pc <- prcomp(data[,-(1:2)],
-             center = TRUE,
-             scale. = TRUE)
-attributes(pc)
-
-# Check the factor loading of the principal components
-print(pc)
-# Check the summary of the principal components
-summary(pc)
-```
-
-::: {style="text-align: justify"}
-The first four principal components explain around 96.72 % of the variation in the data. We will use the first four principal components for the regression model.
-:::
-
-```{r}
-data_pc <- cbind(data[,1:2],pc$x)
-# training data
-data_pc_train <- data_pc[ind,-1]
-# testing data
-data_pc_test <- data_pc[-ind,-1]
-
-# Multiple linear regression using PC
-model_pc <- lm(calories ~ PC1 + PC2 + PC3 + PC4, data = data_pc_train)
-summary(model_pc)
-
-# Prediction on the testing dataset
-y_pred_pc <- predict(model_pc, data_pc_test)
-
-# Create a observed vs. predicted plot
-ggplot(NULL,aes(y_pred_pc,data_test$calories))+geom_point()+
-  labs(y = "Observed", x="Predicted")+geom_abline()
-
-# Calculate RMSE
-rmse <- (y_pred_pc-data_pc_test$calories)^2 |> sum() |> sqrt()
-rmse
-
-# Check the variance inflation factor
-vif_values_pc <- vif(model_pc)
-vif_values_pc
-
 # Check the assumptions of the regression model
-# par(mfrow = c(2, 2))
-# plot(model_pc)
+par(mfrow = c(2, 2))
+plot(model)
 ```
 
 ::: {style="text-align: justify"}
-RMSE for the regression model using the first four principal components is 63.73. The variation inflation factor is less than 1.5 for all the principal components. So using less variables with principal components gives much better predictions.
+Nothing in the residual plots indicate a cause of concern regarding the model.
 :::

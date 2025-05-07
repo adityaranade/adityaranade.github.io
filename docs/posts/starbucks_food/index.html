@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Ranade">
-<meta name="dcterms.date" content="2025-04-23">
+<meta name="dcterms.date" content="2025-05-01">
 
-<title>Starbucks beverages nutritional information</title>
+<title>Starbucks food nutritional information</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -174,8 +174,8 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-page">
-      <h1 class="title">Starbucks beverages nutritional information</h1>
-            <p class="subtitle lead">We all like starbucks beverages, but what about the nutritional value of them?</p>
+      <h1 class="title">Starbucks food nutritional information</h1>
+            <p class="subtitle lead">We all like starbucks food, but what about the nutritional value of them?</p>
                                 <div class="quarto-categories">
                 <div class="quarto-category">analysis</div>
               </div>
@@ -195,7 +195,7 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">April 23, 2025</p>
+        <p class="date">May 1, 2025</p>
       </div>
     </div>
     
@@ -217,10 +217,11 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 
 
 <div style="text-align: justify">
-<p>Starbucks is one of the most valued coffee chain in the world. A lot of people like to consume the beverages available at starbucks. But how good are they in terms of the nutritional value?</p>
+<p>Starbucks is one of the most valued coffee chain in the world. A lot of people like to consume the food available at starbucks. But how good are they in terms of the nutritional value?</p>
 </div>
 <div style="text-align: justify">
-<p>I found this dataset on Kaggle which gives the nutritional information about their beverages. We will look at the exploratory data analysis first and later try some simple models. First let us access and process the data through R.</p>
+<p>I found this dataset on Kaggle which gives the nutritional information about their food products. In my precious post, I built a multiple linear regression model to predict the calories in beverage based on the nutritional contents of the beverage. Now we will try to do the same for the food products.</p>
+<p>First, we look at the exploratory data analysis and later try some simple regression models. First let us access and process the data through R.</p>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the packages</span></span>
@@ -233,44 +234,35 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get starbucks data from github repo</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/adityaranade/starbucks/refs/heads/main/data/starbucks-menu-nutrition-drinks.csv"</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/adityaranade/starbucks/refs/heads/main/data/starbucks-menu-nutrition-food.csv"</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>data0 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(path, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Data processing</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># change the column names</span></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(data0) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"name"</span>, <span class="st">"calories"</span>, <span class="st">"fat"</span>, </span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"carbs"</span>, <span class="st">"fiber"</span>,<span class="st">"protein"</span>, </span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"sodium"</span>)</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the first 6 rows of the dataset</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>data0 <span class="sc">|&gt;</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"carbs"</span>, <span class="st">"fiber"</span>,<span class="st">"protein"</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the first 6 rows of the dataset</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>data0 <span class="sc">|&gt;</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                                                name calories fat carbs fiber
-1           Cool Lime Starbucks Refreshers™ Beverage       45   0    11     0
-2                                   Ombré Pink Drink        -   -     -     -
-3                                         Pink Drink        -   -     -     -
-4     Strawberry Acai Starbucks Refreshers™ Beverage       80   0    18     1
-5 Very Berry Hibiscus Starbucks Refreshers™ Beverage       60   0    14     1
-6                                       Violet Drink        -   -     -     -
-  protein sodium
-1       0     10
-2       -      -
-3       -      -
-4       0     10
-5       0     10
-6       -      -</code></pre>
+<pre><code>                                    name calories fat carbs fiber protein
+1                           Chonga Bagel      300   5    50     3      12
+2                           8-Grain Roll      380   6    70     7      10
+3                       Almond Croissant      410  22    45     3      10
+4                          Apple Fritter      460  23    56     2       7
+5                       Banana Nut Bread      420  22    52     2       6
+6 Blueberry Muffin with Yogurt and Honey      380  16    53     1       6</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the type of data</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>data0 <span class="sc">|&gt;</span> <span class="fu">str</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>'data.frame':   177 obs. of  7 variables:
- $ name    : chr  "Cool Lime Starbucks Refreshers™ Beverage" "Ombré Pink Drink" "Pink Drink" "Strawberry Acai Starbucks Refreshers™ Beverage" ...
- $ calories: chr  "45" "-" "-" "80" ...
- $ fat     : chr  "0" "-" "-" "0" ...
- $ carbs   : chr  "11" "-" "-" "18" ...
- $ fiber   : chr  "0" "-" "-" "1" ...
- $ protein : chr  "0" "-" "-" "0" ...
- $ sodium  : chr  "10" "-" "-" "10" ...</code></pre>
+<pre><code>'data.frame':   113 obs. of  6 variables:
+ $ name    : chr  "Chonga Bagel" "8-Grain Roll" "Almond Croissant" "Apple Fritter" ...
+ $ calories: int  300 380 410 460 420 380 420 240 350 320 ...
+ $ fat     : num  5 6 22 23 22 16 17 12 22 16 ...
+ $ carbs   : int  50 70 45 56 52 53 61 28 38 36 ...
+ $ fiber   : int  3 7 3 2 2 1 2 1 0 1 ...
+ $ protein : int  12 10 10 7 6 6 5 5 2 8 ...</code></pre>
 </div>
 </div>
 <div style="text-align: justify">
@@ -283,28 +275,25 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>data0<span class="sc">$</span>carbs <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(data0<span class="sc">$</span>carbs)</span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>data0<span class="sc">$</span>fiber <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(data0<span class="sc">$</span>fiber)</span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>data0<span class="sc">$</span>protein <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(data0<span class="sc">$</span>protein)</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>data0<span class="sc">$</span>sodium <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(data0<span class="sc">$</span>sodium)</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the type of data again</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>data0 <span class="sc">|&gt;</span> <span class="fu">str</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the type of data again</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>data0 <span class="sc">|&gt;</span> <span class="fu">str</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>'data.frame':   177 obs. of  7 variables:
- $ name    : chr  "Cool Lime Starbucks Refreshers™ Beverage" "Ombré Pink Drink" "Pink Drink" "Strawberry Acai Starbucks Refreshers™ Beverage" ...
- $ calories: num  45 NA NA 80 60 NA NA NA 110 0 ...
- $ fat     : num  0 NA NA 0 0 NA NA NA 0 0 ...
- $ carbs   : num  11 NA NA 18 14 NA NA NA 28 0 ...
- $ fiber   : num  0 NA NA 1 1 NA NA NA 0 0 ...
- $ protein : num  0 NA NA 0 0 NA NA NA 0 0 ...
- $ sodium  : num  10 NA NA 10 10 NA NA NA 5 0 ...</code></pre>
+<pre><code>'data.frame':   113 obs. of  6 variables:
+ $ name    : chr  "Chonga Bagel" "8-Grain Roll" "Almond Croissant" "Apple Fritter" ...
+ $ calories: num  300 380 410 460 420 380 420 240 350 320 ...
+ $ fat     : num  5 6 22 23 22 16 17 12 22 16 ...
+ $ carbs   : num  50 70 45 56 52 53 61 28 38 36 ...
+ $ fiber   : num  3 7 3 2 2 1 2 1 0 1 ...
+ $ protein : num  12 10 10 7 6 6 5 5 2 8 ...</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the rows which do not have any entries</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>ind.na <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">is.na</span>(data0[,<span class="dv">2</span>]))</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(ind.na) <span class="co"># 85 NA values</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(ind.na) <span class="co"># 0 NA values</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 85</code></pre>
+<pre><code>[1] 0</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># exclude the rows which has NA values </span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data0[<span class="sc">-</span>ind.na,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div style="text-align: justify">
 <p>Now that we have the data ready, let us look at the histogram each of the variables namely calories, fat, carbs, fiber, protein and sodium</p>
@@ -315,9 +304,8 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the histogram of all the variables</span></span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(melted_data,<span class="fu">aes</span>(value))<span class="sc">+</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># geom_histogram(aes(y = after_stat(density)),bins = 20)+</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">20</span>)<span class="sc">+</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid2</span>(<span class="sc">~</span>variable, <span class="at">scales=</span><span class="st">"free"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">20</span>)<span class="sc">+</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid2</span>(<span class="sc">~</span>variable, <span class="at">scales=</span><span class="st">"free"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -360,7 +348,7 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 </div>
 </div>
 <div style="text-align: justify">
-<p>Most of the bivariate scatter plots indicate a linear relationship between the variables. The most important result according to us is the relationship between calories with all the other variables. We can now use the dataset for predictions where we try to predict the calories based o the fat, carb, fiber, protein and sodium content using multiple linear regression.</p>
+<p>Most of the bivariate scatter plots indicate a linear relationship between the variables. The most important result according to us is the relationship between calories with all the other variables. We can now use the dataset for predictions where we try to predict the calories based on the fat, carb, fiber and protein content using multiple linear regression.</p>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># split the data into training and testing data</span></span>
@@ -376,32 +364,30 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 <span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>data_test <span class="ot">&lt;-</span> data[<span class="sc">-</span>ind,<span class="sc">-</span><span class="dv">1</span>]</span>
 <span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Multiple linear regression using raw data</span></span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(calories <span class="sc">~</span> fat <span class="sc">+</span> carbs <span class="sc">+</span> fiber <span class="sc">+</span> protein <span class="sc">+</span> sodium, <span class="at">data =</span> data_train)</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(calories <span class="sc">~</span> fat <span class="sc">+</span> carbs <span class="sc">+</span> fiber <span class="sc">+</span> protein , <span class="at">data =</span> data_train)</span>
 <span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
-lm(formula = calories ~ fat + carbs + fiber + protein + sodium, 
-    data = data_train)
+lm(formula = calories ~ fat + carbs + fiber + protein, data = data_train)
 
 Residuals:
-     Min       1Q   Median       3Q      Max 
--14.2823  -1.7523   0.0195   2.1092   8.1259 
+    Min      1Q  Median      3Q     Max 
+-20.675  -4.029  -0.109   3.102  27.055 
 
 Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  1.75158    0.94777   1.848   0.0690 .  
-fat          7.65711    0.25133  30.466  &lt; 2e-16 ***
-carbs        3.79744    0.04057  93.599  &lt; 2e-16 ***
-fiber        2.51563    0.96443   2.608   0.0112 *  
-protein      0.75585    0.31682   2.386   0.0199 *  
-sodium       0.32290    0.03265   9.889 1.01e-14 ***
+(Intercept)  0.14909    2.73597   0.054   0.9567    
+fat          8.80325    0.10889  80.842   &lt;2e-16 ***
+carbs        4.01725    0.06185  64.955   &lt;2e-16 ***
+fiber       -0.90654    0.46687  -1.942   0.0555 .  
+protein      4.16692    0.14242  29.258   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 4.131 on 67 degrees of freedom
-Multiple R-squared:  0.9976,    Adjusted R-squared:  0.9974 
-F-statistic:  5493 on 5 and 67 DF,  p-value: &lt; 2.2e-16</code></pre>
+Residual standard error: 7.6 on 85 degrees of freedom
+Multiple R-squared:  0.9962,    Adjusted R-squared:  0.996 
+F-statistic:  5508 on 4 and 85 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prediction on the testing dataset</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>y_pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(model, data_test)</span>
@@ -420,129 +406,33 @@ F-statistic:  5493 on 5 and 67 DF,  p-value: &lt; 2.2e-16</code></pre>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>rmse <span class="ot">&lt;-</span> (y_pred<span class="sc">-</span>data_test<span class="sc">$</span>calories)<span class="sc">^</span><span class="dv">2</span> <span class="sc">|&gt;</span> <span class="fu">sum</span>() <span class="sc">|&gt;</span> <span class="fu">sqrt</span>()</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>rmse</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 102.3342</code></pre>
+<pre><code>[1] 70.16698</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the variance inflation factor</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>vif_values <span class="ot">&lt;-</span> <span class="fu">vif</span>(model)</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>vif_values</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>      fat     carbs     fiber   protein    sodium 
- 3.849325  1.266592  3.382455 10.380709 11.704360 </code></pre>
+<pre><code>     fat    carbs    fiber  protein 
+1.237161 1.298276 1.880520 1.762035 </code></pre>
 </div>
+</div>
+<div style="text-align: justify">
+<p>The model is decent with RMSE 70.17 and the observed vs.&nbsp;predicted plot also looks decent with all the points just around the line. The variation inflation factor (VIF) is also below 2 for all the variables. We will look at the residual plots to check if all the assumptions of multiple linear regression are satisfied.</p>
+</div>
+<div class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the assumptions of the regression model</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co"># par(mfrow = c(2, 2))</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># plot(model)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div style="text-align: justify">
-<p>The model is decent with RMSE 102.33 and the observed vs.&nbsp;predicted plot also looks decent. However the variation inflation factor (VIF) value for protein and sodium is higher than 10 which indicates that these two variables are highly correlated with at least one other input variable and hence the variation of these variables is inflated. This might lead to unreliable models. One way to mitigate the multicollinearity problem is to use principal components in place of the correlated variables.</p>
-</div>
-<div style="text-align: justify">
-<p>We will create principal components and look how much variation is explained by each of the principal components.</p>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>pc <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(data[,<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)],</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">center =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">scale. =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="fu">attributes</span>(pc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>$names
-[1] "sdev"     "rotation" "center"   "scale"    "x"       
-
-$class
-[1] "prcomp"</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the factor loading of the principal components</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(pc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Standard deviations (1, .., p=5):
-[1] 1.7690827 0.8908878 0.7580688 0.5812294 0.4051785
-
-Rotation (n x k) = (5 x 5):
-              PC1        PC2        PC3        PC4         PC5
-fat     0.4610104  0.3810085  0.1092277  0.7933177  0.03190861
-carbs   0.3784887 -0.5448572 -0.7329252  0.1443775 -0.04304364
-fiber   0.3758452 -0.6263993  0.6433047 -0.0153384  0.22866603
-protein 0.5161622  0.1647649  0.1161063 -0.3649765 -0.74815813
-sodium  0.4863462  0.3720747 -0.1535201 -0.4651440  0.62056454</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the summary of the principal components</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(pc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Importance of components:
-                          PC1    PC2    PC3     PC4     PC5
-Standard deviation     1.7691 0.8909 0.7581 0.58123 0.40518
-Proportion of Variance 0.6259 0.1587 0.1149 0.06757 0.03283
-Cumulative Proportion  0.6259 0.7847 0.8996 0.96717 1.00000</code></pre>
-</div>
-</div>
-<div style="text-align: justify">
-<p>The first four principal components explain around 96.72 % of the variation in the data. We will use the first four principal components for the regression model.</p>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>data_pc <span class="ot">&lt;-</span> <span class="fu">cbind</span>(data[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>],pc<span class="sc">$</span>x)</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="co"># training data</span></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>data_pc_train <span class="ot">&lt;-</span> data_pc[ind,<span class="sc">-</span><span class="dv">1</span>]</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co"># testing data</span></span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>data_pc_test <span class="ot">&lt;-</span> data_pc[<span class="sc">-</span>ind,<span class="sc">-</span><span class="dv">1</span>]</span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Multiple linear regression using PC</span></span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>model_pc <span class="ot">&lt;-</span> <span class="fu">lm</span>(calories <span class="sc">~</span> PC1 <span class="sc">+</span> PC2 <span class="sc">+</span> PC3 <span class="sc">+</span> PC4, <span class="at">data =</span> data_pc_train)</span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_pc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-lm(formula = calories ~ PC1 + PC2 + PC3 + PC4, data = data_pc_train)
-
-Residuals:
-     Min       1Q   Median       3Q      Max 
--15.3780  -1.5028   0.7182   2.2345   7.4206 
-
-Coefficients:
-            Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) 135.7766     0.5642  240.67   &lt;2e-16 ***
-PC1          49.2547     0.3746  131.47   &lt;2e-16 ***
-PC2         -12.8205     0.9443  -13.58   &lt;2e-16 ***
-PC3         -40.1362     0.9209  -43.59   &lt;2e-16 ***
-PC4          22.9143     0.9862   23.23   &lt;2e-16 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 4.442 on 68 degrees of freedom
-Multiple R-squared:  0.9971,    Adjusted R-squared:  0.997 
-F-statistic:  5935 on 4 and 68 DF,  p-value: &lt; 2.2e-16</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prediction on the testing dataset</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>y_pred_pc <span class="ot">&lt;-</span> <span class="fu">predict</span>(model_pc, data_pc_test)</span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a observed vs. predicted plot</span></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="cn">NULL</span>,<span class="fu">aes</span>(y_pred_pc,data_test<span class="sc">$</span>calories))<span class="sc">+</span><span class="fu">geom_point</span>()<span class="sc">+</span></span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"Observed"</span>, <span class="at">x=</span><span class="st">"Predicted"</span>)<span class="sc">+</span><span class="fu">geom_abline</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/assumption-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate RMSE</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>rmse <span class="ot">&lt;-</span> (y_pred_pc<span class="sc">-</span>data_pc_test<span class="sc">$</span>calories)<span class="sc">^</span><span class="dv">2</span> <span class="sc">|&gt;</span> <span class="fu">sum</span>() <span class="sc">|&gt;</span> <span class="fu">sqrt</span>()</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>rmse</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 63.72554</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the variance inflation factor</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>vif_values_pc <span class="ot">&lt;-</span> <span class="fu">vif</span>(model_pc)</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>vif_values_pc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>     PC1      PC2      PC3      PC4 
-1.129946 1.471886 1.373721 1.160650 </code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the assumptions of the regression model</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="co"># par(mfrow = c(2, 2))</span></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="co"># plot(model_pc)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div style="text-align: justify">
-<p>RMSE for the regression model using the first four principal components is 63.73. The variation inflation factor is less than 1.5 for all the principal components. So using less variables with principal components gives much better predictions.</p>
+<p>Nothing in the residual plots indicate a cause of concern regarding the model.</p>
 </div>
 
 
