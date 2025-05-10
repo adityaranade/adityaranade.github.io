@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Blog</title>
+<title>check env</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,24 +23,22 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -68,35 +66,6 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-subtitle','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-subtitle","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
 <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-LC5NNGZ782"></script>
 
 <script type="text/javascript">
@@ -107,42 +76,13 @@ gtag('js', new Date());
 gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 </script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 </head>
 
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
             <div id="quarto-search" class="" title="Search"></div>
@@ -152,23 +92,23 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html"> 
+    <a class="nav-link" href="../../index.html"> 
 <span class="menu-text">Aditya Ranade</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./teaching.html"> 
+    <a class="nav-link" href="../../teaching.html"> 
 <span class="menu-text">Teaching</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./publications.html"> 
+    <a class="nav-link" href="../../publications.html"> 
 <span class="menu-text">Publications</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./posts.html" aria-current="page"> 
+    <a class="nav-link" href="../../posts.html"> 
 <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./miscellaneous.html"> 
+    <a class="nav-link" href="../../miscellaneous.html"> 
 <span class="menu-text">Miscellaneous</span></a>
   </li>  
 </ul>
@@ -196,313 +136,40 @@ window.Quarto = {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-page">
+      <h1 class="title">check env</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta column-page">
+
+      
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(9)</span></div><div class="category" data-category="analysis">analysis <span class="quarto-category-count">(6)</span></div><div class="category" data-category="python">python <span class="quarto-category-count">(1)</span></div></div></div>
+    </div>
 <!-- main -->
-<main class="content column-page-left" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Blog</h1>
-<p class="subtitle lead">Some fun data analytics projects</p>
-</div>
-
-
-
-<div class="quarto-title-meta column-page-left">
-
-    
-  
-    
-  </div>
-  
-
-
-</header>
+<main class="content quarto-banner-title-block column-page" id="quarto-document-content">
 
 
 
 
 
+<p><code>QUARTO_PYTHON</code> is set to <strong>?env:QUARTO_PYTHON</strong></p>
 
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-listing-file-modified-sort="1746836361441" data-listing-reading-time-sort="1" data-listing-word-count-sort="52">
-<div class="thumbnail">
-<p><a href="./posts/stpy/index.html" class="no-external"></a></p><a href="./posts/stpy/index.html" class="no-external">
-<p class="card-img-top"><img src="posts\stpy\index_files\figure-html\fig-polar-output-1.png"  class="thumbnail-image card-img"/></p>
-</a><p><a href="./posts/stpy/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/stpy/index.html" class="no-external">matplotlib demo</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/stpy/index.html" class="no-external"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/stpy/index.html" class="no-external">For a demonstration of a line plot on a polar axis, see Figure&nbsp;1.</a>
-</div>
-</div>
-<div class="metadata">
-<p><a href="./posts/stpy/index.html" class="no-external"></a></p><a href="./posts/stpy/index.html" class="no-external">
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-listing-file-modified-sort="1746836986684" data-listing-reading-time-sort="1" data-listing-word-count-sort="8">
-<div class="thumbnail">
-<p><a href="./posts/test/index.html" class="no-external"></a></p><a href="./posts/test/index.html" class="no-external">
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-</a><p><a href="./posts/test/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/test/index.html" class="no-external">check env</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/test/index.html" class="no-external"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/test/index.html" class="no-external"><code>QUARTO_PYTHON</code> is set to <strong>?env:QUARTO_PYTHON</strong></a>
-</div>
-</div>
-<div class="metadata">
-<p><a href="./posts/test/index.html" class="no-external"></a></p><a href="./posts/test/index.html" class="no-external">
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-listing-file-modified-sort="1746836849983" data-listing-reading-time-sort="1" data-listing-word-count-sort="28">
-<div class="thumbnail">
-<p><a href="./posts/test/test.html" class="no-external"></a></p><a href="./posts/test/test.html" class="no-external">
-<p class="card-img-top"><img src="posts\test\test_files\figure-html\unnamed-chunk-1-1.png"  class="thumbnail-image card-img"/></p>
-</a><p><a href="./posts/test/test.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/test/test.html" class="no-external">Reproducible Quarto Document</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/test/test.html" class="no-external"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/test/test.html" class="no-external">This is a reproducible Quarto document using <code>format: html</code>. It is written in Markdown and contains embedded R code. When you run the code, it will produce a plot.</a>
-</div>
-</div>
-<div class="metadata">
-<p><a href="./posts/test/test.html" class="no-external"></a></p><a href="./posts/test/test.html" class="no-external">
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-categories="analysis" data-listing-date-sort="1746075600000" data-listing-file-modified-sort="1746627669414" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="749">
-<div class="thumbnail">
-<p><a href="./posts/starbucks_food/index.html" class="no-external"></a></p><a href="./posts/starbucks_food/index.html" class="no-external">
-<p><img loading="lazy" src="./posts/starbucks_food/starbucks_food.jpg" class="thumbnail-image"></p>
-</a><p><a href="./posts/starbucks_food/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/starbucks_food/index.html" class="no-external">Starbucks food nutritional information</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/starbucks_food/index.html" class="no-external">We all like starbucks food, but what about the nutritional value of them?</a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('analysis'); return false;">
-analysis
-</div>
-</div>
-<div class="listing-description">
-<a href="./posts/starbucks_food/index.html" class="no-external">Starbucks is one of the most valued coffee chain in the world. A lot of people like to consume the food available at starbucks. But how good are they in terms of the…</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/starbucks_food/index.html" class="no-external">
-<div class="listing-date">
-May 1, 2025
-</div>
-<div class="listing-author">
-Aditya Ranade
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="4" data-categories="analysis,python" data-listing-date-sort="1746075600000" data-listing-file-modified-sort="1746840929689" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="642">
-<div class="thumbnail">
-<p><a href="./posts/starbucks_food_python/index.html" class="no-external"></a></p><a href="./posts/starbucks_food_python/index.html" class="no-external">
-<p><img loading="lazy" src="./posts/starbucks_food_python/starbucks_food.jpg" class="thumbnail-image"></p>
-</a><p><a href="./posts/starbucks_food_python/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/starbucks_food_python/index.html" class="no-external">Starbucks food nutritional information</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/starbucks_food_python/index.html" class="no-external">We all like starbucks food, but what about the nutritional value of them?</a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('analysis'); return false;">
-analysis
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('python'); return false;">
-python
-</div>
-</div>
-<div class="listing-description">
-<a href="./posts/starbucks_food_python/index.html" class="no-external">Starbucks is one of the most valued coffee chain in the world. A lot of people like to consume the food available at starbucks. But how good are they in terms of the…</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/starbucks_food_python/index.html" class="no-external">
-<div class="listing-date">
-May 1, 2025
-</div>
-<div class="listing-author">
-Aditya Ranade
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="5" data-categories="analysis" data-listing-date-sort="1745384400000" data-listing-file-modified-sort="1746627788596" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="971">
-<div class="thumbnail">
-<p><a href="./posts/starbucks/index.html" class="no-external"></a></p><a href="./posts/starbucks/index.html" class="no-external">
-<p><img loading="lazy" src="./posts/starbucks/starbucks_beverages.jpg" class="thumbnail-image"></p>
-</a><p><a href="./posts/starbucks/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/starbucks/index.html" class="no-external">Starbucks beverages nutritional information</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/starbucks/index.html" class="no-external">We all like starbucks beverages, but what about the nutritional value of them?</a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('analysis'); return false;">
-analysis
-</div>
-</div>
-<div class="listing-description">
-<a href="./posts/starbucks/index.html" class="no-external">Starbucks is one of the most valued coffee chain in the world. A lot of people like to consume the beverages available at starbucks. But how good are they in terms of the…</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/starbucks/index.html" class="no-external">
-<div class="listing-date">
-Apr 23, 2025
-</div>
-<div class="listing-author">
-Aditya Ranade
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="6" data-categories="analysis" data-listing-date-sort="1709272800000" data-listing-file-modified-sort="1738680521205" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="899">
-<div class="thumbnail">
-<p><a href="./posts/cherry_blossom_prediction/index.html" class="no-external"></a></p><a href="./posts/cherry_blossom_prediction/index.html" class="no-external">
-<p><img loading="lazy" src="./posts/cherry_blossom_prediction/cherry_blossom.jpg" class="thumbnail-image"></p>
-</a><p><a href="./posts/cherry_blossom_prediction/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/cherry_blossom_prediction/index.html" class="no-external">Cherry Blossom prediction using Time Series</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/cherry_blossom_prediction/index.html" class="no-external">A time series analysis to forecast 2024 cherry blossom bloom date</a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('analysis'); return false;">
-analysis
-</div>
-</div>
-<div class="listing-description">
-<a href="./posts/cherry_blossom_prediction/index.html" class="no-external">Cherry Blossom is one of the most scenic visuals one can experience. Cherry blossom season marks the arrival of spring season and can be considered as transition from winter…</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/cherry_blossom_prediction/index.html" class="no-external">
-<div class="listing-date">
-Mar 1, 2024
-</div>
-<div class="listing-author">
-Aditya Ranade
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="7" data-categories="analysis" data-listing-date-sort="1668060000000" data-listing-file-modified-sort="1710368953619" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1063">
-<div class="thumbnail">
-<p><a href="./posts/ipl_best_team/index.html" class="no-external"></a></p><a href="./posts/ipl_best_team/index.html" class="no-external">
-<p><img loading="lazy" src="./posts/ipl_best_team/ipl_playoff_structure.png" class="thumbnail-image"></p>
-</a><p><a href="./posts/ipl_best_team/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/ipl_best_team/index.html" class="no-external">Does the best team win the Indian Premier League ?</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/ipl_best_team/index.html" class="no-external">A simple Bayesian analysis to check if the best team wins the league reveals a rather surprising result.</a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('analysis'); return false;">
-analysis
-</div>
-</div>
-<div class="listing-description">
-<a href="./posts/ipl_best_team/index.html" class="no-external">Indian Premier League (IPL) is an annual cricket league which is played under the T20 format. It was started in the year 2008 and has quickly gained popularity among cricket…</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/ipl_best_team/index.html" class="no-external">
-<div class="listing-date">
-Nov 10, 2022
-</div>
-<div class="listing-author">
-Aditya Ranade
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="8" data-categories="analysis" data-listing-date-sort="1667106000000" data-listing-file-modified-sort="1710368970678" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1148">
-<div class="thumbnail">
-<p><a href="./posts/fab4/index.html" class="no-external"></a></p><a href="./posts/fab4/index.html" class="no-external">
-<p><img loading="lazy" src="./posts/fab4/table.png" class="thumbnail-image"></p>
-</a><p><a href="./posts/fab4/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/fab4/index.html" class="no-external">Comparing batting averages of the fabulous four players of Indian test cricket by opposition</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/fab4/index.html" class="no-external">A Bayesian hierarchical model to compare the batting averages of the Indian test cricket team’s fabulous four players from late 1990’s and early 2000’s.</a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('analysis'); return false;">
-analysis
-</div>
-</div>
-<div class="listing-description">
-<a href="./posts/fab4/index.html" class="no-external">Sachin Tendulkar, Rahul Dravid, Sourav Ganguly and VVS Laxman are usually dubbed the faboulous four of Indian cricket team. In the late 1990’s and early 2000’s, these…</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/fab4/index.html" class="no-external">
-<div class="listing-date">
-Oct 30, 2022
-</div>
-<div class="listing-author">
-Aditya Ranade
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div></main> <!-- /main -->
+
+
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

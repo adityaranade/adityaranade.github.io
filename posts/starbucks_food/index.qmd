@@ -5,7 +5,7 @@ author: "Aditya Ranade"
 highlight-style:
             light: github
 date: "2025-05-01"
-categories: [analysis]
+categories: [analysis, R]
 image: "./starbucks_food.jpg"
 ---
 
@@ -14,7 +14,7 @@ Starbucks is one of the most valued coffee chain in the world. A lot of people l
 :::
 
 ::: {style="text-align: justify"}
-I found this dataset on Kaggle which gives the nutritional information about their food products. In my precious post, I built a multiple linear regression model to predict the calories in beverage based on the nutritional contents of the beverage. Now we will try to do the same for the food products. 
+I found this dataset on Kaggle which gives the nutritional information about their food products. In my precious post, I built a multiple linear regression model to predict the calories in beverage based on the nutritional contents of the beverage. Now we will try to do the same for the food products.
 
 First, we look at the exploratory data analysis and later try some simple regression models. First let us access and process the data through R.
 :::

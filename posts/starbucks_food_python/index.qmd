@@ -1,0 +1,213 @@
+---
+title: "Starbucks food nutritional information"
+subtitle: "We all like starbucks food, but what about the nutritional value of them?"
+author: "Aditya Ranade"
+highlight-style:
+            light: github
+date: "2025-05-01"
+categories: [analysis, python]
+image: "./starbucks_food.jpg"
+jupyter: python3
+---
+
+::: {style="text-align: justify"}
+Starbucks is one of the most valued coffee chain in the world. A lot of people like to consume the food available at starbucks. But how good are they in terms of the nutritional value?
+:::
+
+::: {style="text-align: justify"}
+I found this dataset on Kaggle which gives the nutritional information about their food products. In my precious post, I built a multiple linear regression model to predict the calories in beverage based on the nutritional contents of the beverage. Now we will try to do the same for the food products.
+
+First, we look at the exploratory data analysis and later try some simple regression models. First let us access and process the data through python
+:::
+
+```{python}
+#| label: load-packages
+#| echo: true
+#| warning: false
+#| include: true
+
+# Load Libraries
+import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
+from plotnine import * # for plots
+import numpy as np # linear algebra
+import matplotlib.pyplot as plt
+import seaborn as sns
+import statsmodels.formula.api as smf
+import random
+from scipy.stats import pearsonr
+
+# Get starbucks data from github repo
+df0=pd.read_csv("https://raw.githubusercontent.com//adityaranade//starbucks//refs//heads//main//data//starbucks-menu-nutrition-food.csv", encoding='unicode_escape')
+df0.head()
+
+```
+
+```{python}
+#| label: data_processing1
+#| echo: true
+#| warning: false
+#| include: true
+
+#modify the column names
+df0.columns = ['name', 'calories','fat','carbs','fiber','protein']
+df0.head()
+
+#convert data type to float for all the columns except name
+for i in df0.columns[1:]:
+    df0[i]=df0[i].astype("float")
+# df0.info()
+```
+
+
+```{python}
+#| label: data_processing2
+#| echo: true
+#| warning: false
+#| include: true
+
+df = df0
+# Use melt function for the histograms
+df2 = pd.melt(df, id_vars=['name'])
+# df2.head()
+
+```
+
+::: {style="text-align: justify"}
+Now that we have the data ready, let us look at the histogram of each variables namely calories, fat, carbs, fiber, protein and sodium
+:::
+
+```{python}
+#| label: EDA
+#| echo: true
+#| warning: false
+#| include: true
+
+p = (
+    ggplot(df2, aes("value"))
+    + geom_histogram(bins=15)
+    + facet_grid(". ~ variable", scales='free_x')
+    )
+
+p.show()
+```
+
+
+The histogram of each of the variables do not show any problems as all the plots look decent. We will look at the correlation plot.
+
+```{python}
+#| label: EDA2
+#| echo: true
+#| warning: false
+#| include: true
+# Check the correlation between the variables
+# plt.figure(figsize=(20,7))
+sns.heatmap(df.iloc[:,1:].corr(),annot=True)
+plt.show()
+
+```
+
+::: {style="text-align: justify"}
+Correlation plot indicates positive association between all the variables which is desired. Now we will look at the pairs plot which will show the pairwise histogram.
+:::
+
+```{python}
+#| label: test
+#| echo: false
+#| warning: false
+#| include: false
+
+# def reg_coef(x,y,label=None,color=None,hue=None,**kwargs):
+#     ax = plt.gca()
+#     r,p = pearsonr(x,y)
+#     ax.annotate('r = {:.2f}'.format(r), xy=(0.5,0.5), xycoords='axes fraction', ha='center')
+#     ax.set_axis_off()
+# 
+# g = sns.PairGrid(df.iloc[:,1:])
+# g.map_diag(sns.histplot)
+# g.map_upper(sns.scatterplot)
+# g.map_lower(reg_coef, hue=None)
+# g.add_legend()
+# plt.show()
+```
+
+
+```{python}
+#| label: EDA3
+#| echo: true
+#| warning: false
+#| include: true
+
+# Pairs plot
+g = sns.PairGrid(df.iloc[:,1:])
+g.map_diag(sns.histplot)
+g.map_upper(sns.scatterplot)
+g.map_lower(sns.scatterplot)
+plt.show()
+
+```
+
+::: {style="text-align: justify"}
+The scatterplots of each variable with calories which can be seen in the upper triangular plots in the very first row. It seems there is a linear association between calories and fat, carbs and protein. However, it does not seem to have a linear association with fiber.
+:::
+
+```{python}
+#| label: mlr_train
+#| echo: true
+#| warning: false
+#| include: true
+
+# Split data into train and test set
+indices = range(len(df)) # Create a list of indices
+
+# Get 3 random indices
+random_indices = random.sample(indices, round(0.75*len(df)))
+
+# Training dataset
+data_train = df.iloc[random_indices,]
+
+# Testing dataset
+data_test = df.iloc[df.index.difference(random_indices),]
+
+
+# Build a multiple linear regression model to predict calories using other variables using training data
+result = smf.ols("calories ~ fat + carbs + fiber + protein", data = data_train).fit()
+# check the summary
+result.summary()
+
+```
+
+::: {style="text-align: justify"}
+Now let us make prediction on the testing data and plot the observed vs. predicted plot
+:::
+
+```{python}
+#| label: prediction_test
+#| echo: true
+#| warning: false
+#| include: true
+
+# Make predictions using testing data
+predictions = result.predict(data_test)
+
+# Observed vs. Predicted plot
+plt.figure(figsize=(20,7))
+sns.regplot(y = data_test["calories"],x = predictions,line_kws={"color":"red"})
+plt.ylabel("Observed calories")
+plt.xlabel("Predicted calories")
+plt.show()
+# decent plot
+```
+
+::: {style="text-align: justify"}
+The observed vs. predicted looks good. However there is low number of data points and hence we should take this with a grain of salt. Let us check some evaluation metrics like the Root Mean Squared Error (RMSE) and Mean Absolute Error (MAE). 
+:::
+
+```{python}
+from sklearn.metrics import mean_absolute_error,mean_squared_error,r2_score
+print("Mean Absolute Error:",round(mean_absolute_error(data_test["calories"],predictions)))
+print("Root Mean Squared Error:",round((mean_squared_error(data_test["calories"],predictions))** 0.5),2)
+```
+
+::: {style="text-align: justify"}
+Root Mean Squared Error (RMSE) of 7.18 and Mean Absolute Error (MAE) of 9.63 is decent and indicates model is performing fairly well. 
+:::

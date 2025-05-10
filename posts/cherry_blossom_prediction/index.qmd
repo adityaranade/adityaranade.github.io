@@ -3,7 +3,7 @@ title: "Cherry Blossom prediction using Time Series"
 subtitle: "A time series analysis to forecast 2024 cherry blossom bloom date"
 author: "Aditya Ranade"
 date: "2024-03-01"
-categories: [analysis]
+categories: [analysis, R]
 image: "./cherry_blossom.jpg"
 ---
 
