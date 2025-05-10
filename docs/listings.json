@@ -2,9 +2,6 @@
   {
     "listing": "/posts.html",
     "items": [
-      "/posts/stpy/index.html",
-      "/posts/test/index.html",
-      "/posts/test/test.html",
       "/posts/starbucks_food/index.html",
       "/posts/starbucks_food_python/index.html",
       "/posts/starbucks/index.html",

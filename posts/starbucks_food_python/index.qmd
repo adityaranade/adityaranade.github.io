@@ -2,8 +2,7 @@
 title: "Starbucks food nutritional information"
 subtitle: "We all like starbucks food, but what about the nutritional value of them?"
 author: "Aditya Ranade"
-highlight-style:
-            light: github
+highlight-style: github-light
 date: "2025-05-01"
 categories: [analysis, python]
 image: "./starbucks_food.jpg"
