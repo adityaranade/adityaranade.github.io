@@ -1,9 +1,0 @@
----
-title: "Portfolio"
-subtitle: "Some fun data analytics projects"
-listing:
-  contents: posts 
-  type: default 
-  sort: "date desc" 
-  categories: true 
----
