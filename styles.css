@@ -1,5 +1,10 @@
 /* css styles */
 
+.cell-output {
+  background-color: lightgreen;
+  border-radius: 4px;
+}
+
 .styled-output .cell-output {
   background-color: darkgrey;
   border-radius: 4px;
