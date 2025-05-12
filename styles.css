@@ -9,3 +9,10 @@
   background-color: darkgrey;
   border-radius: 4px;
 }
+
+pre code {
+  background-color: #A9A9A9; /* Light gray background — change as needed */
+  display: block;
+  padding: 1em;
+  border-radius: 8px;
+}
