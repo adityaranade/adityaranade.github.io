@@ -1,22 +1,20 @@
 ---
-title: "Starbucks food nutritional information"
-subtitle: "We all like starbucks food, but what about the nutritional value of them?"
+title: "Cereals nutritional information"
+subtitle: "Are cereals healthy?"
 author: "Aditya Ranade"
 highlight-style: github-light
-date: "2025-05-01"
+date: "2025-05-08"
 categories: [analysis, python]
-image: "./starbucks_food.jpg"
+image: "./cereals.jpg"
 jupyter: python3
 ---
 
 ::: {style="text-align: justify"}
-Starbucks is one of the most valued coffee chain in the world. A lot of people like to consume the food available at starbucks. But how good are they in terms of the nutritional value?
+Cereals are commonly consumed for breakfast. But how good are they in terms of the nutritional value?
 :::
 
 ::: {style="text-align: justify"}
-I found this dataset on Kaggle which gives the nutritional information about their food products. In my precious post, I built a multiple linear regression model to predict the calories in beverage based on the nutritional contents of the beverage. Now we will try to do the same for the food products.
-
-First, we look at the exploratory data analysis and later try some simple regression models. First let us access and process the data through python
+I found this dataset on Kaggle which gives the nutritional information about their cereals. First, we look at the exploratory data analysis and later try some simple regression models. First let us access and process the data through python
 :::
 
 ```{python}
@@ -26,17 +24,20 @@ First, we look at the exploratory data analysis and later try some simple regres
 #| include: true
 
 # Load Libraries
+
+# Load Libraries
 import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
-from plotnine import * # for plots
+from plotnine import *
 import numpy as np # linear algebra
+# import statsmodels.api as sm
+import statsmodels.formula.api as smf
 import matplotlib.pyplot as plt
 import seaborn as sns
-import statsmodels.formula.api as smf
 import random
 from scipy.stats import pearsonr
 
 # Get starbucks data from github repo
-df0=pd.read_csv("https://raw.githubusercontent.com//adityaranade//starbucks//refs//heads//main//data//starbucks-menu-nutrition-food.csv", encoding='unicode_escape')
+df0=pd.read_csv("https://raw.githubusercontent.com//adityaranade//cereals//refs//heads//main//cereal.csv", encoding='unicode_escape')
 df0.head()
 
 ```
@@ -47,14 +48,10 @@ df0.head()
 #| warning: false
 #| include: true
 
-#modify the column names
-df0.columns = ['name', 'calories','fat','carbs','fiber','protein']
+# modify the column names
+df0.columns = ['name', 'manufacturer','type','calories','protein','fat','sodium','fiber','carbohydrates','sugar','potassium','vitamins','shelf','weight','cups', 'rating']
 df0.head()
 
-#convert data type to float for all the columns except name
-for i in df0.columns[1:]:
-    df0[i]=df0[i].astype("float")
-# df0.info()
 ```
 
 ```{python}
@@ -63,15 +60,17 @@ for i in df0.columns[1:]:
 #| warning: false
 #| include: true
 
-df = df0
-# Use melt function for the histograms
+# select data for the histogram
+df = df0[["calories", "protein", "fat", "sodium", "fiber", "carbohydrates", "sugar","potassium","name"]]
+df.head()
+
+# Use melt function for the histograms of variables 
 df2 = pd.melt(df, id_vars=['name'])
 # df2.head()
-
 ```
 
 ::: {style="text-align: justify"}
-Now that we have the data ready, let us look at the histogram of each variables namely calories, fat, carbs, fiber, protein and sodium
+Now that we have the data ready, let us look at the histogram of each variables namely nutritional contents, specifically calories, protein, fat, sodium, fiber, carbo, sugars and potassium
 :::
 
 ```{python}
@@ -82,9 +81,18 @@ Now that we have the data ready, let us look at the histogram of each variables 
 
 p = (
     ggplot(df2, aes("value"))
-    + geom_histogram(bins=15)
+    + geom_histogram(bins=10)
     + facet_grid(". ~ variable", scales='free_x')
+    + theme(figure_size=(12, 3))
     )
+
+# If we want the density on y axis
+# p = (
+#     ggplot(df2, aes("value", after_stat("density")))
+#     + geom_histogram(bins=10)
+#     + facet_grid(". ~ variable", scales='free_x')
+#     + theme(figure_size=(12, 3))
+#     )
 
 p.show()
 ```
@@ -97,14 +105,13 @@ The histogram of each of the variables do not show any problems as all the plots
 #| warning: false
 #| include: true
 # Check the correlation between the variables
-# plt.figure(figsize=(20,7))
-sns.heatmap(df.iloc[:,1:].corr(),annot=True)
+sns.heatmap(df.iloc[:,:-1].corr(),annot=True,cmap="viridis")
 plt.show()
-
 ```
 
 ::: {style="text-align: justify"}
-Correlation plot indicates positive association between all the variables which is desired. Now we will look at the pairs plot which will show the pairwise histogram.
+
+Calories variable has significant positive correlation with all the variables except fiber and potassium. This seems logical and will be useful when we build a regression model for the same. Next we take a look at the pairs plot which will give us idea about relationship between each pair of variables. Most important from the point of prediction is the first row where calories is the y axis and each of the variable is x axis.
 :::
 
 ```{python}
@@ -155,23 +162,26 @@ The scatterplots of each variable with calories which can be seen in the upper t
 # Split data into train and test set
 indices = range(len(df)) # Create a list of indices
 
-# Get 75% random indices for training data
-random.seed(23) # for repreducible example
+# Get 75% random indices
+random.seed(23) # for reproducible example
 random_indices = random.sample(indices, round(0.75*len(df)))
 
 # Training dataset
-data_train = df.iloc[random_indices,]
+data_train = df.iloc[random_indices,:-1]
 
 # Testing dataset
-data_test = df.iloc[df.index.difference(random_indices),]
-
+data_test = df.iloc[df.index.difference(random_indices),:-1]
 
 # Build a multiple linear regression model to predict calories using other variables using training data
-result = smf.ols("calories ~ fat + carbs + fiber + protein", data = data_train).fit()
+result = smf.ols("calories ~ protein + fat + sodium + fiber + carbohydrates + sugar + potassium", data = data_train).fit()
 # check the summary
 result.summary()
 
 ```
+
+::: {style="text-align: justify"}
+p-value for sodium, fiber and potassium is considerably high and hence these variables do not add help predict the calories. This might be due to multicollinearity (the predictor variables are have high correlation within themselves). If we look at the correlation plot, fiber and potassium has 0.9 correlation which is high. One way to tackle multicollinearity is to consider principal component analysis (PCA). We will look at it in a while but let us first try to make predictions and look at the evaluation metrics.
+:::
 
 ::: {style="text-align: justify"}
 Now let us make prediction on the testing data and plot the observed vs. predicted plot
@@ -196,7 +206,6 @@ x_line = np.linspace(min(data_test["calories"]), max(data_test["calories"]), 100
 y_line = 1 * x_line + 1
 plt.plot(x_line, y_line, color='red')
 plt.show()
-
 ```
 
 ::: {style="text-align: justify"}
@@ -210,5 +219,5 @@ print("Root Mean Squared Error:",round((mean_squared_error(data_test["calories"]
 ```
 
 ::: {style="text-align: justify"}
-Root Mean Squared Error (RMSE) of 7.54 and Mean Absolute Error (MAE) of 10.7 is decent and indicates model is performing fairly well.
+Root Mean Squared Error (RMSE) of 5.34 and Mean Absolute Error (MAE) of 6.89 is decent and indicates model is performing fairly well.
 :::

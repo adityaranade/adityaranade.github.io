@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Ranade">
-<meta name="dcterms.date" content="2025-05-01">
+<meta name="dcterms.date" content="2025-05-08">
 
-<title>Starbucks food nutritional information</title>
+<title>Cereals nutritional information</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -113,7 +113,10 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
 
+
+
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
 
 
 <link rel="stylesheet" href="../../styles.css">
@@ -171,8 +174,8 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-page">
-      <h1 class="title">Starbucks food nutritional information</h1>
-            <p class="subtitle lead">We all like starbucks food, but what about the nutritional value of them?</p>
+      <h1 class="title">Cereals nutritional information</h1>
+            <p class="subtitle lead">Are cereals healthy?</p>
                                 <div class="quarto-categories">
                 <div class="quarto-category">analysis</div>
                 <div class="quarto-category">python</div>
@@ -193,7 +196,7 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">May 1, 2025</p>
+        <p class="date">May 8, 2025</p>
       </div>
     </div>
     
@@ -215,26 +218,28 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 
 
 <div style="text-align: justify">
-<p>Starbucks is one of the most valued coffee chain in the world. A lot of people like to consume the food available at starbucks. But how good are they in terms of the nutritional value?</p>
+<p>Cereals are commonly consumed for breakfast. But how good are they in terms of the nutritional value?</p>
 </div>
 <div style="text-align: justify">
-<p>I found this dataset on Kaggle which gives the nutritional information about their food products. In my precious post, I built a multiple linear regression model to predict the calories in beverage based on the nutritional contents of the beverage. Now we will try to do the same for the food products.</p>
-<p>First, we look at the exploratory data analysis and later try some simple regression models. First let us access and process the data through python</p>
+<p>I found this dataset on Kaggle which gives the nutritional information about their cereals. First, we look at the exploratory data analysis and later try some simple regression models. First let us access and process the data through python</p>
 </div>
 <div id="cell-load-packages" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load Libraries</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd <span class="co"># data processing, CSV file I/O (e.g. pd.read_csv)</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> plotnine <span class="im">import</span> <span class="op">*</span> <span class="co"># for plots</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np <span class="co"># linear algebra</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> pearsonr</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Get starbucks data from github repo</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>df0<span class="op">=</span>pd.read_csv(<span class="st">"https://raw.githubusercontent.com//adityaranade//starbucks//refs//heads//main//data//starbucks-menu-nutrition-food.csv"</span>, encoding<span class="op">=</span><span class="st">'unicode_escape'</span>)</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>df0.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load Libraries</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd <span class="co"># data processing, CSV file I/O (e.g. pd.read_csv)</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> plotnine <span class="im">import</span> <span class="op">*</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np <span class="co"># linear algebra</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># import statsmodels.api as sm</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> pearsonr</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Get starbucks data from github repo</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>df0<span class="op">=</span>pd.read_csv(<span class="st">"https://raw.githubusercontent.com//adityaranade//cereals//refs//heads//main//cereal.csv"</span>, encoding<span class="op">=</span><span class="st">'unicode_escape'</span>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>df0.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div id="load-packages" class="cell-output cell-output-display" data-execution_count="1">
 <div>
 
@@ -243,59 +248,119 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">Unnamed: 0</th>
-<th data-quarto-table-cell-role="th">Calories</th>
-<th data-quarto-table-cell-role="th">Fat (g)</th>
-<th data-quarto-table-cell-role="th">Carb. (g)</th>
-<th data-quarto-table-cell-role="th">Fiber (g)</th>
-<th data-quarto-table-cell-role="th">Protein (g)</th>
+<th data-quarto-table-cell-role="th">name</th>
+<th data-quarto-table-cell-role="th">mfr</th>
+<th data-quarto-table-cell-role="th">type</th>
+<th data-quarto-table-cell-role="th">calories</th>
+<th data-quarto-table-cell-role="th">protein</th>
+<th data-quarto-table-cell-role="th">fat</th>
+<th data-quarto-table-cell-role="th">sodium</th>
+<th data-quarto-table-cell-role="th">fiber</th>
+<th data-quarto-table-cell-role="th">carbo</th>
+<th data-quarto-table-cell-role="th">sugars</th>
+<th data-quarto-table-cell-role="th">potass</th>
+<th data-quarto-table-cell-role="th">vitamins</th>
+<th data-quarto-table-cell-role="th">shelf</th>
+<th data-quarto-table-cell-role="th">weight</th>
+<th data-quarto-table-cell-role="th">cups</th>
+<th data-quarto-table-cell-role="th">rating</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">0</td>
-<td>Chonga Bagel</td>
-<td>300</td>
+<td>100% Bran</td>
+<td>N</td>
+<td>C</td>
+<td>70</td>
+<td>4</td>
+<td>1</td>
+<td>130</td>
+<td>10.0</td>
 <td>5.0</td>
-<td>50</td>
+<td>6</td>
+<td>280</td>
+<td>25</td>
 <td>3</td>
-<td>12</td>
+<td>1.0</td>
+<td>0.33</td>
+<td>68.402973</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">1</td>
-<td>8-Grain Roll</td>
-<td>380</td>
-<td>6.0</td>
-<td>70</td>
-<td>7</td>
-<td>10</td>
+<td>100% Natural Bran</td>
+<td>Q</td>
+<td>C</td>
+<td>120</td>
+<td>3</td>
+<td>5</td>
+<td>15</td>
+<td>2.0</td>
+<td>8.0</td>
+<td>8</td>
+<td>135</td>
+<td>0</td>
+<td>3</td>
+<td>1.0</td>
+<td>1.00</td>
+<td>33.983679</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2</td>
-<td>Almond Croissant</td>
-<td>410</td>
-<td>22.0</td>
-<td>45</td>
+<td>All-Bran</td>
+<td>K</td>
+<td>C</td>
+<td>70</td>
+<td>4</td>
+<td>1</td>
+<td>260</td>
+<td>9.0</td>
+<td>7.0</td>
+<td>5</td>
+<td>320</td>
+<td>25</td>
 <td>3</td>
-<td>10</td>
+<td>1.0</td>
+<td>0.33</td>
+<td>59.425505</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">3</td>
-<td>Apple Fritter</td>
-<td>460</td>
-<td>23.0</td>
-<td>56</td>
-<td>2</td>
-<td>7</td>
+<td>All-Bran with Extra Fiber</td>
+<td>K</td>
+<td>C</td>
+<td>50</td>
+<td>4</td>
+<td>0</td>
+<td>140</td>
+<td>14.0</td>
+<td>8.0</td>
+<td>0</td>
+<td>330</td>
+<td>25</td>
+<td>3</td>
+<td>1.0</td>
+<td>0.50</td>
+<td>93.704912</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">4</td>
-<td>Banana Nut Bread</td>
-<td>420</td>
-<td>22.0</td>
-<td>52</td>
+<td>Almond Delight</td>
+<td>R</td>
+<td>C</td>
+<td>110</td>
 <td>2</td>
-<td>6</td>
+<td>2</td>
+<td>200</td>
+<td>1.0</td>
+<td>14.0</td>
+<td>8</td>
+<td>-1</td>
+<td>25</td>
+<td>3</td>
+<td>1.0</td>
+<td>0.75</td>
+<td>34.384843</td>
 </tr>
 </tbody>
 </table>
@@ -303,37 +368,171 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 </div>
 </div>
 </div>
-<div id="data_processing1" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#modify the column names</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df0.columns <span class="op">=</span> [<span class="st">'name'</span>, <span class="st">'calories'</span>,<span class="st">'fat'</span>,<span class="st">'carbs'</span>,<span class="st">'fiber'</span>,<span class="st">'protein'</span>]</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>df0.head()</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#convert data type to float for all the columns except name</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> df0.columns[<span class="dv">1</span>:]:</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    df0[i]<span class="op">=</span>df0[i].astype(<span class="st">"float"</span>)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># df0.info()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-data_processing1" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># modify the column names</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df0.columns <span class="op">=</span> [<span class="st">'name'</span>, <span class="st">'manufacturer'</span>,<span class="st">'type'</span>,<span class="st">'calories'</span>,<span class="st">'protein'</span>,<span class="st">'fat'</span>,<span class="st">'sodium'</span>,<span class="st">'fiber'</span>,<span class="st">'carbohydrates'</span>,<span class="st">'sugar'</span>,<span class="st">'potassium'</span>,<span class="st">'vitamins'</span>,<span class="st">'shelf'</span>,<span class="st">'weight'</span>,<span class="st">'cups'</span>, <span class="st">'rating'</span>]</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>df0.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="data_processing1" class="cell-output cell-output-display" data-execution_count="2">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">name</th>
+<th data-quarto-table-cell-role="th">manufacturer</th>
+<th data-quarto-table-cell-role="th">type</th>
+<th data-quarto-table-cell-role="th">calories</th>
+<th data-quarto-table-cell-role="th">protein</th>
+<th data-quarto-table-cell-role="th">fat</th>
+<th data-quarto-table-cell-role="th">sodium</th>
+<th data-quarto-table-cell-role="th">fiber</th>
+<th data-quarto-table-cell-role="th">carbohydrates</th>
+<th data-quarto-table-cell-role="th">sugar</th>
+<th data-quarto-table-cell-role="th">potassium</th>
+<th data-quarto-table-cell-role="th">vitamins</th>
+<th data-quarto-table-cell-role="th">shelf</th>
+<th data-quarto-table-cell-role="th">weight</th>
+<th data-quarto-table-cell-role="th">cups</th>
+<th data-quarto-table-cell-role="th">rating</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>100% Bran</td>
+<td>N</td>
+<td>C</td>
+<td>70</td>
+<td>4</td>
+<td>1</td>
+<td>130</td>
+<td>10.0</td>
+<td>5.0</td>
+<td>6</td>
+<td>280</td>
+<td>25</td>
+<td>3</td>
+<td>1.0</td>
+<td>0.33</td>
+<td>68.402973</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>100% Natural Bran</td>
+<td>Q</td>
+<td>C</td>
+<td>120</td>
+<td>3</td>
+<td>5</td>
+<td>15</td>
+<td>2.0</td>
+<td>8.0</td>
+<td>8</td>
+<td>135</td>
+<td>0</td>
+<td>3</td>
+<td>1.0</td>
+<td>1.00</td>
+<td>33.983679</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>All-Bran</td>
+<td>K</td>
+<td>C</td>
+<td>70</td>
+<td>4</td>
+<td>1</td>
+<td>260</td>
+<td>9.0</td>
+<td>7.0</td>
+<td>5</td>
+<td>320</td>
+<td>25</td>
+<td>3</td>
+<td>1.0</td>
+<td>0.33</td>
+<td>59.425505</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>All-Bran with Extra Fiber</td>
+<td>K</td>
+<td>C</td>
+<td>50</td>
+<td>4</td>
+<td>0</td>
+<td>140</td>
+<td>14.0</td>
+<td>8.0</td>
+<td>0</td>
+<td>330</td>
+<td>25</td>
+<td>3</td>
+<td>1.0</td>
+<td>0.50</td>
+<td>93.704912</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>Almond Delight</td>
+<td>R</td>
+<td>C</td>
+<td>110</td>
+<td>2</td>
+<td>2</td>
+<td>200</td>
+<td>1.0</td>
+<td>14.0</td>
+<td>8</td>
+<td>-1</td>
+<td>25</td>
+<td>3</td>
+<td>1.0</td>
+<td>0.75</td>
+<td>34.384843</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
 </div>
 <div id="data_processing2" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df0</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Use melt function for the histograms</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>df2 <span class="op">=</span> pd.melt(df, id_vars<span class="op">=</span>[<span class="st">'name'</span>])</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># df2.head()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># select data for the histogram</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df0[[<span class="st">"calories"</span>, <span class="st">"protein"</span>, <span class="st">"fat"</span>, <span class="st">"sodium"</span>, <span class="st">"fiber"</span>, <span class="st">"carbohydrates"</span>, <span class="st">"sugar"</span>,<span class="st">"potassium"</span>,<span class="st">"name"</span>]]</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>df.head()</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Use melt function for the histograms of variables </span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>df2 <span class="op">=</span> pd.melt(df, id_vars<span class="op">=</span>[<span class="st">'name'</span>])</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># df2.head()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div style="text-align: justify">
-<p>Now that we have the data ready, let us look at the histogram of each variables namely calories, fat, carbs, fiber, protein and sodium</p>
+<p>Now that we have the data ready, let us look at the histogram of each variables namely nutritional contents, specifically calories, protein, fat, sodium, fiber, carbo, sugars and potassium</p>
 </div>
 <div id="cell-EDA" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> (</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    ggplot(df2, aes(<span class="st">"value"</span>))</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> geom_histogram(bins<span class="op">=</span><span class="dv">15</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> geom_histogram(bins<span class="op">=</span><span class="dv">10</span>)</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> facet_grid(<span class="st">". ~ variable"</span>, scales<span class="op">=</span><span class="st">'free_x'</span>)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>p.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> theme(figure_size<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">3</span>))</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># If we want the density on y axis</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co"># p = (</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">#     ggplot(df2, aes("value", after_stat("density")))</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">#     + geom_histogram(bins=10)</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co">#     + facet_grid(". ~ variable", scales='free_x')</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co">#     + theme(figure_size=(12, 3))</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co">#     )</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>p.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/eda-output-1.png" id="eda" width="672" height="480" class="figure-img"></p>
+<p><img src="index_files/figure-html/eda-output-1.png" id="eda" width="1152" height="288" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -341,9 +540,8 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 <p>The histogram of each of the variables do not show any problems as all the plots look decent. We will look at the correlation plot.</p>
 <div id="cell-EDA2" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the correlation between the variables</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># plt.figure(figsize=(20,7))</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>sns.heatmap(df.iloc[:,<span class="dv">1</span>:].corr(),annot<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>sns.heatmap(df.iloc[:,:<span class="op">-</span><span class="dv">1</span>].corr(),annot<span class="op">=</span><span class="va">True</span>,cmap<span class="op">=</span><span class="st">"viridis"</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -353,7 +551,7 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 </div>
 </div>
 <div style="text-align: justify">
-<p>Correlation plot indicates positive association between all the variables which is desired. Now we will look at the pairs plot which will show the pairwise histogram.</p>
+<p>Calories variable has significant positive correlation with all the variables except fiber and potassium. This seems logical and will be useful when we build a regression model for the same. Next we take a look at the pairs plot which will give us idea about relationship between each pair of variables. Most important from the point of prediction is the first row where calories is the y axis and each of the variable is x axis.</p>
 </div>
 <div id="cell-EDA3" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pairs plot</span></span>
@@ -377,21 +575,20 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Split data into train and test set</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>indices <span class="op">=</span> <span class="bu">range</span>(<span class="bu">len</span>(df)) <span class="co"># Create a list of indices</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Get 75% random indices for training data</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>random.seed(<span class="dv">23</span>) <span class="co"># for repreducible example</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Get 75% random indices</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>random.seed(<span class="dv">23</span>) <span class="co"># for reproducible example</span></span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>random_indices <span class="op">=</span> random.sample(indices, <span class="bu">round</span>(<span class="fl">0.75</span><span class="op">*</span><span class="bu">len</span>(df)))</span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Training dataset</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>data_train <span class="op">=</span> df.iloc[random_indices,]</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>data_train <span class="op">=</span> df.iloc[random_indices,:<span class="op">-</span><span class="dv">1</span>]</span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Testing dataset</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>data_test <span class="op">=</span> df.iloc[df.index.difference(random_indices),]</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>data_test <span class="op">=</span> df.iloc[df.index.difference(random_indices),:<span class="op">-</span><span class="dv">1</span>]</span>
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Build a multiple linear regression model to predict calories using other variables using training data</span></span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> smf.ols(<span class="st">"calories ~ fat + carbs + fiber + protein"</span>, data <span class="op">=</span> data_train).fit()</span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co"># check the summary</span></span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>result.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Build a multiple linear regression model to predict calories using other variables using training data</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> smf.ols(<span class="st">"calories ~ protein + fat + sodium + fiber + carbohydrates + sugar + potassium"</span>, data <span class="op">=</span> data_train).fit()</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co"># check the summary</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>result.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div id="mlr_train" class="cell-output cell-output-display" data-execution_count="8">
 <table class="simpletable caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <caption>OLS Regression Results</caption>
@@ -400,47 +597,47 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 <td data-quarto-table-cell-role="th">Dep. Variable:</td>
 <td>calories</td>
 <td data-quarto-table-cell-role="th">R-squared:</td>
-<td>0.995</td>
+<td>0.783</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Model:</td>
 <td>OLS</td>
 <td data-quarto-table-cell-role="th">Adj. R-squared:</td>
-<td>0.995</td>
+<td>0.753</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Method:</td>
 <td>Least Squares</td>
 <td data-quarto-table-cell-role="th">F-statistic:</td>
-<td>4351.</td>
+<td>25.78</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Date:</td>
 <td>Thu, 15 May 2025</td>
 <td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
-<td>1.06e-92</td>
+<td>1.59e-14</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>18:55:53</td>
+<td>18:55:41</td>
 <td data-quarto-table-cell-role="th">Log-Likelihood:</td>
-<td>-304.54</td>
+<td>-205.34</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">No. Observations:</td>
-<td>85</td>
+<td>58</td>
 <td data-quarto-table-cell-role="th">AIC:</td>
-<td>619.1</td>
+<td>426.7</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Df Residuals:</td>
-<td>80</td>
+<td>50</td>
 <td data-quarto-table-cell-role="th">BIC:</td>
-<td>631.3</td>
+<td>443.2</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Df Model:</td>
-<td>4</td>
+<td>7</td>
 <td data-quarto-table-cell-role="th"></td>
 <td></td>
 </tr>
@@ -467,48 +664,75 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Intercept</td>
-<td>-2.8394</td>
-<td>3.006</td>
-<td>-0.945</td>
-<td>0.348</td>
-<td>-8.821</td>
-<td>3.142</td>
+<td>27.1211</td>
+<td>8.231</td>
+<td>3.295</td>
+<td>0.002</td>
+<td>10.588</td>
+<td>43.654</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">fat</td>
-<td>8.8760</td>
-<td>0.129</td>
-<td>68.933</td>
-<td>0.000</td>
-<td>8.620</td>
-<td>9.132</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">carbs</td>
-<td>4.0291</td>
-<td>0.066</td>
-<td>61.478</td>
-<td>0.000</td>
-<td>3.899</td>
-<td>4.160</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">fiber</td>
-<td>-1.1151</td>
-<td>0.402</td>
-<td>-2.772</td>
-<td>0.007</td>
-<td>-1.916</td>
-<td>-0.315</td>
-</tr>
-<tr class="even">
 <td data-quarto-table-cell-role="th">protein</td>
-<td>4.3474</td>
-<td>0.156</td>
-<td>27.915</td>
+<td>5.8767</td>
+<td>1.433</td>
+<td>4.102</td>
 <td>0.000</td>
-<td>4.037</td>
-<td>4.657</td>
+<td>2.999</td>
+<td>8.754</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">fat</td>
+<td>8.7752</td>
+<td>1.482</td>
+<td>5.920</td>
+<td>0.000</td>
+<td>5.798</td>
+<td>11.753</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">sodium</td>
+<td>0.0062</td>
+<td>0.016</td>
+<td>0.381</td>
+<td>0.705</td>
+<td>-0.026</td>
+<td>0.039</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">fiber</td>
+<td>0.1062</td>
+<td>1.480</td>
+<td>0.072</td>
+<td>0.943</td>
+<td>-2.866</td>
+<td>3.078</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">carbohydrates</td>
+<td>2.5884</td>
+<td>0.380</td>
+<td>6.811</td>
+<td>0.000</td>
+<td>1.825</td>
+<td>3.352</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">sugar</td>
+<td>3.1356</td>
+<td>0.365</td>
+<td>8.587</td>
+<td>0.000</td>
+<td>2.402</td>
+<td>3.869</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">potassium</td>
+<td>-0.0489</td>
+<td>0.052</td>
+<td>-0.937</td>
+<td>0.353</td>
+<td>-0.154</td>
+<td>0.056</td>
 </tr>
 </tbody>
 </table>
@@ -518,32 +742,35 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Omnibus:</td>
-<td>8.990</td>
+<td>29.387</td>
 <td data-quarto-table-cell-role="th">Durbin-Watson:</td>
-<td>2.042</td>
+<td>2.071</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Prob(Omnibus):</td>
-<td>0.011</td>
+<td>0.000</td>
 <td data-quarto-table-cell-role="th">Jarque-Bera (JB):</td>
-<td>12.887</td>
+<td>80.990</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Skew:</td>
-<td>0.426</td>
+<td>1.410</td>
 <td data-quarto-table-cell-role="th">Prob(JB):</td>
-<td>0.00159</td>
+<td>2.59e-18</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Kurtosis:</td>
-<td>4.707</td>
+<td>8.055</td>
 <td data-quarto-table-cell-role="th">Cond. No.</td>
-<td>151.</td>
+<td>1.39e+03</td>
 </tr>
 </tbody>
 </table>
-<br><br>Notes:<br>[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+<br><br>Notes:<br>[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.<br>[2] The condition number is large, 1.39e+03. This might indicate that there are<br>strong multicollinearity or other numerical problems.
 </div>
+</div>
+<div style="text-align: justify">
+<p>p-value for sodium, fiber and potassium is considerably high and hence these variables do not add help predict the calories. This might be due to multicollinearity (the predictor variables are have high correlation within themselves). If we look at the correlation plot, fiber and potassium has 0.9 correlation which is high. One way to tackle multicollinearity is to consider principal component analysis (PCA). We will look at it in a while but let us first try to make predictions and look at the evaluation metrics.</p>
 </div>
 <div style="text-align: justify">
 <p>Now let us make prediction on the testing data and plot the observed vs.&nbsp;predicted plot</p>
@@ -573,17 +800,17 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 <div style="text-align: justify">
 <p>The observed vs.&nbsp;predicted looks good. However there is low number of data points and hence we should take this with a grain of salt. Let us check some evaluation metrics like the Root Mean Squared Error (RMSE) and Mean Absolute Error (MAE).</p>
 </div>
-<div id="5829e1e5" class="cell" data-execution_count="10">
+<div id="d225cd4d" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_absolute_error,mean_squared_error</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Mean Absolute Error:"</span>,<span class="bu">round</span>(mean_absolute_error(data_test[<span class="st">"calories"</span>],predictions),<span class="dv">2</span>))</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Root Mean Squared Error:"</span>,<span class="bu">round</span>((mean_squared_error(data_test[<span class="st">"calories"</span>],predictions))<span class="op">**</span> <span class="fl">0.5</span>,<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Mean Absolute Error: 7.54
-Root Mean Squared Error: 10.7</code></pre>
+<pre><code>Mean Absolute Error: 5.34
+Root Mean Squared Error: 6.89</code></pre>
 </div>
 </div>
 <div style="text-align: justify">
-<p>Root Mean Squared Error (RMSE) of 7.54 and Mean Absolute Error (MAE) of 10.7 is decent and indicates model is performing fairly well.</p>
+<p>Root Mean Squared Error (RMSE) of 5.34 and Mean Absolute Error (MAE) of 6.89 is decent and indicates model is performing fairly well.</p>
 </div>
 
 

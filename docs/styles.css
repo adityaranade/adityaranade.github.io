@@ -1,6 +1,8 @@
 /* css styles */
 
-.styled-output .cell-output {
-  background-color: darkgrey;
-  border-radius: 4px;
+pre code {
+  background-color: lightgrey; /* Light gray background — change as needed */
+  display: block;
+  padding: 1em;
+  border-radius: 8px;
 }
