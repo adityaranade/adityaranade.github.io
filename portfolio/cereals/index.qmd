@@ -3,7 +3,7 @@ title: "Cereals nutritional information"
 subtitle: "Are cereals healthy?"
 author: "Aditya Ranade"
 highlight-style: github-light
-date: "2025-05-08"
+date: "2025-03-23"
 categories: [analysis, python]
 image: "./cereals.jpg"
 jupyter: python3
@@ -105,12 +105,12 @@ The histogram of each of the variables do not show any problems as all the plots
 #| warning: false
 #| include: true
 # Check the correlation between the variables
+plt.figure(figsize=(20,10))
 sns.heatmap(df.iloc[:,:-1].corr(),annot=True,cmap="viridis")
 plt.show()
 ```
 
 ::: {style="text-align: justify"}
-
 Calories variable has significant positive correlation with all the variables except fiber and potassium. This seems logical and will be useful when we build a regression model for the same. Next we take a look at the pairs plot which will give us idea about relationship between each pair of variables. Most important from the point of prediction is the first row where calories is the y axis and each of the variable is x axis.
 :::
 
@@ -213,6 +213,11 @@ The observed vs. predicted looks good. However there is low number of data point
 :::
 
 ```{python}
+#| label: evaluation_metrics
+#| echo: true
+#| warning: false
+#| include: true
+
 from sklearn.metrics import mean_absolute_error,mean_squared_error
 print("Mean Absolute Error:",round(mean_absolute_error(data_test["calories"],predictions),2))
 print("Root Mean Squared Error:",round((mean_squared_error(data_test["calories"],predictions))** 0.5,2))
@@ -220,4 +225,166 @@ print("Root Mean Squared Error:",round((mean_squared_error(data_test["calories"]
 
 ::: {style="text-align: justify"}
 Root Mean Squared Error (RMSE) of 5.34 and Mean Absolute Error (MAE) of 6.89 is decent and indicates model is performing fairly well.
+:::
+
+::: {style="text-align: justify"}
+Now, we will run regression model based on principal component analysis since it helps with multicollinearity.
+:::
+
+
+```{python}
+#| label: PCA_processing
+#| echo: true
+#| warning: false
+#| include: true
+
+# Principal component analysis
+from sklearn.decomposition import PCA
+
+# separate the x and y variable for the training data first
+y_train = data_train.iloc[:,:1]
+X0_train = data_train.iloc[:,1:]
+
+# Standardize the predictor data first
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+# training data
+X_train_scaled = sc.fit_transform(X0_train)
+
+# Now calculate the principal components
+from sklearn.decomposition import PCA
+pca = PCA()
+principalComponents = pca.fit_transform(X_train_scaled)
+# Training data
+X_train_pca = pd.DataFrame(data = principalComponents,
+             columns=['PC{}'.format(i+1)
+                      for i in range(principalComponents.shape[1])])
+
+
+
+explained_variance = pca.explained_variance_ratio_
+explained_variance
+
+```
+
+::: {style="text-align: justify"}
+The first six principal components explain around 99% of the data, so we will use the first 6 principal components to build a regression model.
+:::
+
+```{python}
+#| label: PCA_processing2
+#| echo: true
+#| warning: false
+#| include: true
+
+X_train_pca = pd.DataFrame(data = principalComponents,
+             columns=['PC{}'.format(i+1)
+                      for i in range(principalComponents.shape[1])])
+
+# combine the X and Y for the training data
+data_train_pca = X_train_pca
+data_train_pca.set_index(X0_train.index,inplace = True)
+data_train_pca['calories'] = y_train
+data_train_pca.head()
+```
+
+```{python}
+#| label: correlation_plot
+#| echo: true
+#| warning: false
+#| include: true
+
+# Correlation plot for principal components
+plt.figure(figsize=(20,10))
+sns.heatmap(data_train_pca.corr().round(4),annot=True, cmap="viridis")
+plt.show()
+```
+
+::: {style="text-align: justify"}
+We can observe that only calories variable has correlation with the principal components and the correlation between the principal components is practically 0. So we will use the principal components to build a regression model.
+:::
+
+```{python}
+#| label: PCA_model
+#| echo: true
+#| warning: false
+#| include: true
+
+# Now run the OLS regression model on the first five principal components
+# Fit the OLS regression
+result_pca = smf.ols("calories ~ PC1 + PC2 + PC3 + PC4 + PC5 + PC6", data = data_train_pca).fit()
+# check the summary
+result_pca.summary()
+
+```
+
+::: {style="text-align: justify"}
+$R^{2}$ is 77.4% which is decent and all the predictor variables have a low p-value value. We make predictions using the test data and then plot the out of sample observed vs. predicted. First we calculate the principal components of the testing data and then make the predictions.
+:::
+
+```{python}
+#| label: PCA_test_data
+#| echo: true
+#| warning: false
+#| include: true
+
+# X for testing data
+X0_test = data_test.iloc[:,1:]
+
+# scaled test data
+X_test_scaled = sc.transform(X0_test)
+
+# calculate the principal components for the testing data
+X_test = pca.transform(X_test_scaled)
+X_test_pca = pd.DataFrame(data = X_test,
+             columns=['PC{}'.format(i+1)
+                      for i in range(X_test.shape[1])])
+# calculate the predictions
+predictions_pca = result_pca.predict(X_test_pca)
+```
+
+::: {style="text-align: justify"}
+Now we plot the out of sample predictions obtained from regression model using raw data as well as the predictions obtained from model using the first six principal components on the same plot with different colors.
+:::
+
+```{python}
+#| label: PCA_predicted
+#| echo: true
+#| warning: false
+#| include: true
+
+# Observed vs. Predicted plot
+plt.figure(figsize=(20,7))
+
+plt.scatter(predictions, data_test["calories"], label='raw', color='black', marker='o')
+plt.scatter(predictions_pca, data_test["calories"],  label='PCA', color='blue', marker='o')
+# sns.regplot(y = data_test["calories"],x = predictions,ci=None,line_kws={"color":"red"})
+plt.ylabel("Observed calories")
+plt.xlabel("Predicted calories")
+plt.legend()
+
+# Create the abline
+x_line = np.linspace(min(data_test["calories"]), max(data_test["calories"]), 100)
+y_line = 1 * x_line + 1
+plt.plot(x_line, y_line, color='red')
+plt.show()
+```
+
+::: {style="text-align: justify"}
+The out of sample observed vs. predicted plot looks decent with all the points just around the red line. WE look at the evaluation metrics for the model built using the principal components.
+:::
+
+```{python}
+#| label: PCA_metrics
+#| echo: true
+#| warning: false
+#| include: true
+
+from sklearn.metrics import mean_absolute_error,mean_squared_error
+print("Mean Absolute Error:",round(mean_absolute_error(data_test["calories"],predictions_pca),2))
+print("Root Mean Squared Error:",round((mean_squared_error(data_test["calories"],predictions_pca))** 0.5,2))
+```
+
+::: {style="text-align: justify"}
+For the regression model using first six principal components, Root Mean Squared Error (RMSE) is 4.66 and Mean Absolute Error (MAE) is 6.11 which is an improvement from the regression model using the raw data.
 :::
