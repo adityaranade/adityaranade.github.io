@@ -13,6 +13,7 @@
     "listing": "/portfolio.html",
     "items": [
       "/portfolio/cereals/index.html",
+      "/portfolio/cereals_ratings/index.html",
       "/portfolio/starbucks_food_python/index.html",
       "/portfolio/starbucks/index.html",
       "/portfolio/cherry_blossom_prediction/index.html",
