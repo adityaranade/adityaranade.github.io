@@ -1,6 +1,6 @@
 ---
 title: "Cereals nutritional information"
-subtitle: "Are cereals healthy?"
+subtitle: "Predicting calories cereals based on the nutritional contents"
 author: "Aditya Ranade"
 highlight-style: github-light
 date: "2025-03-23"
@@ -10,7 +10,7 @@ jupyter: python3
 ---
 
 ::: {style="text-align: justify"}
-Cereals are commonly consumed for breakfast. But how good are they in terms of the nutritional value?
+Cereals are commonly consumed for breakfast. But how good are they in terms of the nutritional value? Can we predict the calories based on the nutritional contents ?
 :::
 
 ::: {style="text-align: justify"}
@@ -37,9 +37,12 @@ import random
 from scipy.stats import pearsonr
 
 # Get starbucks data from github repo
-df0=pd.read_csv("https://raw.githubusercontent.com//adityaranade//cereals//refs//heads//main//cereal.csv", encoding='unicode_escape')
-df0.head()
 
+path = "https://raw.githubusercontent.com//adityaranade//portfolio//refs//heads//main//cereals//cereal.csv"
+
+df0=pd.read_csv(path, encoding='unicode_escape')
+
+df0.head()
 ```
 
 ```{python}
@@ -230,7 +233,6 @@ Root Mean Squared Error (RMSE) of 5.34 and Mean Absolute Error (MAE) of 6.89 is 
 ::: {style="text-align: justify"}
 Now, we will run regression model based on principal component analysis since it helps with multicollinearity.
 :::
-
 
 ```{python}
 #| label: PCA_processing

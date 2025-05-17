@@ -39,7 +39,7 @@ library(GGally) # for pairs plot using ggplot framework
 #| include: true
 
 # Get starbucks data from github repo
-path <- "https://raw.githubusercontent.com/adityaranade/starbucks/refs/heads/main/data/starbucks-menu-nutrition-drinks.csv"
+path = "https://raw.githubusercontent.com//adityaranade//portfolio//refs//heads//main//starbucks//starbucks-menu-nutrition-drinks.csv"
 data0 <- read.csv(path, header = TRUE)
 
 # Data processing

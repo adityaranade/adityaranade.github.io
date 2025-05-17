@@ -33,7 +33,10 @@ import random
 from scipy.stats import pearsonr
 
 # Get starbucks data from github repo
-df0=pd.read_csv("https://raw.githubusercontent.com//adityaranade//cereals//refs//heads//main//cereal.csv", encoding='unicode_escape')
+path = "https://raw.githubusercontent.com//adityaranade//portfolio//refs//heads//main//cereals//cereal.csv"
+
+df0=pd.read_csv(path, encoding='unicode_escape')
+
 df0.head()
 
 ```

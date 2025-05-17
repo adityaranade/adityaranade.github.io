@@ -113,10 +113,7 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
 
-
-
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
-
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -204,7 +201,7 @@ window.Quarto = {
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-page">
       <h1 class="title">Cereals nutritional information</h1>
-            <p class="subtitle lead">Are cereals healthy?</p>
+            <p class="subtitle lead">Predicting calories cereals based on the nutritional contents</p>
                                 <div class="quarto-categories">
                 <div class="quarto-category">analysis</div>
                 <div class="quarto-category">python</div>
@@ -247,7 +244,7 @@ window.Quarto = {
 
 
 <div style="text-align: justify">
-<p>Cereals are commonly consumed for breakfast. But how good are they in terms of the nutritional value?</p>
+<p>Cereals are commonly consumed for breakfast. But how good are they in terms of the nutritional value? Can we predict the calories based on the nutritional contents ?</p>
 </div>
 <div style="text-align: justify">
 <p>I found this dataset on Kaggle which gives the nutritional information about their cereals. First, we look at the exploratory data analysis and later try some simple regression models. First let us access and process the data through python</p>
@@ -267,9 +264,15 @@ window.Quarto = {
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> pearsonr</span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Get starbucks data from github repo</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>df0<span class="op">=</span>pd.read_csv(<span class="st">"https://raw.githubusercontent.com//adityaranade//cereals//refs//heads//main//cereal.csv"</span>, encoding<span class="op">=</span><span class="st">'unicode_escape'</span>)</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>df0.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div id="load-packages" class="cell-output cell-output-display" data-execution_count="35">
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com//adityaranade//portfolio//refs//heads//main//cereals//cereal.csv"</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>df0<span class="op">=</span>pd.read_csv(path, encoding<span class="op">=</span><span class="st">'unicode_escape'</span>)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co"># df0=pd.read_csv("https://raw.githubusercontent.com//adityaranade//cereals//refs//heads//main//cereal.csv", encoding='unicode_escape')</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>df0.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="load-packages" class="cell-output cell-output-display" data-execution_count="1">
 <div>
 
 
@@ -401,7 +404,7 @@ window.Quarto = {
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># modify the column names</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df0.columns <span class="op">=</span> [<span class="st">'name'</span>, <span class="st">'manufacturer'</span>,<span class="st">'type'</span>,<span class="st">'calories'</span>,<span class="st">'protein'</span>,<span class="st">'fat'</span>,<span class="st">'sodium'</span>,<span class="st">'fiber'</span>,<span class="st">'carbohydrates'</span>,<span class="st">'sugar'</span>,<span class="st">'potassium'</span>,<span class="st">'vitamins'</span>,<span class="st">'shelf'</span>,<span class="st">'weight'</span>,<span class="st">'cups'</span>, <span class="st">'rating'</span>]</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>df0.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div id="data_processing1" class="cell-output cell-output-display" data-execution_count="36">
+<div id="data_processing1" class="cell-output cell-output-display" data-execution_count="2">
 <div>
 
 
@@ -619,7 +622,7 @@ window.Quarto = {
 <span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> smf.ols(<span class="st">"calories ~ protein + fat + sodium + fiber + carbohydrates + sugar + potassium"</span>, data <span class="op">=</span> data_train).fit()</span>
 <span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co"># check the summary</span></span>
 <span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>result.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div id="mlr_train" class="cell-output cell-output-display" data-execution_count="42">
+<div id="mlr_train" class="cell-output cell-output-display" data-execution_count="8">
 <table class="simpletable caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <caption>OLS Regression Results</caption>
 <tbody>
@@ -643,13 +646,13 @@ window.Quarto = {
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Date:</td>
-<td>Fri, 16 May 2025</td>
+<td>Sat, 17 May 2025</td>
 <td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
 <td>1.59e-14</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>11:04:24</td>
+<td>10:15:17</td>
 <td data-quarto-table-cell-role="th">Log-Likelihood:</td>
 <td>-205.34</td>
 </tr>
@@ -872,7 +875,7 @@ Root Mean Squared Error: 6.89</code></pre>
 <span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>explained_variance <span class="op">=</span> pca.explained_variance_ratio_</span>
 <span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>explained_variance</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div id="pca_processing" class="cell-output cell-output-display" data-execution_count="45">
+<div id="pca_processing" class="cell-output cell-output-display" data-execution_count="11">
 <pre><code>array([0.37089562, 0.24123216, 0.14712018, 0.12790205, 0.05655818,
        0.0483467 , 0.0079451 ])</code></pre>
 </div>
@@ -890,7 +893,7 @@ Root Mean Squared Error: 6.89</code></pre>
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>data_train_pca.set_index(X0_train.index,inplace <span class="op">=</span> <span class="va">True</span>)</span>
 <span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>data_train_pca[<span class="st">'calories'</span>] <span class="op">=</span> y_train</span>
 <span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>data_train_pca.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div id="pca_processing2" class="cell-output cell-output-display" data-execution_count="46">
+<div id="pca_processing2" class="cell-output cell-output-display" data-execution_count="12">
 <div>
 
 
@@ -992,7 +995,7 @@ Root Mean Squared Error: 6.89</code></pre>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>result_pca <span class="op">=</span> smf.ols(<span class="st">"calories ~ PC1 + PC2 + PC3 + PC4 + PC5 + PC6"</span>, data <span class="op">=</span> data_train_pca).fit()</span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># check the summary</span></span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>result_pca.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div id="pca_model" class="cell-output cell-output-display" data-execution_count="48">
+<div id="pca_model" class="cell-output cell-output-display" data-execution_count="14">
 <table class="simpletable caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <caption>OLS Regression Results</caption>
 <tbody>
@@ -1016,13 +1019,13 @@ Root Mean Squared Error: 6.89</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Date:</td>
-<td>Fri, 16 May 2025</td>
+<td>Sat, 17 May 2025</td>
 <td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
 <td>7.97e-15</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>11:04:24</td>
+<td>10:15:17</td>
 <td data-quarto-table-cell-role="th">Log-Likelihood:</td>
 <td>-206.59</td>
 </tr>
