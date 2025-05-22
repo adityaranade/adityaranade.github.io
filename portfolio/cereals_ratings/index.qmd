@@ -3,7 +3,7 @@ title: "Rating of cereals based on nutritional information"
 subtitle: "Can we predict the rating of cereals based on nutritional information?"
 author: "Aditya Ranade"
 highlight-style: github-light
-date: "2025-04-10"
+date: "2025-02-23"
 categories: [analysis, python]
 image: "./cereals.jpg"
 jupyter: python3

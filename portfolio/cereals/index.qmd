@@ -3,7 +3,7 @@ title: "Cereals nutritional information"
 subtitle: "Predicting calories cereals based on the nutritional contents"
 author: "Aditya Ranade"
 highlight-style: github-light
-date: "2025-03-23"
+date: "2025-02-13"
 categories: [analysis, python]
 image: "./cereals.jpg"
 jupyter: python3
