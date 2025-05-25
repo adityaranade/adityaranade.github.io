@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aditya Ranade">
-<meta name="dcterms.date" content="2025-03-14">
+<meta name="dcterms.date" content="2025-01-23">
 
 <title>Starbucks food nutritional information</title>
 <style>
@@ -113,10 +113,7 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
 
-
-
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
-
 
 
 <link rel="stylesheet" href="../../styles.css">
@@ -196,7 +193,7 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">March 14, 2025</p>
+        <p class="date">January 23, 2025</p>
       </div>
     </div>
     
@@ -421,13 +418,13 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Date:</td>
-<td>Sat, 17 May 2025</td>
+<td>Sun, 25 May 2025</td>
 <td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
 <td>1.06e-92</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>10:39:22</td>
+<td>11:08:25</td>
 <td data-quarto-table-cell-role="th">Log-Likelihood:</td>
 <td>-304.54</td>
 </tr>
@@ -578,7 +575,7 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 <div style="text-align: justify">
 <p>The observed vs.&nbsp;predicted looks good. However there is low number of data points and hence we should take this with a grain of salt. Let us check some evaluation metrics like the Root Mean Squared Error (RMSE) and Mean Absolute Error (MAE).</p>
 </div>
-<div id="6bb800a4" class="cell" data-execution_count="10">
+<div id="222ce481" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_absolute_error,mean_squared_error</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Mean Absolute Error:"</span>,<span class="bu">round</span>(mean_absolute_error(data_test[<span class="st">"calories"</span>],predictions),<span class="dv">2</span>))</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Root Mean Squared Error:"</span>,<span class="bu">round</span>((mean_squared_error(data_test[<span class="st">"calories"</span>],predictions))<span class="op">**</span> <span class="fl">0.5</span>,<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
