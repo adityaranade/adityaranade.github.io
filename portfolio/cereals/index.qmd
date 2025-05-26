@@ -24,8 +24,6 @@ I found this dataset on Kaggle which gives the nutritional information about the
 #| include: true
 
 # Load Libraries
-
-# Load Libraries
 import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 from plotnine import *
 import numpy as np # linear algebra
@@ -36,7 +34,7 @@ import seaborn as sns
 import random
 from scipy.stats import pearsonr
 
-# Get starbucks data from github repo
+# Get data from github repo
 
 path = "https://raw.githubusercontent.com//adityaranade//portfolio//refs//heads//main//cereals//cereal.csv"
 

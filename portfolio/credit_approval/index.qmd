@@ -1,0 +1,321 @@
+---
+title: "Credit approval"
+subtitle: "Predicting credit approval using binary logistic regression model"
+author: "Aditya Ranade"
+highlight-style:
+            light: github
+date: "2025-03-14"
+categories: [analysis, R]
+image: "./credit.jpg"
+---
+
+::: {style="text-align: justify"}
+I found this [dataset](https://archive.ics.uci.edu/dataset/27/credit+approval) on UCI machine learning repository which gives the credit approval dataset for a Japanese credit agency. The variable names have been changed to generic names and the factor levels have been changed to general symbols. We will look to build a logistic regression based on the data and try to predict if credit is given or not.
+:::
+
+```{r}
+#| label: load-packages
+#| echo: true
+#| warning: false
+#| include: true
+
+library(reshape2)
+library(ggplot2)
+library(dplyr)
+library(ggh4x)
+library(cmdstanr)
+library(bayesplot)
+library(rstanarm)
+
+# Get data from github repo
+path <- "https://raw.githubusercontent.com/adityaranade/portfolio/refs/heads/main/credit/data/crx.data"
+data0 <- read.table(path, sep=",")
+
+# Data processing
+head(data0)
+
+```
+
+
+::: {style="text-align: justify"}
+In this case, we will restrict ourselves to continuous response variables, namely V2, V3, V8, V11 and V15.
+:::
+
+```{r}
+#| label: EDA0
+#| echo: true
+#| warning: false
+#| include: true
+#| fig-width: 14
+#| fig-height: 6
+
+# V16 is the response +/- so convert the response to 0 and 1
+data0$response <- ifelse(data0$V16 =="+",1,ifelse(data0$V16 =="-",0,NA))
+data0$decision <- ifelse(data0$V16 =="+","credit_granted",ifelse(data0$V16 =="-","credit_not_granted",NA)) 
+
+# Check the first 6 rows of the dataset
+data0 |> head()
+
+# Check the type of data
+data0 |> str()
+
+# Convert the data into appropriate factors or numbers
+data0$V2 <- data0$V2 |> as.numeric()
+data0$V3 <- data0$V3 |> as.numeric()
+data0$V8 <- data0$V8 |> as.numeric()
+data0$V11 <- data0$V11 |> as.numeric()
+data0$V15 <- data0$V15 |> as.numeric()
+
+# Combine only numerical data along with the response
+data1 <- data0 |> dplyr::select(response,V2,V3,V8,V11,V15)
+data2 <- data0 |> dplyr::select(decision,V2,V3,V8,V11,V15)
+# data1 |> str()
+
+# Check the number of NA values
+sum(is.na(data1))
+
+# Exclude the rows which has NA values
+data10 <- na.omit(data1)
+```
+
+::: {style="text-align: justify"}
+We look at the distribution of the continuous data variables based on if decision variable (credit given / credit not given)
+:::
+
+```{r}
+#| label: EDA1
+#| echo: true
+#| warning: false
+#| include: true
+#| fig-width: 14
+#| fig-height: 6
+
+# Data for histogram
+melted_data <- melt(na.omit(data2), id="decision")
+
+# Plot the histogram of all the variables
+ggplot(melted_data,aes(value))+
+  geom_histogram(aes(),bins = 30)+
+  # geom_histogram(aes(y = after_stat(density)),bins = 20)+
+  facet_grid2(decision~variable, scales="free")+theme_bw()
+```
+
+
+::: {style="text-align: justify"}
+The distribution of the first two variables (V2 and V3) is similar across the decision. So we will exclude these two variables from the model as it is unlikely to have an impact on the decision.
+:::
+
+```{r}
+#| label: data processing
+#| echo: true
+#| warning: false
+#| include: true
+
+# Exclude V3 and V8 variables
+data <- data10[,-(2:3)]
+
+# split the data into training and testing data
+seed <- 55
+set.seed(seed)
+ind <- sample(floor(0.75*nrow(data)),
+              replace = FALSE)
+
+# Training dataset
+data_train <- data[ind,]
+# Testing dataset
+data_test <- data[-c(ind),]
+
+data |> summary()
+
+```
+
+
+
+```{r}
+#| label: base_model
+#| echo: false
+#| warning: false
+#| include: false
+
+# library(MASS)
+# # Fit an ordinal logistic regression model
+# model <- glm(response ~ V8 + V11 + V15,
+#              family = binomial(link='logit'),data = data_train)
+# 
+# # Check the summary of the model
+# model |> summary()
+# 
+# # Predictions on the testing data
+# y_pred <- predict(model, data_test, type = "response")
+# y_predicted <- ifelse(y_pred > 0.5,1,0) |> as.factor()
+# 
+# # confusion matrix
+# conf_matrix <- caret::confusionMatrix(data_test$response, y_predicted)
+# conf_matrix
+# 
+# misclassification_error <- mean(y_predicted != data_test$response)
+# print(paste('Accuracy',1-misclassification_error))
+# 
+# # ROC curve
+# library(ROCR)
+# pr <- prediction(y_pred, data_test$response)
+# prf <- performance(pr, measure = "tpr", x.measure = "fpr")
+# plot(prf)
+# 
+# # AUC 
+# auc <- performance(pr, measure = "auc")
+# auc <- auc@y.values[[1]]
+# auc #0.7968867
+```
+
+
+
+```{r}
+#| label: STAN
+#| echo: true
+#| warning: false
+#| include: true
+#| 
+
+# Read the STAN file
+file_stan <- "logistic_regression.stan"
+
+# Compile stan model
+model_stan <- cmdstan_model(stan_file = file_stan,
+                            cpp_options = list(stan_threads = TRUE))
+model_stan$check_syntax()
+
+```
+
+::: {style="text-align: justify"}
+Now that the model is compiled, we will prepare the data to supply to the model to estimate the parameters based on the training data and make predictions on the testing data.
+:::
+
+```{r}
+#| label: STAN2
+#| echo: true
+#| warning: false
+#| include: true
+
+#Get the data in appropriate form to pass to STAN model
+x_train <- data_train[,-1]
+y_train <- data_train[,1] 
+x_test <- data_test[,-1]
+y_test <- data_test[,1]
+
+x_train <- x_train |> as.matrix()
+x_test <- x_test |> as.matrix()
+
+standata <- list(K = ncol(x_train),
+                 N1 = nrow(x_train),
+                 X1 = x_train,
+                 Y1 = y_train,
+                 N2 = nrow(x_test),
+                 X2 = x_test,
+                 Y2 = y_test)
+
+fit_optim <- model_stan$optimize(data = standata,
+                                 seed = seed,
+                                 threads =  10)
+
+fsum_optim <- as.data.frame(fit_optim$summary())
+
+# The optimized parameter would be 
+par_ind <- 2:(ncol(x_train)+2)
+opt_pars <- fsum_optim[par_ind,]
+opt_pars
+
+# starting value of parameters
+start_parameters <- rep(list(list(alpha = opt_pars[1,2],
+                                  beta = opt_pars[-1,2])),4)
+
+# Run the MCMC with optimized values as the starting values
+fit <- model_stan$sample(
+  data = standata,
+  init = start_parameters,
+  seed = seed,
+  iter_warmup = 10000,
+  iter_sampling = 10000,
+  chains = 4,
+  parallel_chains = 4,
+  refresh = 10000,
+  threads =  32,
+  save_warmup = FALSE)
+
+# Summary
+fit$summary()
+
+# Save the summary
+fsum <- as.data.frame(fit$summary())
+```
+
+
+::: {style="text-align: justify"}
+Next we look at the posterior distribution of the parameters and the trace plots. The posterior distribution of the parameters are unimodel and the trace plots indicates a good mix. So no issues with convergence.
+:::
+
+
+```{r}
+#| label: diagnostics
+#| echo: true
+#| warning: false
+#| include: true
+
+# Plot posterior distribution of parameters
+bayesplot::color_scheme_set("gray")
+bayesplot::mcmc_dens(fit$draws(c("alpha","beta")))
+
+# Trace plots
+bayesplot::color_scheme_set("brewer-Spectral")
+bayesplot::mcmc_trace(fit$draws(c("alpha","beta")))
+```
+
+::: {style="text-align: justify"}
+Now we check the prediction. The STAN model calculates the posterior probability. If the probability is greater than 1, we predict the response to be 1 and 0 otherwise. Based on the predictions, we will generate the confusion matrix.
+:::
+
+```{r}
+#| label: diagnostics2
+#| echo: true
+#| warning: false
+#| include: true
+
+# Check the predictions
+pred_ind <- (max(par_ind)+1):(max(par_ind)+length(y_test))
+# predicted probability
+pred_prob <- fsum[pred_ind,2]
+pred_outcome <- ifelse(pred_prob>0.5,1,0)
+
+# Generate the confusion matrix
+conf_matrix2 <- caret::confusionMatrix(as.factor(pred_outcome),as.factor(y_test))
+conf_matrix2
+
+# Accuracy
+accuracy <- mean(pred_outcome == y_test)
+print(paste('Accuracy is ',round(accuracy,4)))
+
+```
+
+::: {style="text-align: justify"}
+Our model has an accuracy of around 83% which indicates the model is correctly identifying the posiitve and negative cases in around 83% of the cases. Next, we look at the Receiver Operating Characteristic (ROC) curve. It plots the True Positive Rate (TPR) against the False Positive Rate (FPR). It is the visualization of trade-off between correctly identifying positive cases and incorrectly identifying negative cases as positive. A good model ROC curve which goes from bottom left to top left which means the model is perfectly identifying positive cases and does not identify negatives as positive. On the other hand, a ROC curve which is a straight line from bottom left to to right with slope 1 indicates the model is randomly assigning the positive and negative cases. Our curve is somewhere in between these 2 extreme cases and is decent. The area under the curve (AUC) is around 79% which is also decent.
+:::
+
+```{r}
+#| label: diagnostics3
+#| echo: true
+#| warning: false
+#| include: true
+
+# ROC curve
+library(ROCR)
+pr <- prediction(pred_outcome, y_test)
+prf <- performance(pr, measure = "tpr", x.measure = "fpr")
+plot(prf)
+
+# AUC 
+auc <- performance(pr, measure = "auc")
+auc <- auc@y.values[[1]]
+auc
+
+```
+

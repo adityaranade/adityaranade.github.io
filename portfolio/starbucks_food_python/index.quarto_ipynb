@@ -26,7 +26,7 @@
         "First, we look at the exploratory data analysis and later try some simple regression models. First let us access and process the data through python\n",
         ":::\n"
       ],
-      "id": "262464b8"
+      "id": "a475afdf"
     },
     {
       "cell_type": "code",
@@ -105,7 +105,7 @@
         "Now that we have the data ready, let us look at the histogram of each variables namely calories, fat, carbs, fiber, protein and sodium\n",
         ":::\n"
       ],
-      "id": "4341a889"
+      "id": "76b609b8"
     },
     {
       "cell_type": "code",
@@ -134,7 +134,7 @@
       "source": [
         "The histogram of each of the variables do not show any problems as all the plots look decent. We will look at the correlation plot.\n"
       ],
-      "id": "9bd4eb3e"
+      "id": "8679badf"
     },
     {
       "cell_type": "code",
@@ -161,7 +161,7 @@
         "Correlation plot indicates positive association between all the variables which is desired. Now we will look at the pairs plot which will show the pairwise histogram.\n",
         ":::\n"
       ],
-      "id": "66771e2f"
+      "id": "8aaf5990"
     },
     {
       "cell_type": "code",
@@ -217,7 +217,7 @@
         "The scatterplots of each variable with calories which can be seen in the upper triangular plots in the very first row. It seems there is a linear association between calories and fat, carbs and protein. However, it does not seem to have a linear association with fiber.\n",
         ":::\n"
       ],
-      "id": "acbe96f6"
+      "id": "82586c3b"
     },
     {
       "cell_type": "code",
@@ -259,7 +259,7 @@
         "Now let us make prediction on the testing data and plot the observed vs. predicted plot\n",
         ":::\n"
       ],
-      "id": "2479bb77"
+      "id": "6f3fad48"
     },
     {
       "cell_type": "code",
@@ -296,7 +296,7 @@
         "The observed vs. predicted looks good. However there is low number of data points and hence we should take this with a grain of salt. Let us check some evaluation metrics like the Root Mean Squared Error (RMSE) and Mean Absolute Error (MAE).\n",
         ":::\n"
       ],
-      "id": "3e6f6c57"
+      "id": "e70ca44e"
     },
     {
       "cell_type": "code",
@@ -306,7 +306,7 @@
         "print(\"Mean Absolute Error:\",round(mean_absolute_error(data_test[\"calories\"],predictions),2))\n",
         "print(\"Root Mean Squared Error:\",round((mean_squared_error(data_test[\"calories\"],predictions))** 0.5,2))"
       ],
-      "id": "de6ae8c6",
+      "id": "c2630df3",
       "execution_count": null,
       "outputs": []
     },
@@ -318,7 +318,7 @@
         "Root Mean Squared Error (RMSE) of 7.54 and Mean Absolute Error (MAE) of 10.7 is decent and indicates model is performing fairly well.\n",
         ":::"
       ],
-      "id": "ce1d3bc1"
+      "id": "6819ab2d"
     }
   ],
   "metadata": {

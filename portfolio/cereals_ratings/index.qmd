@@ -32,7 +32,7 @@ import seaborn as sns
 import random
 from scipy.stats import pearsonr
 
-# Get starbucks data from github repo
+# Get data from github repo
 path = "https://raw.githubusercontent.com//adityaranade//portfolio//refs//heads//main//cereals//cereal.csv"
 
 df0=pd.read_csv(path, encoding='unicode_escape')

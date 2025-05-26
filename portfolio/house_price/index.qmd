@@ -42,7 +42,7 @@ library(tidyr)
 #| warning: false
 #| include: true
 
-# Get starbucks data from github repo
+# Get data from github repo
 path = "https://raw.githubusercontent.com/adityaranade/portfolio/refs/heads/main/real_estate/real_estate_valuation.csv"
 data0 <- read.csv(path, header = TRUE)
 
@@ -241,10 +241,10 @@ model_stan$check_syntax()
 #| include: true
 
 
-x_train <- data2[ind,1]
-y_train <- data2[ind,2]
-x_test <- data2[-ind,1]
-y_test <- data2[-ind,2]
+x_train <- data_train[,-1]
+y_train <- data_train[,1]
+x_test <- data_test[,-1]
+y_test <- data_test[,1]
 
 x_train <- x_train |> as.matrix()
 x_test <- x_test |> as.matrix()
