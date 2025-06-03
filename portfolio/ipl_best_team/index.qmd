@@ -3,7 +3,7 @@ title: "Does the best team win the Indian Premier League ?"
 subtitle: "A simple Bayesian analysis to check if the best team wins the league reveals a rather surprising result."
 author: "Aditya Ranade"
 date: "2022-11-10"
-categories: [analysis]
+categories: [analysis, R, python]
 image: "./ipl_playoff_structure.png"
 ---
 
@@ -55,4 +55,8 @@ Let us perform the same analysis for the team which finishes at second position 
 ![Credible intervals for probabilities for team finishing second during league stage](./pos2.png)
 
 We can see the probability of being winner is higher than the probability of finishing as runner's up or 3rd place. This means the team finishing second in the league stage will more often go on to win the tournament. Surely a surprising and fascinating result!
+:::
+
+::: {style="text-align: justify"}
+The code for this analysis is available at the following link. [R code](https://github.com/adityaranade/IPL-Does_the_best_team_win/blob/main/IPL_playoff_bayesian_analysis.R) and [python code](https://github.com/adityaranade/IPL-Does_the_best_team_win/blob/main/IPL_playoff_bayesian_analysis.py)
 :::
