@@ -6,8 +6,15 @@ highlight-style:
             light: github
 date: "2025-04-23"
 categories: [interview_prep]
-image: "./house_price.jpg"
+image: "./job.jpg"
 ---
+
+
+
+::: {style="text-align: justify"}
+Some commony asked interview questions in Statistics / Machine Learning / Artificial Intelligence
+:::
+
 
 ::: {style="text-align: justify"}
 What is the difference between Bayesian and Frequentist ?

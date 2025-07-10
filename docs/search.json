@@ -179,6 +179,6 @@
     "href": "portfolio/interview/index.html",
     "title": "Common Interview Questions",
     "section": "",
-    "text": "What is the difference between Bayesian and Frequentist ?\nA frequentist approach considers the parameter as unknown but fixed quantity whereas a bayesian approach assumes the parameter to be a random variable.\n\n\nWhat is the difference between confidence interval and credible interval\nA confidence interval is a frequentist POV about the parameter value. A confidence interval gives us a range of values within which a parameter value will lie if we repeat the experiment for a certain number of times.\nA credible interval is a Bayesian POV of the parameter value. It gives a range of values within which a parameter lies with certain probability."
+    "text": "Some commony asked interview questions in Statistics / Machine Learning / Artificial Intelligence\n\n\nWhat is the difference between Bayesian and Frequentist ?\nA frequentist approach considers the parameter as unknown but fixed quantity whereas a bayesian approach assumes the parameter to be a random variable.\n\n\nWhat is the difference between confidence interval and credible interval\nA confidence interval is a frequentist POV about the parameter value. A confidence interval gives us a range of values within which a parameter value will lie if we repeat the experiment for a certain number of times.\nA credible interval is a Bayesian POV of the parameter value. It gives a range of values within which a parameter lies with certain probability."
   }
 ]
