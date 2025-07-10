@@ -23,7 +23,7 @@ about:
 
 ------------------------------------------------------------------------
 
-Hello! My name is Aditya Ranade. I am a PhD candidate in the [Department of Statistics](https://www.stat.iastate.edu/){target="_blank"}, Iowa State University. My advisor is [Dr. Jarad Niemi](https://www.stat.iastate.edu/people/jarad-niemi){target="_blank"}. My research interest is application of Bayesian methods and my current work focuses on developing machine learning techniques for functional data. I also try to write about sports analytics during my free time.
+Hello! My name is Aditya Ranade. I earned my doctorate in Statistics from the Iowa State University, [Department of Statistics](https://www.stat.iastate.edu/){target="_blank"} under the guidance of [Dr. Jarad Niemi](https://www.stat.iastate.edu/people/jarad-niemi){target="_blank"}. My doctoral research focused on developing machine learning techniques for high dimensional functional data. Current research interest is application of Bayesian methods and statistical modeling in sports especially Cricket about which I try to write during my free time.
 
 ::: {style="text-align: justify"}
 :::
