@@ -12,6 +12,7 @@
   {
     "listing": "/portfolio.html",
     "items": [
+      "/portfolio/interview/index.html",
       "/portfolio/credit_approval/index.html",
       "/portfolio/house_price/index.html",
       "/portfolio/cereals_ratings/index.html",

@@ -1,0 +1,24 @@
+---
+title: "Common Interview Questions"
+subtitle: "Some commonly asked Statistics questions"
+author: "Aditya Ranade"
+highlight-style:
+            light: github
+date: "2025-04-23"
+categories: [interview_prep]
+image: "./house_price.jpg"
+---
+
+::: {style="text-align: justify"}
+What is the difference between Bayesian and Frequentist ?
+
+A frequentist approach considers the parameter as unknown but fixed quantity whereas a bayesian approach assumes the parameter to be a random variable.
+:::
+
+::: {style="text-align: justify"}
+What is the difference between confidence interval and credible interval
+
+A confidence interval is a frequentist POV about the parameter value. A confidence interval gives us a range of values within which a parameter value will lie if we repeat the experiment for a certain number of times.
+
+A credible interval is a Bayesian POV of the parameter value. It gives a range of values within which a parameter lies with certain probability.
+:::
