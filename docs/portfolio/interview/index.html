@@ -229,8 +229,16 @@ window.Quarto = {
 <p>One of the ways to identify multicollinearity is through the variance inflation factor (VIF). VIF = 1 indicates no multicollinearity. <span class="math inline">\(1 &lt; VIF &lt; 5\)</span> indicates moderate multicollinearity which is acceptable. <span class="math inline">\(VIF &gt; 5\)</span> indicates a cause of concern and <span class="math inline">\(VIF &gt; 10\)</span> indicates serious issues with multicollinearity. Another way is to look at linear correlation between pairs of variables. Highly correlated variables indicates potential multicollinearity.</p>
 <p>There are multiple ways to tackle multicollinearity. One of the most popular one is to calculate principal components and use some of them as predictors.</p>
 </section>
-<section id="section" class="level5" style="text-align: justify">
-<h5 class="anchored" data-anchor-id="section"></h5>
+<section id="what-is-the-difference-between-parametric-and-non-parametric-methods" class="level5" style="text-align: justify">
+<h5 class="anchored" data-anchor-id="what-is-the-difference-between-parametric-and-non-parametric-methods">What is the difference between parametric and non parametric methods</h5>
+<p>The basic difference between parametric and non parametric methods is the distributional assumptions of the data. In a parametric methods, there are strong assumption for the data whereas in non parametric methods, the distributional assumptions are minimal. A parametric model will not give reliable results if the assumptions are not satisfied.</p>
+<p>As an example, if we are looking at a linear regression model between predictor variable (X) and response (Y), using a linear regression (parametric method) assumes linear relationship between the two variables (X and Y), normality of residuals. The model will not perform well if these assumptions are not satisfied. Whereas if we consider a decision trees/random forest (non-parametric method), there is not distributional assumptions.</p>
+<p>However the parameters in a parametric models can be interpreted in the context of the data whereas the hyper-parameters in a non-parametric models cannot be interpreted in the context of the data.</p>
+</section>
+<section id="what-is-the-difference-between-probability-and-likelihood" class="level5" style="text-align: justify">
+<h5 class="anchored" data-anchor-id="what-is-the-difference-between-probability-and-likelihood">What is the difference between probability and likelihood</h5>
+<p>Probability is the chance of observing an event (or data) given a cetrain model (or parameters) whereas likelihood is trying to find the most plausible model (or parameters) given the event (or data) has already happened (or observed).</p>
+<p>Suppose we denote the parameters by <span class="math inline">\(\theta\)</span> and data by <span class="math inline">\(D\)</span>. Then probability is <span class="math inline">\(p(D|\theta)\)</span> whereas likelihood is <span class="math inline">\(L(\theta|D)\)</span>.</p>
 </section>
 
 
