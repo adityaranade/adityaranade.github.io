@@ -77,6 +77,35 @@ gtag('js', new Date());
 gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 </script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../styles.css">
 </head>
@@ -176,17 +205,33 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 
 
 <div style="text-align: justify">
-<p>Some commony asked interview questions in Statistics / Machine Learning / Artificial Intelligence</p>
+<p>Some commonly asked interview questions in Statistics / Machine Learning / Artificial Intelligence</p>
 </div>
-<div style="text-align: justify">
-<p>What is the difference between Bayesian and Frequentist ?</p>
-<p>A frequentist approach considers the parameter as unknown but fixed quantity whereas a bayesian approach assumes the parameter to be a random variable.</p>
-</div>
-<div style="text-align: justify">
-<p>What is the difference between confidence interval and credible interval</p>
-<p>A confidence interval is a frequentist POV about the parameter value. A confidence interval gives us a range of values within which a parameter value will lie if we repeat the experiment for a certain number of times.</p>
-<p>A credible interval is a Bayesian POV of the parameter value. It gives a range of values within which a parameter lies with certain probability.</p>
-</div>
+<section id="what-is-the-difference-between-bayesian-and-frequentist" class="level5" style="text-align: justify">
+<h5 class="anchored" data-anchor-id="what-is-the-difference-between-bayesian-and-frequentist">What is the difference between Bayesian and Frequentist ?</h5>
+<p>The frequentist approach treats the parameter (e.g., a population mean or proportion) as an unknown but fixed quantity. It does not have a probability distribution because, in this view, the parameter is not random — only the data are random due to sampling variability. Statistical inference is made by evaluating how likely the observed data are, given different hypothetical values of the parameter.</p>
+<p>The Bayesian approach treats the parameter as a random variable. It assigns a prior distribution to represent beliefs or knowledge about the parameter before observing data. After seeing the data, these beliefs are updated using Bayes’ theorem, resulting in a posterior distribution. This posterior captures our updated uncertainty about the parameter, and we can compute probabilities (e.g., that the parameter lies in a given range).</p>
+<!-- In terms of parameters, a frequentist approach considers the parameter as unknown but fixed quantity whereas a bayesian approach assumes the parameter to be a random variable. -->
+</section>
+<section id="what-is-the-difference-between-confidence-interval-and-credible-interval" class="level5" style="text-align: justify">
+<h5 class="anchored" data-anchor-id="what-is-the-difference-between-confidence-interval-and-credible-interval">What is the difference between confidence interval and credible interval ?</h5>
+<p>A confidence interval reflects a frequentist interpretation of uncertainty about a parameter’s value. A confidence interval provides a range of values calculated from sample data, using a method that is designed to capture the true parameter value c certain proportion of time over repeated sampling. As an example, if we calculate the 95% confidence interval of a parameter, then we are saying that if we repeat the procedure to calculate the confidence interval 100 times using our method, it will capture the true value of the parameter about 95% of the times. The confidence is in the method, not in the specific interval once it is calculated. For any given confidence interval from one sample, the true parameter either is or is not in the interval; there is no probability involved from a frequentist standpoint after the interval is observed.</p>
+<p>Whereas a credible interval reflects Bayesian interpretation of uncertainty about a parameter’s value. It gives a range within which the parameter lies with a certain probability, given the observed data and prior beliefs. For example, a 95% credible interval means that, based on the posterior distribution (which is reconciliation of the prior and the likelihood from the data), there is a 95% probability that the parameter lies within the interval. This is fundamentally different from a confidence interval in the frequentist framework, where the parameter is fixed and the interval is random. In Bayesian statistics, the parameter is treated as a random variable, and the credible interval expresses actual uncertainty about its value after seeing the data.</p>
+</section>
+<section id="what-is-a-p-value" class="level5" style="text-align: justify">
+<h5 class="anchored" data-anchor-id="what-is-a-p-value">What is a p-value ?</h5>
+<p>p-value (probability value) is the probability of observing as or more extreme test statistic than what we have observed assuming the null hypothesis is true.</p>
+<p>p-value is always between 0 and 1. If the p-value is close to 0 (very low), we say the data does not agree with the null hypothesis and if the p-value is high other words, we say that data seems to agree with the null hypothesis.</p>
+</section>
+<section id="what-is-multicollinearity-and-how-to-overcome-it" class="level5" style="text-align: justify">
+<h5 class="anchored" data-anchor-id="what-is-multicollinearity-and-how-to-overcome-it">What is multicollinearity and how to overcome it ?</h5>
+<p>Multicollinearity is a situation when two or more explanatory variables (predictors) are highly linearly correlated with each other. This means the two variables provide similar information about the response. This indicates it might be better to include just one variable in the model as adding another variable (making the model more complex) will not provide much additional information.</p>
+<p>One of the ways to identify multicollinearity is through the variance inflation factor (VIF). VIF = 1 indicates no multicollinearity. <span class="math inline">\(1 &lt; VIF &lt; 5\)</span> indicates moderate multicollinearity which is acceptable. <span class="math inline">\(VIF &gt; 5\)</span> indicates a cause of concern and <span class="math inline">\(VIF &gt; 10\)</span> indicates serious issues with multicollinearity. Another way is to look at linear correlation between pairs of variables. Highly correlated variables indicates potential multicollinearity.</p>
+<p>There are multiple ways to tackle multicollinearity. One of the most popular one is to calculate principal components and use some of them as predictors.</p>
+</section>
+<section id="section" class="level5" style="text-align: justify">
+<h5 class="anchored" data-anchor-id="section"></h5>
+</section>
 
 
 
