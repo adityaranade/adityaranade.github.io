@@ -214,12 +214,12 @@ window.Quarto = {
 </section>
 <section id="what-is-the-difference-between-confidence-interval-and-credible-interval" class="level5" style="text-align: justify">
 <h5 class="anchored" data-anchor-id="what-is-the-difference-between-confidence-interval-and-credible-interval">What is the difference between confidence interval and credible interval ?</h5>
-<p>A confidence interval reflects a frequentist interpretation of uncertainty about a parameter’s value. A confidence interval provides a range of values calculated from sample data, using a method that is designed to capture the true parameter value c certain proportion of time over repeated sampling. As an example, if we calculate the 95% confidence interval of a parameter, then we are saying that if we repeat the procedure to calculate the confidence interval 100 times using our method, it will capture the true value of the parameter about 95% of the times. The confidence is in the method, not in the specific interval once it is calculated. For any given confidence interval from one sample, the true parameter either is or is not in the interval; there is no probability involved from a frequentist standpoint after the interval is observed.</p>
+<p>A confidence interval reflects a frequentist interpretation of uncertainty about a parameter’s value. A confidence interval provides a range of values calculated from sample data, using a method that is designed to capture the true parameter value a certain proportion of time over repeated sampling. As an example, if we calculate the 95% confidence interval of a parameter, then we are saying that if we repeat the procedure to calculate the confidence interval 100 times using our method, it will capture the true value of the parameter about 95% of the times. The confidence is in the method, not in the specific interval once it is calculated. For any given confidence interval from one sample, the true parameter either is or is not in the interval; there is no probability involved from a frequentist standpoint after the interval is observed.</p>
 <p>Whereas a credible interval reflects Bayesian interpretation of uncertainty about a parameter’s value. It gives a range within which the parameter lies with a certain probability, given the observed data and prior beliefs. For example, a 95% credible interval means that, based on the posterior distribution (which is reconciliation of the prior and the likelihood from the data), there is a 95% probability that the parameter lies within the interval. This is fundamentally different from a confidence interval in the frequentist framework, where the parameter is fixed and the interval is random. In Bayesian statistics, the parameter is treated as a random variable, and the credible interval expresses actual uncertainty about its value after seeing the data.</p>
 </section>
 <section id="what-is-a-p-value" class="level5" style="text-align: justify">
 <h5 class="anchored" data-anchor-id="what-is-a-p-value">What is a p-value ?</h5>
-<p>p-value (probability value) is the probability of observing as or more extreme test statistic than what we have observed assuming the null hypothesis is true. p-value is always between 0 and 1. If the p-value is close to 0 (very low), we say the data does not seem agree with the null hypothesis and if the p-value is high other words, we say that data seems to agree with the null hypothesis.</p>
+<p>p-value (probability value) is the probability of observing as or more extreme test statistic than what we have observed assuming the null hypothesis is true. p-value is always between 0 and 1. If the p-value is close to 0 (very low), we say the data does not seem to agree with the null hypothesis (overwhelming evidence against null hypothesis) and if the p-value is high, we say that data seems to agree with the null hypothesis (no evidence against null hypothesis).</p>
 <p>If we get a very low p-value (close to 0), it does not mean the null hypothesis is false, it simply means the data does not agree with the null hypothesis. Similarly if the p-value is very high (close to 1), it does not mean the null hypothesis is true, it simply means the data agrees with the null hypothesis. It can always happen that we have got an unrepresentative sample in which case, our conclusion will be incorrect.</p>
 </section>
 <section id="what-is-multicollinearity-and-how-to-overcome-it" class="level5" style="text-align: justify">
@@ -239,14 +239,18 @@ window.Quarto = {
 <p>Probability is the chance of observing an event (or data) given a cetrain model (or parameters) whereas likelihood is trying to find the most plausible model (or parameters) given the event (or data) has already happened (or observed).</p>
 <p>Suppose we denote the parameters by <span class="math inline">\(\theta\)</span> and data by <span class="math inline">\(D\)</span>. Then probability is <span class="math inline">\(p(D|\theta)\)</span> whereas likelihood is <span class="math inline">\(L(\theta|D)\)</span>. In probability, parameter <span class="math inline">\(\theta\)</span> is fixed and data <span class="math inline">\(D\)</span> is random whereas in likelihood, data <span class="math inline">\(D\)</span> is fixed and parameter <span class="math inline">\(\theta\)</span> is random.</p>
 </section>
+<section id="what-is-the-difference-between-correlation-and-covariance" class="level5" style="text-align: justify">
+<h5 class="anchored" data-anchor-id="what-is-the-difference-between-correlation-and-covariance">What is the difference between correlation and covariance</h5>
+<p>Correlation and Covariance gives the linear relationship between two variables.</p>
+<p>Covariance gives only the direction of linear relationship between 2 variables. The units are the same as that of the variables. Covariance can take any value between <span class="math inline">\(- \infty\)</span> from <span class="math inline">\(\infty\)</span>.</p>
+<p>Correlation gives both the strength and direction of linear relationship between 2 variables. It can be thought of as a scaled version of covariance and is unitless. Covariance can take any value between <span class="math inline">\(- 1\)</span> from <span class="math inline">\(1\)</span>.</p>
+<p>Based on the difference, two datasets cannot be compared using covariance due to the potential difference in the unit but it can be compared using the correlation.</p>
+</section>
 <section id="section" class="level5" style="text-align: justify">
 <h5 class="anchored" data-anchor-id="section"></h5>
 </section>
 <section id="section-1" class="level5" style="text-align: justify">
 <h5 class="anchored" data-anchor-id="section-1"></h5>
-</section>
-<section id="section-2" class="level5" style="text-align: justify">
-<h5 class="anchored" data-anchor-id="section-2"></h5>
 </section>
 
 
