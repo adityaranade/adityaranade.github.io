@@ -36,7 +36,6 @@ head(data0)
 
 ```
 
-
 ::: {style="text-align: justify"}
 In this case, we will restrict ourselves to continuous response variables, namely V2, V3, V8, V11 and V15.
 :::
@@ -96,10 +95,8 @@ melted_data <- melt(na.omit(data2), id="decision")
 # Plot the histogram of all the variables
 ggplot(melted_data,aes(value))+
   geom_histogram(aes(),bins = 30)+
-  # geom_histogram(aes(y = after_stat(density)),bins = 20)+
   facet_grid2(decision~variable, scales="free")+theme_bw()
 ```
-
 
 ::: {style="text-align: justify"}
 The distribution of the first two variables (V2 and V3) is similar across the decision. So we will exclude these two variables from the model as it is unlikely to have an impact on the decision.
@@ -128,8 +125,6 @@ data_test <- data[-c(ind),]
 data |> summary()
 
 ```
-
-
 
 ```{r}
 #| label: base_model
@@ -167,8 +162,6 @@ data |> summary()
 # auc <- auc@y.values[[1]]
 # auc #0.7968867
 ```
-
-
 
 ```{r}
 #| label: STAN
@@ -249,11 +242,9 @@ fit$summary()
 fsum <- as.data.frame(fit$summary())
 ```
 
-
 ::: {style="text-align: justify"}
 Next we look at the posterior distribution of the parameters and the trace plots. The posterior distribution of the parameters are unimodel and the trace plots indicates a good mix. So no issues with convergence.
 :::
-
 
 ```{r}
 #| label: diagnostics
@@ -297,7 +288,7 @@ print(paste('Accuracy is ',round(accuracy,4)))
 ```
 
 ::: {style="text-align: justify"}
-Our model has an accuracy of around 83% which indicates the model is correctly identifying the posiitve and negative cases in around 83% of the cases. Next, we look at the Receiver Operating Characteristic (ROC) curve. It plots the True Positive Rate (TPR) against the False Positive Rate (FPR). It is the visualization of trade-off between correctly identifying positive cases and incorrectly identifying negative cases as positive. A good model ROC curve which goes from bottom left to top left which means the model is perfectly identifying positive cases and does not identify negatives as positive. On the other hand, a ROC curve which is a straight line from bottom left to to right with slope 1 indicates the model is randomly assigning the positive and negative cases. Our curve is somewhere in between these 2 extreme cases and is decent. The area under the curve (AUC) is around 79% which is also decent.
+Our model has an accuracy of around 83% which indicates the model is correctly identifying the positive and negative cases in around 83% of the cases. Next, we look at the Receiver Operating Characteristic (ROC) curve. It plots the True Positive Rate (TPR) against the False Positive Rate (FPR). It is the visualization of trade-off between correctly identifying positive cases and incorrectly identifying negative cases as positive. A good model ROC curve which goes from bottom left to top left which means the model is perfectly identifying positive cases and does not identify negatives as positive. On the other hand, a ROC curve which is a straight line from bottom left to to right with slope 1 indicates the model is randomly assigning the positive and negative cases. Our curve is somewhere in between these 2 extreme cases and is decent. The area under the curve (AUC) is around 79% which is also decent.
 :::
 
 ```{r}
@@ -318,4 +309,3 @@ auc <- auc@y.values[[1]]
 auc
 
 ```
-

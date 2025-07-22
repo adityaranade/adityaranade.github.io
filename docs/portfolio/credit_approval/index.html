@@ -317,8 +317,7 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the histogram of all the variables</span></span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(melted_data,<span class="fu">aes</span>(value))<span class="sc">+</span></span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(),<span class="at">bins =</span> <span class="dv">30</span>)<span class="sc">+</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># geom_histogram(aes(y = after_stat(density)),bins = 20)+</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid2</span>(decision<span class="sc">~</span>variable, <span class="at">scales=</span><span class="st">"free"</span>)<span class="sc">+</span><span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid2</span>(decision<span class="sc">~</span>variable, <span class="at">scales=</span><span class="st">"free"</span>)<span class="sc">+</span><span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -435,26 +434,26 @@ Chain 1 Iteration:     1 / 20000 [  0%]  (Warmup)
 Chain 2 Iteration:     1 / 20000 [  0%]  (Warmup) 
 Chain 3 Iteration:     1 / 20000 [  0%]  (Warmup) 
 Chain 4 Iteration:     1 / 20000 [  0%]  (Warmup) 
-Chain 2 Iteration: 10000 / 20000 [ 50%]  (Warmup) 
-Chain 2 Iteration: 10001 / 20000 [ 50%]  (Sampling) 
 Chain 1 Iteration: 10000 / 20000 [ 50%]  (Warmup) 
 Chain 1 Iteration: 10001 / 20000 [ 50%]  (Sampling) 
+Chain 2 Iteration: 10000 / 20000 [ 50%]  (Warmup) 
 Chain 3 Iteration: 10000 / 20000 [ 50%]  (Warmup) 
+Chain 2 Iteration: 10001 / 20000 [ 50%]  (Sampling) 
 Chain 3 Iteration: 10001 / 20000 [ 50%]  (Sampling) 
 Chain 4 Iteration: 10000 / 20000 [ 50%]  (Warmup) 
 Chain 4 Iteration: 10001 / 20000 [ 50%]  (Sampling) 
 Chain 2 Iteration: 20000 / 20000 [100%]  (Sampling) 
-Chain 2 finished in 22.2 seconds.
+Chain 2 finished in 21.5 seconds.
 Chain 1 Iteration: 20000 / 20000 [100%]  (Sampling) 
-Chain 1 finished in 23.1 seconds.
+Chain 1 finished in 22.1 seconds.
 Chain 3 Iteration: 20000 / 20000 [100%]  (Sampling) 
-Chain 3 finished in 24.0 seconds.
+Chain 3 finished in 22.8 seconds.
 Chain 4 Iteration: 20000 / 20000 [100%]  (Sampling) 
-Chain 4 finished in 28.7 seconds.
+Chain 4 finished in 23.7 seconds.
 
 All 4 chains finished successfully.
-Mean chain execution time: 24.5 seconds.
-Total execution time: 28.8 seconds.</code></pre>
+Mean chain execution time: 22.5 seconds.
+Total execution time: 23.9 seconds.</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>fit<span class="sc">$</span><span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -553,7 +552,7 @@ Prediction   0   1
 </div>
 </div>
 <div style="text-align: justify">
-<p>Our model has an accuracy of around 83% which indicates the model is correctly identifying the posiitve and negative cases in around 83% of the cases. Next, we look at the Receiver Operating Characteristic (ROC) curve. It plots the True Positive Rate (TPR) against the False Positive Rate (FPR). It is the visualization of trade-off between correctly identifying positive cases and incorrectly identifying negative cases as positive. A good model ROC curve which goes from bottom left to top left which means the model is perfectly identifying positive cases and does not identify negatives as positive. On the other hand, a ROC curve which is a straight line from bottom left to to right with slope 1 indicates the model is randomly assigning the positive and negative cases. Our curve is somewhere in between these 2 extreme cases and is decent. The area under the curve (AUC) is around 79% which is also decent.</p>
+<p>Our model has an accuracy of around 83% which indicates the model is correctly identifying the positive and negative cases in around 83% of the cases. Next, we look at the Receiver Operating Characteristic (ROC) curve. It plots the True Positive Rate (TPR) against the False Positive Rate (FPR). It is the visualization of trade-off between correctly identifying positive cases and incorrectly identifying negative cases as positive. A good model ROC curve which goes from bottom left to top left which means the model is perfectly identifying positive cases and does not identify negatives as positive. On the other hand, a ROC curve which is a straight line from bottom left to to right with slope 1 indicates the model is randomly assigning the positive and negative cases. Our curve is somewhere in between these 2 extreme cases and is decent. The area under the curve (AUC) is around 79% which is also decent.</p>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ROC curve</span></span>
