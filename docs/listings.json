@@ -12,6 +12,7 @@
   {
     "listing": "/portfolio.html",
     "items": [
+      "/portfolio/penguins/penguins.html",
       "/portfolio/interview/index.html",
       "/portfolio/breast_cancer/breast_cancer.html",
       "/portfolio/credit_approval/index.html",

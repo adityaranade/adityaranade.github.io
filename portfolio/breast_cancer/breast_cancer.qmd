@@ -117,15 +117,15 @@ ggpairs(data[,-ncol(data)])
 ```
 
 ::: {style="text-align: justify"}
-As expected, there is multicollinearity in the data. One way to mitigate the effect of multicollinearity is to use $L2$ regularization (often called as ridge regression). Another way is to transform the data using principal component analysis (PCA) and use that data for regression. In this instance, we will first look at logistic regression and then logistic regression using L2 regularization. Let us look at the 
+As expected, there is multicollinearity in the data. One way to mitigate the effect of multicollinearity is to use $L2$ regularization (often called as ridge regression). Another way is to transform the data using principal component analysis (PCA) and use that data for regression. In this instance, we will first look at logistic regression and then logistic regression using L2 regularization.
 :::
 
 ::: {style="text-align: justify"}
-Let us look at the results of logistic regression.
+We first split the data into training and testing set.
 :::
 
 ```{r}
-#| label: logistic_model
+#| label: data_split
 #| echo: true
 #| warning: false
 #| include: true
@@ -142,7 +142,18 @@ data_train <- data[ind,]
 
 # Testing dataset
 data_test <- data[-ind,]
-###############################################################
+```
+
+
+::: {style="text-align: justify"}
+Let us look at the results of logistic regression.
+:::
+
+```{r}
+#| label: logistic_model
+#| echo: true
+#| warning: false
+#| include: true
 
 # Fit an binary logistic regression model
 model <- glm(response ~ ., data = data_train, family = binomial)
@@ -233,10 +244,10 @@ conf_matrix_l2 <- caret::confusionMatrix(as.factor(y_pred_l2),as.factor(data_tes
 conf_matrix_l2
 
 ```
+
 ::: {style="text-align: justify"}
 Now the misclassification rate on the testing data is (2+4)/114 = 0.0526. We will now try the logistic regression with $L2$ regularization, which should improve the performance.
 :::
-
 
 ```{r}
 #| label: diagnostics_model_l2
@@ -298,4 +309,3 @@ This demonstrates that using L2 regularization in logistic regression where ther
 # legend("bottomright", legend = paste("AUC =", round(auc, 3)), col = "blue", lwd = 3)
 # )
 ```
-
