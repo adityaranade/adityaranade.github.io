@@ -168,7 +168,7 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-page">
       <h1 class="title">Identify Penguin species</h1>
-            <p class="subtitle lead">Identify penguin species using naive Bayes classification algorithm</p>
+            <p class="subtitle lead">Identify penguin species using multinomial Logistic Regression</p>
                                 <div class="quarto-categories">
                 <div class="quarto-category">analysis</div>
                 <div class="quarto-category">R</div>
@@ -275,7 +275,7 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 </div>
 </div>
 <div style="text-align: justify">
-<p>As expected, there is multicollinearity in the data for the continuous variables. This is not unexpected.</p>
+<p>It is not unexpected to see multicollinearity in the data for the continuous variables since they are body measurements for the penguins.</p>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Histogram based on species</span></span>
