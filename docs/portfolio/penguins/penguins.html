@@ -221,7 +221,7 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GGally)</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(naivebayes)</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(e1071)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nnet)</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Data is available in the palmer penguins package in R</span></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(palmerpenguins)</span>
@@ -269,7 +269,7 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="penguins_files/figure-html/EDA0-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="penguins_files/figure-html/EDA0-1.png" class="img-fluid figure-img" width="1344"></p>
 </figure>
 </div>
 </div>
@@ -356,91 +356,93 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 </div>
 </div>
 <div style="text-align: justify">
-<p>We now build a naive Bayes classification model to identify the species of Penguins.</p>
+<p>We now build a multinomial logistic regression model to identify the species of Penguins. A multinomial logistic regression model is used when we have more than 2 nominal classes in a categorical variables.</p>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">naiveBayes</span>(species <span class="sc">~</span> ., <span class="at">data =</span> data_train) </span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>model2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">multinom</span>(species <span class="sc">~</span> ., <span class="at">data =</span> data_train) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>
-Naive Bayes Classifier for Discrete Predictors
-
-Call:
-naiveBayes.default(x = X, y = Y, laplace = laplace)
-
-A-priori probabilities:
-Y
-   Adelie Chinstrap    Gentoo 
-0.4396552 0.2025862 0.3577586 
-
-Conditional probabilities:
-           bill_length_mm
-Y               [,1]     [,2]
-  Adelie    38.69706 2.661439
-  Chinstrap 48.83404 3.409531
-  Gentoo    47.11807 2.936862
-
-           bill_depth_mm
-Y               [,1]      [,2]
-  Adelie    18.49216 1.2083608
-  Chinstrap 18.44681 1.1321106
-  Gentoo    14.83855 0.9528943
-
-           flipper_length_mm
-Y               [,1]     [,2]
-  Adelie    189.2255 6.494334
-  Chinstrap 194.6596 6.885008
-  Gentoo    216.5422 6.210340
-
-           body_mass_g
-Y               [,1]     [,2]
-  Adelie    3729.657 458.5914
-  Chinstrap 3744.149 417.3289
-  Gentoo    5053.614 526.8135</code></pre>
+<pre><code># weights:  18 (10 variable)
+initial  value 254.878051 
+iter  10 value 18.171584
+iter  20 value 3.530079
+iter  30 value 1.576129
+iter  40 value 0.007276
+iter  50 value 0.000719
+iter  60 value 0.000656
+iter  70 value 0.000216
+iter  80 value 0.000214
+iter  90 value 0.000195
+iter 100 value 0.000192
+final  value 0.000192 
+stopped after 100 iterations</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>y_pred2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(model2, <span class="at">newdata =</span> data_test)</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>conf_table2 <span class="ot">&lt;-</span> <span class="fu">table</span>(data_test<span class="sc">$</span>species, y_pred2)</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(conf_table2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>model2 <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call:
+multinom(formula = species ~ ., data = data_train)
+
+Coefficients:
+          (Intercept) bill_length_mm bill_depth_mm flipper_length_mm
+Chinstrap   -4.627397       50.77590     -53.80151        -4.4291595
+Gentoo      -3.282477       26.93981     -66.79718        -0.9805378
+          body_mass_g
+Chinstrap -0.10625251
+Gentoo     0.04238281
+
+Std. Errors:
+           (Intercept) bill_length_mm bill_depth_mm flipper_length_mm
+Chinstrap 0.0324946625    0.792550472   0.351600282        4.77472729
+Gentoo    0.0001474703    0.006326474   0.002595476        0.02890417
+          body_mass_g
+Chinstrap   0.2441534
+Gentoo      0.6931102
+
+Residual Deviance: 0.00038416 
+AIC: 20.00038 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>y_pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(model2, <span class="at">newdata =</span> data_test)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>conf_table <span class="ot">&lt;-</span> <span class="fu">table</span>(data_test<span class="sc">$</span>species, y_pred)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(conf_table)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Confusion Matrix and Statistics
 
-           y_pred2
+           y_pred
             Adelie Chinstrap Gentoo
-  Adelie        42         2      0
+  Adelie        44         0      0
   Chinstrap      1        20      0
   Gentoo         0         0     36
 
 Overall Statistics
                                           
-               Accuracy : 0.9703          
-                 95% CI : (0.9156, 0.9938)
-    No Information Rate : 0.4257          
+               Accuracy : 0.9901          
+                 95% CI : (0.9461, 0.9997)
+    No Information Rate : 0.4455          
     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
                                           
-                  Kappa : 0.9537          
+                  Kappa : 0.9845          
                                           
  Mcnemar's Test P-Value : NA              
 
 Statistics by Class:
 
                      Class: Adelie Class: Chinstrap Class: Gentoo
-Sensitivity                 0.9767           0.9091        1.0000
-Specificity                 0.9655           0.9873        1.0000
-Pos Pred Value              0.9545           0.9524        1.0000
-Neg Pred Value              0.9825           0.9750        1.0000
-Prevalence                  0.4257           0.2178        0.3564
-Detection Rate              0.4158           0.1980        0.3564
+Sensitivity                 0.9778           1.0000        1.0000
+Specificity                 1.0000           0.9877        1.0000
+Pos Pred Value              1.0000           0.9524        1.0000
+Neg Pred Value              0.9825           1.0000        1.0000
+Prevalence                  0.4455           0.1980        0.3564
+Detection Rate              0.4356           0.1980        0.3564
 Detection Prevalence        0.4356           0.2079        0.3564
-Balanced Accuracy           0.9711           0.9482        1.0000</code></pre>
+Balanced Accuracy           0.9889           0.9938        1.0000</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Misclassification</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>(<span class="fu">diag</span>(conf_table2)) <span class="sc">/</span> <span class="fu">sum</span>(conf_table2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Misclassification</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>(<span class="fu">diag</span>(conf_table)) <span class="sc">/</span> <span class="fu">sum</span>(conf_table)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.02970297</code></pre>
+<pre><code>[1] 0.00990099</code></pre>
 </div>
 </div>
 <div style="text-align: justify">
-<p>The misclassification rate of the model on test dataset is about 3% which is not bad. We will now try to code the model without using any package.</p>
+<p>The misclassification rate of the model on test dataset is about 1% which is not bad. In fact we misclassified the species of only one penguin.</p>
 </div>
 
 

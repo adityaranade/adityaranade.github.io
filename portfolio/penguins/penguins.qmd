@@ -26,7 +26,7 @@ library(ggh4x)
 library(GGally)
 library(naivebayes)
 library(caret)
-library(e1071)
+library(nnet)
 
 # Data is available in the palmer penguins package in R
 library(palmerpenguins)
@@ -51,6 +51,7 @@ data00 <- na.omit(data0)
 #| echo: true
 #| warning: false
 #| include: true
+#| fig-width: 14
 
 # Pairs plot between the explanatory variables to 
 # check correlation between each pair of the variables
@@ -128,26 +129,26 @@ data_test |> count(species)
 ```
 
 ::: {style="text-align: justify"}
-We now build a naive Bayes classification model to identify the species of Penguins.
+We now build a multinomial logistic regression model to identify the species of Penguins. A multinomial logistic regression model is used when we have more than 2 nominal classes in a categorical variables.
 :::
 
 ```{r}
-#| label: naive_bayes
+#| label: multinomial_logistic_regresson
 #| echo: true
 #| warning: false
 #| include: true
 
-model2 <- naiveBayes(species ~ ., data = data_train) 
-model2
+model2 <- multinom(species ~ ., data = data_train) 
+model2 |> summary()
 
-y_pred2 <- predict(model2, newdata = data_test)
-conf_table2 <- table(data_test$species, y_pred2)
-confusionMatrix(conf_table2)
+y_pred <- predict(model2, newdata = data_test)
+conf_table <- table(data_test$species, y_pred)
+confusionMatrix(conf_table)
 
 # Misclassification
-1 - sum(diag(conf_table2)) / sum(conf_table2)
+1 - sum(diag(conf_table)) / sum(conf_table)
 ```
 
 ::: {style="text-align: justify"}
-The misclassification rate of the model on test dataset is about 3% which is not bad. We will now try to code the model without using any package.
+The misclassification rate of the model on test dataset is about 1% which is not bad. In fact we misclassified the species of only one penguin.
 :::
