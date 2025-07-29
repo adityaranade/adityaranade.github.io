@@ -33,43 +33,19 @@ path <- "https://raw.githubusercontent.com/adityaranade/portfolio/refs/heads/mai
 data0 <- read.table(path, sep=",", header = TRUE)
 
 # Data processing
-head(data0)
-
-# Variable names
-colnames(data0)
-```
-
-::: {style="text-align: justify"}
-We will ignore the date variable. Occupancy is the binary variable which takes value 0 if the room is not occupied and takes the value 1 if the room is occupied. The explanatory variables are temperature, humidity, light carbon dioxide (CO2) and humidity ratio which are all numerical variables. Lets take a look at the first six rows of the dataset and check if there are any missing values in the dataset.
-:::
-
-```{r}
-#| label: EDA0
-#| echo: true
-#| warning: false
-#| include: true
-
-# Data processing
-head(data0)
-
-# change column names
-colnames(data0)
-# "date","Temperature","Humidity","Light",
-# "CO2","HumidityRatio","Occupancy"  
-
-# Check the first 6 rows of the dataset
-data0 |> head()
-
 # Check the type of data
 data0 |> str()
 
 # Check the rows which do not have any entries
 sum(is.na(data0)) # No NA values
 
+# Check the first 6 rows of the dataset
+data0%>% head
+
 ```
 
 ::: {style="text-align: justify"}
-Now we will look at the correlation plot which shows the correlation between each pair of the explanatory variables.
+First column is the date which we will ignore. There are no missing values. Occupancy is the binary variable which takes value 0 if the room is not occupied and takes the value 1 if the room is occupied. The explanatory variables are temperature, humidity, light carbon dioxide (CO2) and humidity ratio which are all numerical variables. Next, we will look at the correlation plot which shows the correlation between each pair of the explanatory variables.
 :::
 
 ```{r}
@@ -181,4 +157,19 @@ legend("bottomright", legend = paste("AUC =", round(auc_value, 3)), col = "blue"
 
 ::: {style="text-align: justify"}
 Misclassification is just around 0.4% on the testing dataset. This is not bad. Also the ROC curve is close to perfect and Area under the curve is also close to 1. We will now try to interpret the coefficients of the model as it will give us an idea of how the explanatory variable impacts the response variable occupancy.
+:::
+
+```{r}
+#| label: base_model2
+#| echo: true
+#| warning: false
+#| include: true
+
+# Extract the model parameters / coefficients
+model$coefficients
+
+```
+
+::: {style="text-align: justify"}
+The intercept is , the coefficient associated with light is and the coefficient associated with humidty temperature is .
 :::
