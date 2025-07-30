@@ -272,7 +272,7 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 </div>
 </div>
 <div style="text-align: justify">
-<p>Humidity and Humidity ratio has high correlation (close to 1). This is on expected lines as humidity ratio is derived from humidity. We will keep only one variable in the model. Now let us look at the distribution of the continuous variables according to occupancy variable.</p>
+<p>Humidity and Humidity ratio has high correlation (close to 1). This is on expected lines as humidity ratio is derived from humidity. Now let us look at the distribution of the continuous variables according to occupancy variable.</p>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Data for histogram</span></span>
@@ -285,13 +285,13 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/EDA2-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/EDA2-1.png" class="img-fluid figure-img" width="1920"></p>
 </figure>
 </div>
 </div>
 </div>
 <div style="text-align: justify">
-<p>We will keep humidity ratio and light in the model. We will build a logistic regression model.</p>
+<p>We will keep temperature and light in the model as explanatory variable and look to predict the room occupancy using a logistic regression model.</p>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select the variables to keep in the model</span></span>
@@ -376,7 +376,7 @@ Number of Fisher Scoring iterations: 9</code></pre>
 </div>
 </div>
 <div style="text-align: justify">
-<p>The misclassification is 8 out of a total of 2036 test cases. This is a good model.</p>
+<p>The misclassification is 8 out of a total of 2036 test cases which is not a bad situation.</p>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Misclassification</span></span>
@@ -404,18 +404,7 @@ Number of Fisher Scoring iterations: 9</code></pre>
 </div>
 </div>
 <div style="text-align: justify">
-<p>Misclassification is just around 0.4% on the testing dataset. This is not bad. Also the ROC curve is close to perfect and Area under the curve is also close to 1. We will now try to interpret the coefficients of the model as it will give us an idea of how the explanatory variable impacts the response variable occupancy.</p>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the model parameters / coefficients</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>model<span class="sc">$</span>coefficients</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  (Intercept)         Light HumidityRatio 
-  -9.48953438    0.02224673  374.62234627 </code></pre>
-</div>
-</div>
-<div style="text-align: justify">
-<p>The intercept is , the coefficient associated with light is and the coefficient associated with humidty temperature is .</p>
+<p>Misclassification is just around 0.4% on the testing dataset. This is not bad. Also the ROC curve is close to perfect and Area under the curve is also close to 1.</p>
 </div>
 
 
