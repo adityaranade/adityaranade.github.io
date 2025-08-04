@@ -20,7 +20,7 @@
         "Cereals are commonly consumed for breakfast and there are plenty of options available for cereals. I found this dataset on Kaggle which gives the nutritional information about cereals as well as the ratings. It is not clear where the rating come from, but I think they are the average ratings from the customers. Can we predict the ratings based on the nutritional information of cereals ? First, we look at the exploratory data analysis and later try some simple regression models. First let us access and process the data through python.\n",
         ":::\n"
       ],
-      "id": "78bf9810"
+      "id": "3037ea94"
     },
     {
       "cell_type": "code",
@@ -97,7 +97,7 @@
         "Now that we have the data ready, let us look at the histogram of each variables namely nutritional contents, specifically calories, protein, fat, sodium, fiber, carbo, sugars and potassium\n",
         ":::\n"
       ],
-      "id": "c503ac2f"
+      "id": "8d5c2437"
     },
     {
       "cell_type": "code",
@@ -139,7 +139,7 @@
       "source": [
         "The histogram of each of the variables do not show any problems as all the plots look decent. We will look at the correlation plot, which shows the correlation between each pair of variables in a visual form.\n"
       ],
-      "id": "8fd5ae4c"
+      "id": "15dec6d5"
     },
     {
       "cell_type": "code",
@@ -166,7 +166,7 @@
         "Rating variable has positive correlation with all the variables except sugar, sodium, fat and calories . This seems logical and will be useful when we build a regression model for the same. Next we take a look at the pairs plot which will give us idea about relationship between each pair of variables. Most important from the point of prediction is the last row where rating is the y axis and each of the variable is x axis.\n",
         ":::\n"
       ],
-      "id": "15ec2ade"
+      "id": "d5245558"
     },
     {
       "cell_type": "code",
@@ -222,7 +222,7 @@
         "The scatterplots of each variable with calories which can be seen in the upper triangular plots in the very first row. It seems there is a linear association between calories and fat, carbs and protein. However, it does not seem to have a linear association with fiber.\n",
         ":::\n"
       ],
-      "id": "d9bf722c"
+      "id": "b9c25d32"
     },
     {
       "cell_type": "code",
@@ -267,7 +267,7 @@
         "Now let us make prediction on the testing data and plot the observed vs. predicted plot\n",
         ":::\n"
       ],
-      "id": "9c7be8c7"
+      "id": "532cc3a2"
     },
     {
       "cell_type": "code",
@@ -304,7 +304,7 @@
         "The observed vs. predicted looks good. However there is low number of data points and hence we should take this with a grain of salt. Let us check some evaluation metrics like the Root Mean Squared Error (RMSE) and Mean Absolute Error (MAE).\n",
         ":::\n"
       ],
-      "id": "7fdd1d2b"
+      "id": "dc4e1d6a"
     },
     {
       "cell_type": "code",
@@ -335,7 +335,7 @@
         "Now, we will run regression model based on principal component analysis since it helps with multicollinearity.\n",
         ":::\n"
       ],
-      "id": "91340190"
+      "id": "29b2264b"
     },
     {
       "cell_type": "code",
@@ -385,7 +385,7 @@
         "The first six principal components explain around 98% of the data, so we will use the first six principal components to build a regression model.\n",
         ":::\n"
       ],
-      "id": "c9f2466a"
+      "id": "b7493c1c"
     },
     {
       "cell_type": "code",
@@ -436,7 +436,7 @@
         "We can observe that only rating variable has correlation with the principal components and the correlation between the principal components is 0. The correlation of rating with principal component 6 and 8 is considerably low and hence we will not use them in the model. So we will use the principal components 1,2,3,4,5 and 8 to build a regression model.\n",
         ":::\n"
       ],
-      "id": "a869ddaa"
+      "id": "aac8a7cb"
     },
     {
       "cell_type": "code",
@@ -465,7 +465,7 @@
         "$R^{2}$ is 99.7% which is decent and all the predictor variables have a low p-value value. We make predictions using the test data and then plot the out of sample observed vs. predicted. First we calculate the principal components of the testing data and then make the predictions.\n",
         ":::\n"
       ],
-      "id": "2100ca3e"
+      "id": "ad1a3fe6"
     },
     {
       "cell_type": "code",
@@ -502,7 +502,7 @@
         "Now we plot the out of sample predictions obtained from regression model using raw data as well as the predictions obtained from model using the six principal components on the same plot with different colors.\n",
         ":::\n"
       ],
-      "id": "18a602ba"
+      "id": "27a8a28c"
     },
     {
       "cell_type": "code",
@@ -541,7 +541,7 @@
         "The out of sample observed vs. predicted plot looks decent with all the points just around the red line. WE look at the evaluation metrics for the model built using the principal components.\n",
         ":::\n"
       ],
-      "id": "d7f6b607"
+      "id": "bc5085de"
     },
     {
       "cell_type": "code",
@@ -568,7 +568,7 @@
         "For the regression model using first six principal components, Root Mean Squared Error (RMSE) is 1.23 and Mean Absolute Error (MAE) is 1.89 which is slightly higher than the regression model using the raw data.\n",
         ":::"
       ],
-      "id": "a96d57e4"
+      "id": "7ab6fad5"
     }
   ],
   "metadata": {

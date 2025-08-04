@@ -20,7 +20,7 @@
         "I found this [dataset](https://archive.ics.uci.edu/dataset/1150/gallstone-1) on Kaggle which gives gallstone disease identification data. First, we look at the exploratory data analysis and later try to build predictive models like logistic regression, support vector classifier and k nearest neighbour model. First let us access and process the data through python\n",
         ":::\n"
       ],
-      "id": "ac7ace16"
+      "id": "96b39920"
     },
     {
       "cell_type": "code",
@@ -94,7 +94,7 @@
         "Now that we have the data ready, let us look at the histogram of each variables namely calories, fat, carbs, fiber, protein and sodium\n",
         ":::\n"
       ],
-      "id": "85f116c0"
+      "id": "e86f766a"
     },
     {
       "cell_type": "code",
@@ -124,7 +124,7 @@
       "source": [
         "The histogram of each of the variables do not show any problems as all the plots look decent. We will look at the correlation plot.\n"
       ],
-      "id": "73fedbb9"
+      "id": "f6ddd569"
     },
     {
       "cell_type": "code",
@@ -152,7 +152,7 @@
         "Correlation plot indicates weak association between all the variables which indicates there might not be severe multicolinearity. It does not warrant any cause of concern. Now we will look at the pairs plot which will show the pairwise relationship.\n",
         ":::\n"
       ],
-      "id": "14a50e67"
+      "id": "f1e01cc6"
     },
     {
       "cell_type": "code",
@@ -182,7 +182,7 @@
         "The scatterplots of each variable with which can be seen in the lower triangular plots. No strong association between any two variables. We will try to run different models like logistic regression, k nearest neighbours and support vector classification model on the data. First we will split the data into training (70%) and testing set (30%) and standardize the data.\n",
         ":::\n"
       ],
-      "id": "ab472e8b"
+      "id": "393a1f41"
     },
     {
       "cell_type": "code",
@@ -225,7 +225,7 @@
         "Now we will run a logistic regression model first.\n",
         ":::\n"
       ],
-      "id": "f965219e"
+      "id": "a65abde2"
     },
     {
       "cell_type": "code",
@@ -244,12 +244,39 @@
         "model.fit(X_train, y_train)\n",
         "\n",
         "# Predictions\n",
-        "y_pred = model.predict(X_test)\n",
+        "y_pred_logistic = model.predict(X_test)\n",
         "\n",
         "# Evaluation\n",
-        "print(\"Confusion Matrix:\\n\", confusion_matrix(y_test, y_pred))\n",
-        "print(\"Accuracy:\", accuracy_score(y_test, y_pred))\n",
-        "print(\"\\nClassification Report:\\n\", classification_report(y_test, y_pred))"
+        "print(\"Confusion Matrix:\\n\", confusion_matrix(y_test, y_pred_logistic))\n",
+        "print(\"Accuracy:\", accuracy_score(y_test, y_pred_logistic))\n",
+        "print(\"\\nClassification Report:\\n\", classification_report(y_test, y_pred_logistic))"
+      ],
+      "id": "logistic_model",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: logistic_model\n",
+        "#| echo: true\n",
+        "#| warning: false\n",
+        "#| include: true\n",
+        "\n",
+        "from sklearn.metrics import roc_auc_score, roc_curve\n",
+        "\n",
+        "y_prob = model.predict_proba(X_test)[:, 1]  # probability of positive class\n",
+        "auc = roc_auc_score(y_test, y_prob)\n",
+        "print(\"AUC:\", auc)\n",
+        "\n",
+        "fpr, tpr, _ = roc_curve(y_test, y_prob)\n",
+        "plt.plot(fpr, tpr, label=f\"AUC = {auc:.2f}\")\n",
+        "plt.plot([0, 1], [0, 1], linestyle=\"--\")\n",
+        "plt.xlabel(\"False Positive Rate\")\n",
+        "plt.ylabel(\"True Positive Rate\")\n",
+        "plt.legend()\n",
+        "plt.show()"
       ],
       "id": "logistic_model",
       "execution_count": null,
@@ -263,7 +290,7 @@
         "Next, we will run a k nearest neighbour model.\n",
         ":::\n"
       ],
-      "id": "ce3a21d3"
+      "id": "d7d89c26"
     },
     {
       "cell_type": "code",
@@ -276,7 +303,7 @@
         "\n",
         "# KNN model\n",
         "from sklearn.neighbors import KNeighborsClassifier\n",
-        "from sklearn.metrics import accuracy_score, classification_report\n",
+        "from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, classification_report\n",
         "\n",
         "from sklearn.model_selection import cross_val_score\n",
         "k_values = range(1, 11)\n",
@@ -295,12 +322,12 @@
         "knn.fit(X_train, y_train)\n",
         "\n",
         "# Predictions\n",
-        "y_pred = knn.predict(X_test)\n",
+        "y_pred_knn = knn.predict(X_test)\n",
         "\n",
         "# Accuracy\n",
-        "print(\"Confusion Matrix:\\n\", confusion_matrix(y_test, y_pred))\n",
-        "print(\"Accuracy:\", accuracy_score(y_test, y_pred))\n",
-        "print(\"\\nClassification Report:\\n\", classification_report(y_test, y_pred))"
+        "print(\"Confusion Matrix:\\n\", confusion_matrix(y_test, y_pred_knn))\n",
+        "print(\"Accuracy:\", accuracy_score(y_test, y_pred_knn))\n",
+        "print(\"\\nClassification Report:\\n\", classification_report(y_test, y_pred_knn))"
       ],
       "id": "knn_model",
       "execution_count": null,
@@ -314,7 +341,7 @@
         "Next, we will run a support vector classification model.\n",
         ":::\n"
       ],
-      "id": "bf3f01d7"
+      "id": "550b47ee"
     },
     {
       "cell_type": "code",
@@ -346,12 +373,12 @@
         "svm_model.fit(X_train, y_train)\n",
         "\n",
         "# Predictions\n",
-        "y_pred = svm_model.predict(X_test)\n",
+        "y_pred_svm = svm_model.predict(X_test)\n",
         "\n",
         "# Evaluation\n",
-        "print(\"Confusion Matrix:\\n\", confusion_matrix(y_test, y_pred))\n",
-        "print(\"Accuracy:\", accuracy_score(y_test, y_pred))\n",
-        "print(\"\\nClassification Report:\\n\", classification_report(y_test, y_pred))"
+        "print(\"Confusion Matrix:\\n\", confusion_matrix(y_test, y_pred_svm))\n",
+        "print(\"Accuracy:\", accuracy_score(y_test, y_pred_svm))\n",
+        "print(\"\\nClassification Report:\\n\", classification_report(y_test, y_pred_svm))"
       ],
       "id": "svc_model",
       "execution_count": null,
@@ -362,18 +389,65 @@
       "metadata": {},
       "source": [
         "::: {style=\"text-align: justify\"}\n",
-        "The R code for the analysis can be found [here](https://raw.githubusercontent.com/adityaranade/portfolio/refs/heads/main/gallstone/gallstone.R) \n",
+        "The combined evaluation metrics can be seen in the table below. It seems the k nearest neighbor model has the highest accuracy. However, the accuracy for the logistic regression and support vector machine models is not  too bad.\n",
+        ":::\n"
+      ],
+      "id": "1d6e3786"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: combine_results\n",
+        "#| echo: true\n",
+        "#| warning: false\n",
+        "#| include: true\n",
+        "\n",
+        "# Combine the results of all the models.\n",
+        "from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score\n",
+        "\n",
+        "# Store all models\n",
+        "models = {\n",
+        "    \"Logistic Regression\": y_pred_logistic,\n",
+        "    \"KNN\": y_pred_knn,\n",
+        "    \"SVM\": y_pred_knn\n",
+        "}\n",
+        "\n",
+        "# Calculate metrics for each model\n",
+        "results = []\n",
+        "for name, y_pred in models.items():\n",
+        "    results.append({\n",
+        "        \"Model\": name,\n",
+        "        \"Accuracy\": round(accuracy_score(y_test, y_pred),4),\n",
+        "        \"Precision\": round(precision_score(y_test, y_pred),4),\n",
+        "        \"Recall\": round(recall_score(y_test, y_pred),4),\n",
+        "        \"F1 Score\": round(f1_score(y_test, y_pred),4)\n",
+        "    })\n",
+        "\n",
+        "# Create DataFrame\n",
+        "results_df = pd.DataFrame(results)\n",
+        "print(results_df)"
+      ],
+      "id": "combine_results",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "::: {style=\"text-align: justify\"}\n",
+        "The R code for the analysis can be found [here](https://raw.githubusercontent.com/adityaranade/portfolio/refs/heads/main/gallstone/gallstone.R)\n",
         ":::"
       ],
-      "id": "eabac0cc"
+      "id": "9f532c0d"
     }
   ],
   "metadata": {
     "kernelspec": {
-      "name": "python3",
+      "display_name": "Python 3",
       "language": "python",
-      "display_name": "Python 3 (ipykernel)",
-      "path": "C:\\Users\\adity\\AppData\\Local\\Programs\\Python\\Python313\\share\\jupyter\\kernels\\python3"
+      "name": "python3"
     }
   },
   "nbformat": 4,

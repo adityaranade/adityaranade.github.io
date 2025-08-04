@@ -161,13 +161,34 @@ model = LogisticRegression()
 model.fit(X_train, y_train)
 
 # Predictions
-y_pred = model.predict(X_test)
+y_pred_logistic = model.predict(X_test)
 
 # Evaluation
-print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
-print("Accuracy:", accuracy_score(y_test, y_pred))
-print("\nClassification Report:\n", classification_report(y_test, y_pred))
+print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred_logistic))
+print("Accuracy:", accuracy_score(y_test, y_pred_logistic))
+print("\nClassification Report:\n", classification_report(y_test, y_pred_logistic))
 
+```
+
+```{python}
+#| label: logistic_model
+#| echo: true
+#| warning: false
+#| include: true
+
+from sklearn.metrics import roc_auc_score, roc_curve
+
+y_prob = model.predict_proba(X_test)[:, 1]  # probability of positive class
+auc = roc_auc_score(y_test, y_prob)
+print("AUC:", auc)
+
+fpr, tpr, _ = roc_curve(y_test, y_prob)
+plt.plot(fpr, tpr, label=f"AUC = {auc:.2f}")
+plt.plot([0, 1], [0, 1], linestyle="--")
+plt.xlabel("False Positive Rate")
+plt.ylabel("True Positive Rate")
+plt.legend()
+plt.show()
 ```
 
 ::: {style="text-align: justify"}
@@ -182,7 +203,7 @@ Next, we will run a k nearest neighbour model.
 
 # KNN model
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import accuracy_score, classification_report
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, classification_report
 
 from sklearn.model_selection import cross_val_score
 k_values = range(1, 11)
@@ -201,12 +222,12 @@ knn = KNeighborsClassifier(n_neighbors=best_k)
 knn.fit(X_train, y_train)
 
 # Predictions
-y_pred = knn.predict(X_test)
+y_pred_knn = knn.predict(X_test)
 
 # Accuracy
-print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
-print("Accuracy:", accuracy_score(y_test, y_pred))
-print("\nClassification Report:\n", classification_report(y_test, y_pred))
+print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred_knn))
+print("Accuracy:", accuracy_score(y_test, y_pred_knn))
+print("\nClassification Report:\n", classification_report(y_test, y_pred_knn))
 ```
 
 ::: {style="text-align: justify"}
@@ -240,14 +261,51 @@ svm_model = SVC(kernel='rbf', C=10, gamma=0.01)
 svm_model.fit(X_train, y_train)
 
 # Predictions
-y_pred = svm_model.predict(X_test)
+y_pred_svm = svm_model.predict(X_test)
 
 # Evaluation
-print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
-print("Accuracy:", accuracy_score(y_test, y_pred))
-print("\nClassification Report:\n", classification_report(y_test, y_pred))
+print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred_svm))
+print("Accuracy:", accuracy_score(y_test, y_pred_svm))
+print("\nClassification Report:\n", classification_report(y_test, y_pred_svm))
 ```
 
 ::: {style="text-align: justify"}
-The R code for the analysis can be found [here](https://raw.githubusercontent.com/adityaranade/portfolio/refs/heads/main/gallstone/gallstone.R) 
+The combined evaluation metrics can be seen in the table below. It seems the k nearest neighbor model has the highest accuracy. However, the accuracy for the logistic regression and support vector machine models is not  too bad.
+:::
+
+```{python}
+#| label: combine_results
+#| echo: true
+#| warning: false
+#| include: true
+
+# Combine the results of all the models.
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+
+# Store all models
+models = {
+    "Logistic Regression": y_pred_logistic,
+    "KNN": y_pred_knn,
+    "SVM": y_pred_knn
+}
+
+# Calculate metrics for each model
+results = []
+for name, y_pred in models.items():
+    results.append({
+        "Model": name,
+        "Accuracy": round(accuracy_score(y_test, y_pred),4),
+        "Precision": round(precision_score(y_test, y_pred),4),
+        "Recall": round(recall_score(y_test, y_pred),4),
+        "F1 Score": round(f1_score(y_test, y_pred),4)
+    })
+
+# Create DataFrame
+results_df = pd.DataFrame(results)
+print(results_df)
+
+```
+
+::: {style="text-align: justify"}
+The R code for the analysis can be found [here](https://raw.githubusercontent.com/adityaranade/portfolio/refs/heads/main/gallstone/gallstone.R)
 :::
