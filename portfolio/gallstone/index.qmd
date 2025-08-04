@@ -4,7 +4,7 @@ subtitle: "Comparing AI methods to predict gallstone disease"
 author: "Aditya Ranade"
 highlight-style: github-light
 date: "2025-05-07"
-categories: [analysis, python]
+categories: [analysis, python, R]
 image: "./gallbladder.png"
 jupyter: python3
 ---
@@ -89,7 +89,7 @@ The histogram of each of the variables do not show any problems as all the plots
 #| include: true
 
 # Correlation plot
-plt.figure(figsize=(20,10))
+plt.figure(figsize=(20,8))
 sns.heatmap(df.iloc[:,1:].corr(),annot=True)
 plt.show()
 ```
@@ -247,3 +247,7 @@ print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
 print("Accuracy:", accuracy_score(y_test, y_pred))
 print("\nClassification Report:\n", classification_report(y_test, y_pred))
 ```
+
+::: {style="text-align: justify"}
+The R code for the analysis can be found [here](https://raw.githubusercontent.com/adityaranade/portfolio/refs/heads/main/gallstone/gallstone.R) 
+:::

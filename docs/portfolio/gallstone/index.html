@@ -179,6 +179,7 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
                                 <div class="quarto-categories">
                 <div class="quarto-category">analysis</div>
                 <div class="quarto-category">python</div>
+                <div class="quarto-category">R</div>
               </div>
                   </div>
   </div>
@@ -237,7 +238,7 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>df0<span class="op">=</span>pd.read_csv(path)</span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>df0.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div id="load-packages" class="cell-output cell-output-display" data-execution_count="1">
+<div id="load-packages" class="cell-output cell-output-display" data-execution_count="11">
 <div>
 
 
@@ -429,7 +430,7 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 <p>The histogram of each of the variables do not show any problems as all the plots look decent. We will look at the correlation plot.</p>
 <div id="cell-EDA2" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Correlation plot</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">20</span>,<span class="dv">10</span>))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">20</span>,<span class="dv">8</span>))</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>sns.heatmap(df.iloc[:,<span class="dv">1</span>:].corr(),annot<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -617,6 +618,9 @@ Classification Report:
 weighted avg       0.72      0.72      0.72        96
 </code></pre>
 </div>
+</div>
+<div style="text-align: justify">
+<p>The R code for the analysis can be found <a href="https://raw.githubusercontent.com/adityaranade/portfolio/refs/heads/main/gallstone/gallstone.R">here</a></p>
 </div>
 
 
