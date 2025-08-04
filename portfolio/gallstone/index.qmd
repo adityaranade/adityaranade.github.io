@@ -4,7 +4,7 @@ subtitle: "Comparing AI methods to predict gallstone disease"
 author: "Aditya Ranade"
 highlight-style: github-light
 date: "2025-05-07"
-categories: [analysis, python, R]
+categories: [AI, analysis, python, R]
 image: "./gallbladder.png"
 jupyter: python3
 ---
@@ -89,7 +89,7 @@ The histogram of each of the variables do not show any problems as all the plots
 #| include: true
 
 # Correlation plot
-plt.figure(figsize=(20,8))
+plt.figure(figsize=(15,10))
 sns.heatmap(df.iloc[:,1:].corr(),annot=True)
 plt.show()
 ```
@@ -148,7 +148,7 @@ Now we will run a logistic regression model first.
 :::
 
 ```{python}
-#| label: logistic_model
+#| label: logistic_model1
 #| echo: true
 #| warning: false
 #| include: true
@@ -171,7 +171,7 @@ print("\nClassification Report:\n", classification_report(y_test, y_pred_logisti
 ```
 
 ```{python}
-#| label: logistic_model
+#| label: logistic_model2
 #| echo: true
 #| warning: false
 #| include: true
@@ -269,10 +269,6 @@ print("Accuracy:", accuracy_score(y_test, y_pred_svm))
 print("\nClassification Report:\n", classification_report(y_test, y_pred_svm))
 ```
 
-::: {style="text-align: justify"}
-The combined evaluation metrics can be seen in the table below. It seems the k nearest neighbor model has the highest accuracy. However, the accuracy for the logistic regression and support vector machine models is not  too bad.
-:::
-
 ```{python}
 #| label: combine_results
 #| echo: true
@@ -307,5 +303,5 @@ print(results_df)
 ```
 
 ::: {style="text-align: justify"}
-The R code for the analysis can be found [here](https://raw.githubusercontent.com/adityaranade/portfolio/refs/heads/main/gallstone/gallstone.R)
+The combined evaluation metrics can be seen in the table above. It seems the k nearest neighbor model has the highest accuracy. However, the accuracy for the logistic regression and support vector machine models is not too bad. The R code for the analysis can be found [here](https://raw.githubusercontent.com/adityaranade/portfolio/refs/heads/main/gallstone/gallstone.R)
 :::

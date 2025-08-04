@@ -5,7 +5,7 @@ author: "Aditya Ranade"
 highlight-style:
             light: github
 date: "2025-04-11"
-categories: [analysis, R]
+categories: [AI, analysis, R]
 image: "./breast_cancer.jpg"
 ---
 
@@ -143,7 +143,6 @@ data_train <- data[ind,]
 # Testing dataset
 data_test <- data[-ind,]
 ```
-
 
 ::: {style="text-align: justify"}
 Let us look at the results of logistic regression.
