@@ -10,7 +10,7 @@ jupyter: python3
 ---
 
 ::: {style="text-align: justify"}
-I found this [dataset](https://archive.ics.uci.edu/dataset/1150/gallstone-1) on Kaggle which gives gallstone disease identification data. First, we look at the exploratory data analysis and later try to build predictive models like logistic regression, support vector classifier and k nearest neighbour model. First let us access and process the data through python
+I found this [dataset](https://archive.ics.uci.edu/dataset/1150/gallstone-1) on UCI machine learning repository which gives gallstone disease identification data. First, we look at the exploratory data analysis and later try to build predictive models like logistic regression, support vector classifier and k nearest neighbour model. First let us access and process the data through python.
 :::
 
 ```{python}
