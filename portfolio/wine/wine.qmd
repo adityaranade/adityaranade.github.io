@@ -1,0 +1,338 @@
+---
+title: "Predicting Wine Quality"
+subtitle: "Predicting wine quality using multiple ML models"
+author: "Aditya Ranade"
+highlight-style:
+  light: github
+date: "2025-05-23"
+categories: [analysis, R]
+image: "./wine.jpg"
+---
+
+::: {style="text-align: justify"}
+I found this [dataset](https://archive.ics.uci.edu/dataset/186/wine+quality) on UCI machine learning repository which gives the dataset related to red and white variants of the Portuguese "Vinho Verde" wine which has physicochemical variables (input) and sensory variables (output) available. Due to privacy, the wine brand, type of grape and selling price is not provided. In this post, we will try to predict the quality based on the physicochemical variables.
+:::
+
+```{r}
+#| label: load-packages
+#| echo: true
+#| warning: false
+#| include: true
+
+library(reshape2)
+library(ggplot2)
+library(ggh4x)
+library(ggcorrplot)
+library(GGally) # for pairs plot using ggplot framework
+
+# Load the data
+path <- "https://raw.githubusercontent.com/adityaranade/portfolio/refs/heads/main/wine/winequality-red.csv"
+data0 <- read.csv(path, header = TRUE)
+
+# Data processing
+# Check the type of data
+data0 |> str()
+
+# Check the rows which do not have any entries
+sum(is.na(data0)) # no NA values
+
+# data (no need to exclude anything)
+data <- data0
+
+head(data)
+```
+
+```{r}
+#| label: EDA0
+#| echo: true
+#| warning: false
+#| include: true
+#| fig-width: 14
+#| fig-height: 20
+
+# Correlation plot
+ggcorrplot(round(cor(data), 2))
+
+# Pairs plot between the explanatory variables to 
+# check correlation between each pair of the variables
+ggpairs(data[,-ncol(data)])
+```
+
+::: {style="text-align: justify"}
+The correlation plot indicates moderate multicolinearity. The histogram of the response variable quality can be seen below. It can be seen most of the entries take the value 5, 6 or 7. Very few entries have value 3, 4 or 8.
+:::
+
+```{r}
+#| label: EDA1
+#| echo: true
+#| warning: false
+#| include: true
+#| fig-width: 14
+#| fig-height: 6
+
+# Check the histogram of the response variable
+ggplot(data,aes(quality))+
+  geom_histogram()+
+  theme_bw()
+```
+
+::: {style="text-align: justify"}
+This can be treated as a count data and we can use the Poisson regression. However in Poisson regression, the mean and variance of the response variable quality should be same.
+:::
+  
+```{r}
+#| label: EDA2
+#| echo: true
+#| warning: false
+#| include: true
+
+# Check if the mean and variance of response variable is same.
+
+# Mean
+data$quality %>% mean
+# Variance
+data$quality %>% var
+```  
+
+::: {style="text-align: justify"}
+The mean is considerably greater than variance. Hence Poisson regression model will not work well. An alternative is to use a quasi Poisson model or Negative Binomial model. We will start with a basic multiple linear regression model. First we process the data and standardize all the variables.
+:::
+  
+```{r}
+#| label: data_split
+#| echo: true
+#| warning: false
+#| include: true
+
+# Standardize the data
+# Scale everything except the response variable (last column)
+data2 <- data
+data2[, -ncol(data)] <- scale(data[, -ncol(data)])
+
+# split the data into training and testing data
+seed <- 23
+set.seed(seed)
+
+ind <- sample(1:nrow(data2),
+              floor(0.8*nrow(data2)),
+              replace = FALSE)
+
+# Training dataset
+data_train <- data2[ind,] |> as.data.frame()
+# Testing dataset
+data_test <- data2[-ind,] |> as.data.frame()
+data_test |> dim()
+```
+
+
+::: {style="text-align: justify"}
+Now we run a linear regression model with quality being predicted as a response to volatile acidity, chlorides, total sulfur dioxide, pH, sulphates and alcohol. These variables have been selected after trying multiple combinations of predictor variables. Once we build the model and make predictions, we will round the response variable and make a Predicted vs. actual table. This will help us understand how many correct values were predicted.
+:::
+  
+```{r}
+#| label: mlr
+#| echo: true
+#| warning: false
+#| include: true
+
+model <- lm(quality ~ volatile.acidity + chlorides + total.sulfur.dioxide 
+            + pH + sulphates + alcohol,
+            data = data_train)
+summary(model)
+
+# Prediction on the testing dataset
+y_pred <- predict(model, data_test, type = "response")
+
+# # Create a observed vs. predicted plot
+# ggplot(NULL,aes(y_pred,data_test$quality))+geom_point()+
+#   labs(y = "Observed", x="Predicted")+theme_minimal()+geom_abline()
+
+table_lm <- table(Predicted = as.factor(round(y_pred)),
+                  Actual = as.factor(data_test$quality))
+table_lm
+```
+
+::: {style="text-align: justify"}
+Since there is some multicolinearity in the data, we can try to use L2  regularization which is also called as ridge regression. This helps shrink the coefficients of the model towards zero.
+:::
+  
+  
+```{r}
+library(glmnet)
+#| label: mlr
+#| echo: true
+#| warning: false
+#| include: true
+
+model_l2_cv <- cv.glmnet(as.matrix(data_train[,-ncol(data_train)]),
+                         as.matrix(data_train[,ncol(data_train)]),
+                         alpha = 1)
+
+#find optimal lambda value that minimizes test MSE
+best_lambda <- model_l2_cv$lambda.min
+best_lambda
+
+model_l2 <- glmnet(as.matrix(data_train[,-ncol(data_train)]),
+                   as.matrix(data_train[,ncol(data_train)]),
+                   alpha = 1, 
+                   lambda = best_lambda)
+coef(model_l2)
+
+model_l2 |> summary()
+
+# Prediction on the testing dataset
+y_pred_l2 <- predict(model_l2,  s = best_lambda,
+                     newx= as.matrix(data_test[,-ncol(data_test)]))
+
+table_l2 <- table(Predicted = as.factor(round(y_pred_l2)),
+                  Actual = as.factor(data_test$quality))
+table_l2
+```
+  
+::: {style="text-align: justify"}
+Now, we will try the support vector machines regression model.
+:::
+  
+```{r}
+#| label: svm
+#| echo: true
+#| warning: false
+#| include: true
+
+# SVM regression
+library(e1071)
+model_svm <- svm(quality ~ volatile.acidity + chlorides + total.sulfur.dioxide 
+                 + pH + sulphates + alcohol,
+                 data = data_train,
+                 type = "eps-regression", kernel = "radial")
+
+y_pred_svm <- predict(model_svm, data_test)
+
+table(Predicted = round(y_pred_svm),
+      Actual = data_test$quality)
+```
+
+::: {style="text-align: justify"}
+Now, we will try Bootstrap Aggregating (Bagging) model.
+:::
+
+```{r}
+#| label: Bagging
+#| echo: true
+#| warning: false
+#| include: true
+
+# Bagging
+library(ipred)
+model_bagging <- bagging(quality ~ volatile.acidity + chlorides + total.sulfur.dioxide 
+                         + pH + sulphates + alcohol, data = data_train, nbagg = 100)
+
+
+y_pred_bagging <- predict(model_bagging, data_test)
+
+table(Predicted = round(y_pred_bagging),
+      Actual = data_test$quality)
+```
+
+::: {style="text-align: justify"}
+Now, we will try the Boosting model.
+:::
+
+```{r}
+#| label: boosting
+#| echo: true
+#| warning: false
+#| include: true
+
+# Boosting
+library(gbm)
+model_boosting <- gbm(quality ~ volatile.acidity + chlorides + total.sulfur.dioxide 
+                      + pH + sulphates + alcohol, 
+                      data = data_train, 
+                      distribution = "gaussian", 
+                      n.trees = 100, interaction.depth = 3, 
+                      shrinkage = 0.01, cv.folds = 5)
+
+best_trees <- gbm.perf(model_boosting, method = "cv")
+best_trees
+
+# Predictions
+y_pred_boosting <- predict(model_boosting, data_test, n.trees = best_trees)
+table(data_test$quality, round(y_pred_boosting))
+```
+
+::: {style="text-align: justify"}
+Now, we will try Xgboot (Xtreme Gradient Boosting) model.
+:::
+
+```{r}
+#| label: xgb
+#| echo: true
+#| warning: false
+#| include: true
+
+# XGBOOST
+library(xgboost)
+# Convert to matrix (xgboost requires the data as matrix or DMatrix format)
+data_train_matrix <- as.matrix(data_train[,-ncol(data_train)])  
+target <- data_train[,ncol(data_train)]
+
+# Create a DMatrix object (this is how xgboost stores and handles data)
+dtrain <- xgb.DMatrix(data = data_train_matrix, label = target)
+
+params <- list(
+  objective = "reg:squarederror",  # Objective function (regression)
+  eta = 0.1,                      # Learning rate
+  max_depth = 6,                   # Maximum depth of trees
+  colsample_bytree = 0.8,          # Subsample fraction of features
+  subsample = 0.8,                 # Subsample fraction of data
+  alpha = 0.1                      # L2 regularization
+)
+
+xgb_model <- xgb.train(
+  params = params, 
+  data = dtrain, 
+  nrounds = 100,         # Number of boosting rounds (iterations)
+  watchlist = list(train = dtrain),  # To monitor the training process
+  print_every_n = 10     # Print every 10 iterations
+)
+
+# Make predictions on the testing data
+data_test_matrix <- as.matrix(data_test[,-ncol(data_test)])  
+predictions <- predict(xgb_model, data_test_matrix)
+
+table(round(predictions),data_test$quality)
+```
+
+::: {style="text-align: justify"}
+Lastly, we will try k nearest neighbour (knn) model.
+:::
+
+```{r}
+#| label: knn
+#| echo: true
+#| warning: false
+#| include: true
+# KNN
+library(caret)
+# Apply KNN with k = 5 (5 nearest neighbors)
+train_control <- trainControl(method = "cv", number = 5)  # 5-fold cross-validation
+model_knn <- train(quality ~ volatile.acidity + chlorides + total.sulfur.dioxide 
+                   + pH + sulphates + alcohol, 
+                   data = data_train, 
+                   method = "knn", 
+                   trControl = train_control, 
+                   tuneLength = 10)
+
+# Check best K and accuracy
+print(model_knn$bestTune)
+print(model_knn$results)
+
+y_pred_knn <- predict(model_knn, data_test)
+
+table(round(y_pred_knn),data_test$quality)
+```
+
+::: {style="text-align: justify"}
+Based on the multiple models, the Extreme Gradiant Boosting (xgboost) model is able to get the most accuracy in out case. It got the ratings correctly for 230 out of 320 cases in the testing data set which translates to an accuracy of around 71.88%.
+:::
