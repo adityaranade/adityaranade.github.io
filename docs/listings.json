@@ -12,6 +12,7 @@
   {
     "listing": "/portfolio.html",
     "items": [
+      "/portfolio/abalone/abalone.html",
       "/portfolio/wine/wine.html",
       "/portfolio/gallstone/index.html",
       "/portfolio/penguins/penguins.html",

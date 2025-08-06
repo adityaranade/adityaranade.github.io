@@ -48,7 +48,7 @@ head(data)
 #| warning: false
 #| include: true
 #| fig-width: 14
-#| fig-height: 20
+#| fig-height: 16
 
 # Correlation plot
 ggcorrplot(round(cor(data), 2))
