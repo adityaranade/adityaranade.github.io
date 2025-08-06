@@ -1,0 +1,503 @@
+---
+title: "Predicting fuel consumption (MPG) of cars"
+subtitle: "ML models to predict fuel conumption of cars (MPG) using car information"
+author: "Aditya Ranade"
+highlight-style:
+  light: github
+date: "2025-05-31"
+categories: [analysis, R]
+image: "./cars.jpg"
+---
+
+::: {style="text-align: justify"}
+I found this [dataset](https://archive.ics.uci.edu/dataset/9/auto+mpg) on UCI machine learning repository which gives the dataset regarding the car features along with fuel consumption. The goal is to predict the fuel consumption indicated by the variable mpg based on other features of the car like horespower, displacement, weight, etc. of car. We will compare multiple Machine Learning models for the same.
+:::
+
+```{r}
+#| label: load-packages
+#| echo: true
+#| warning: false
+#| include: true
+
+library(reshape2)
+library(ggplot2)
+library(ggh4x)
+library(ggcorrplot)
+library(GGally) # for pairs plot using ggplot framework
+library(dplyr)
+library(glmnet)
+library(knitr)
+
+# Get cars data from github repo
+path <- "https://raw.githubusercontent.com/adityaranade/portfolio/refs/heads/main/cars/autompg.data"
+data0 <- read.table(path, fill = TRUE, header = FALSE)
+
+colnames(data0) <- c("mpg","cylinders","displacement",
+                     "horsepower","weight","acceleration",
+                     "model_year","origin","car_name")
+
+# Check the type of data
+data0 |> str()
+
+# Convert horsepower to numeric
+data0$horsepower <- as.numeric(data0$horsepower)
+
+# Check the type of data again
+data0 |> str()
+
+# Check the rows which do not have any entries
+sum(is.na(data0)) # 6 NA values
+
+# Exclude the rows with missing information
+data1 <- na.omit(data0)
+sum(is.na(data1)) # no NA values
+
+# Check the first 6 rows of the dataset
+data1 |> head()
+```
+
+::: {style="text-align: justify"}
+The distributions of the continuous variables on the original scale indicates some non linear relationships between the response variable mpg and the other variables. So we convert the data to log scale and the relationships become close to linear. Hence we will use the data on log scale for predictions. The distribution of the data on the log scale is as follows
+:::
+
+```{r}
+#| label: EDA01
+#| echo: true
+#| warning: false
+#| include: true
+#| fig-width: 14
+#| fig-height: 16
+
+# Transform the data to log scale
+# exclude the last column which is car name
+data <- data1[,-ncol(data1)]
+
+# Pairs plot between the explanatory variables to 
+# check correlation between each pair of the variables
+ggpairs(data) 
+```
+
+::: {style="text-align: justify"}
+The response variable, mpg is correlated with all the variables which is good. However, the explanatory variables are correlated within themselves which is not a good indication. This indicates there is some multicollinearity. This means two variables give similar information about the response variable. One way to mitigate the effect is to consider the principal components and then use the principal components for the models. Another way is to use some regularization to mitigate the effect of multicollinearity.
+:::
+
+```{r}
+#| label: EDA00
+#| echo: true
+#| warning: false
+#| include: true
+#| fig-width: 14
+#| fig-height: 16
+
+# Transform the data to log scale
+data <- data1[,-ncol(data1)] |> log()
+
+# Pairs plot between the explanatory variables to 
+# check correlation between each pair of the variables
+ggpairs(data) 
+```
+
+
+::: {style="text-align: justify"}
+The response variable, mpg is correlated with all the variables which is good. However, the explanatory variables are correlated within themselves which is not a good indication. This indicates there is some multicollinearity. This means two variables give similar information about the response variable. One way to mitigate the effect is to consider the principal components and then use the principal components for the models. Another way is to use some regularization to mitigate the effect of multicollinearity.
+:::
+
+```{r}
+#| label: EDA1
+#| echo: false
+#| warning: false
+#| include: false
+#| fig-width: 14
+#| fig-height: 6
+
+# # Check the histogram of the response variable
+# ggplot(data,aes(mpg))+
+#   geom_histogram(bins=30)+
+#   theme_bw()
+```
+
+```{r}
+#| label: data_split
+#| echo: true
+#| warning: false
+#| include: true
+
+# split the data into training and testing data
+seed <- 23
+set.seed(seed)
+
+ind <- sample(floor(0.8*nrow(data)),
+              replace = FALSE)
+
+# Training dataset
+data_train <- data[ind,-ncol(data)]
+# Testing dataset
+data_test <- data[-ind,-ncol(data)]
+
+```
+
+::: {style="text-align: justify"}
+First, we will look at a multiple linear regression model
+:::
+
+```{r}
+#| label: mlr
+#| echo: true
+#| warning: false
+#| include: true
+ 
+# Fit a multiple linear regression model
+model_lm <- glm(mpg ~ ., data = data_train)
+
+# Check the summary of the model
+model_lm |> summary()
+
+# Prediction on the testing dataset
+y_pred_lm <- predict(model_lm, data_test)
+
+# Data frame for observed vs predicted
+df_pred_mlr <- data.frame(predicted = y_pred_lm, 
+                    observed = data_test$mpg)
+df_pred_mlr$model <- "mlr"
+
+# Evaluation metrics
+rmse_lm <- sqrt(sum(data_test$mpg-y_pred_lm)^2)
+mae_lm <- mean(abs(data_test$mpg-y_pred_lm))
+r2_lm   <- 1 - sum((data_test$mpg - y_pred_lm)^2) / sum((data_test$mpg - mean(data_test$mpg))^2)
+```
+
+::: {style="text-align: justify"}
+Next, we will try the ridge regression which uses the $L^2$ penalty.
+:::
+
+```{r}
+#| label: ridge
+#| echo: true
+#| warning: false
+#| include: true
+
+# Ridge regression (L2 penalty)
+model_l2_cv <- cv.glmnet(as.matrix(data_train[,-1]),
+                         as.matrix(data_train[,1]),
+                         alpha = 1)
+
+#find optimal lambda value that minimizes test MSE
+best_lambda <- model_l2_cv$lambda.min
+best_lambda
+
+model_l2 <- glmnet(as.matrix(data_train[,-1]),
+                   as.matrix(data_train[,1]),
+                   alpha = 1, 
+                   lambda = best_lambda)
+coef(model_l2)
+
+model_l2 |> summary()
+
+# Prediction on the testing dataset
+y_pred_l2 <- predict(model_l2,  s = best_lambda,
+                     newx= as.matrix(data_test[,-1]))
+
+# Data frame for observed vs predicted
+df_pred_l2 <- data.frame(predicted = as.vector(y_pred_l2), 
+                    observed = data_test$mpg)
+df_pred_l2$model <- "ridge"
+
+# Evaluation metrics
+rmse_l2 <- sqrt(sum(data_test$mpg-y_pred_l2)^2)
+mae_l2 <- mean(abs(data_test$mpg-y_pred_l2))
+r2_l2   <- 1 - sum((data_test$mpg - y_pred_l2)^2) / sum((data_test$mpg - mean(data_test$mpg))^2)
+```
+
+::: {style="text-align: justify"}
+Next, we will try the lasso regression which uses the $L^1$ penalty.
+:::
+
+```{r}
+#| label: lasso
+#| echo: true
+#| warning: false
+#| include: true
+
+# Lasso regression (L1 penalty)
+model_l1_cv <- cv.glmnet(as.matrix(data_train[,-1]),
+                         as.matrix(data_train[,1]),
+                         alpha = 0)
+
+#find optimal lambda value that minimizes test MSE
+best_lambda_l1 <- model_l1_cv$lambda.min
+best_lambda_l1
+
+model_l1 <- glmnet(as.matrix(data_train[,-1]),
+                   as.matrix(data_train[,1]),
+                   alpha = 0, 
+                   lambda = best_lambda_l1)
+coef(model_l1)
+
+model_l1 |> summary()
+
+# Prediction on the testing dataset
+y_pred_l1 <- predict(model_l1,  s = best_lambda_l1,
+                     newx= as.matrix(data_test[,-1]))
+
+# Data frame for observed vs predicted
+df_pred_l1 <- data.frame(predicted = as.vector(y_pred_l1), 
+                    observed = data_test$mpg)
+df_pred_l1$model <- "lasso"
+
+# Evaluation metrics
+rmse_l1 <- sqrt(sum(data_test$mpg-y_pred_l1)^2)
+mae_l1 <- mean(abs(data_test$mpg-y_pred_l1))
+r2_l1   <- 1 - sum((data_test$mpg - y_pred_l1)^2) / sum((data_test$mpg - mean(data_test$mpg))^2)
+```
+
+::: {style="text-align: justify"}
+Next, we will try the elastic net regression which is a combination of ridge ($L^2$ penalty) and lasso ($L^1$ penalty) regression.
+:::
+
+```{r}
+#| label: elastic_net
+#| echo: true
+#| warning: false
+#| include: true
+
+# Elastic net
+model_en_cv <- cv.glmnet(as.matrix(data_train[,-1]),
+                         as.matrix(data_train[,1]),
+                         alpha = 0.5)
+
+#find optimal lambda value that minimizes test MSE
+best_lambda_en <- model_en_cv$lambda.min
+best_lambda_en
+
+model_en <- glmnet(as.matrix(data_train[,-1]),
+                   as.matrix(data_train[,1]),
+                   alpha = 0.5, 
+                   lambda = best_lambda_en)
+coef(model_en)
+
+model_en |> summary()
+
+# Prediction on the testing dataset
+y_pred_en <- predict(model_en,  s = best_lambda_en,
+                     newx= as.matrix(data_test[,-1]))
+
+# Data frame for observed vs predicted
+df_pred_en <- data.frame(predicted = as.vector(y_pred_en), 
+                    observed = data_test$mpg)
+df_pred_en$model <- "elastic_net"
+
+# Evaluation metrics
+rmse_en <- sqrt(sum(data_test$mpg-y_pred_en)^2)
+mae_en <- mean(abs(data_test$mpg-y_pred_en))
+r2_en   <- 1 - sum((data_test$mpg - y_pred_en)^2) / sum((data_test$mpg - mean(data_test$mpg))^2)
+```
+
+
+::: {style="text-align: justify"}
+Next, we will try the tree based approach.
+:::
+
+```{r}
+#| label: tree
+#| echo: true
+#| warning: false
+#| include: true
+
+# Tree approach
+library(rpart)
+library(rpart.plot)
+
+# Fit regression tree
+model_tree <- rpart(mpg ~ ., data = data_train, method = "anova")
+
+# summary(model_tree)
+
+# Plot
+rpart.plot(model_tree, type = 3, extra = 101, fallen.leaves = TRUE)
+
+y_pred_tree <- predict(model_tree, data_test)
+
+# Data frame for observed vs predicted
+df_pred_tree <- data.frame(predicted = y_pred_tree, 
+                    observed = data_test$mpg)
+df_pred_tree$model <- "tree"
+
+# Evaluation metrics
+rmse_tree <- sqrt(sum(data_test$mpg-y_pred_tree)^2)
+mae_tree <- mean(abs(data_test$mpg-y_pred_tree))
+r2_tree   <- 1 - sum((data_test$mpg - y_pred_tree)^2) / sum((data_test$mpg - mean(data_test$mpg))^2)
+```
+
+::: {style="text-align: justify"}
+Next, we will try the random forest approach. In random forest approach, we build multiple trees and then average the predictions of all the trees.
+:::
+
+```{r}
+#| label: random_forest
+#| echo: true
+#| warning: false
+#| include: true
+
+# Random forest
+library(randomForest)
+model_rf <- randomForest(mpg ~ ., data = data_train)
+
+y_pred_rf <- predict(model_rf, data_test)
+
+# Data frame for observed vs predicted
+df_pred_rf <- data.frame(predicted = y_pred_rf, 
+                    observed = data_test$mpg)
+df_pred_rf$model <- "random_forest"
+
+# Evaluation metrics
+rmse_rf <- sqrt(sum(data_test$mpg-y_pred_rf)^2)
+mae_rf <- mean(abs(data_test$mpg-y_pred_rf))
+r2_rf   <- 1 - sum((data_test$mpg - y_pred_rf)^2) / sum((data_test$mpg - mean(data_test$mpg))^2)
+```
+
+::: {style="text-align: justify"}
+Next, we will try the support vector machine (SVM) approach.
+:::
+
+```{r}
+#| label: svm
+#| echo: true
+#| warning: false
+#| include: true
+
+library(e1071)
+model_svm <- svm(mpg ~ ., data = data_train, 
+                 kernel = "radial", cost = 10, 
+                 gamma = 0.1)
+
+# Predict on test data
+y_pred_svm <- predict(model_svm, data_test)
+
+# Data frame for observed vs predicted
+df_pred_svm <- data.frame(predicted = y_pred_svm, 
+                    observed = data_test$mpg)
+df_pred_svm$model <- "svm"
+
+# Evaluation metrics
+rmse_svm <- sqrt(sum(data_test$mpg-y_pred_svm)^2)
+mae_svm <- mean(abs(data_test$mpg-y_pred_svm))
+r2_svm   <- 1 - sum((data_test$mpg - y_pred_svm)^2) / sum((data_test$mpg - mean(data_test$mpg))^2)
+```
+
+::: {style="text-align: justify"}
+The observed vs. predicted for all the models side by side can be seen in the plot below
+:::
+
+```{r}
+#| label: ovp_plot
+#| echo: true
+#| warning: false
+#| include: true
+#| fig-width: 14
+#| fig-height: 6
+
+# Plot observed vs. predicted for all the models
+df_pred <- rbind(df_pred_mlr,df_pred_l1,df_pred_l2,
+                 df_pred_en, df_pred_tree, df_pred_rf,
+                 df_pred_svm)
+
+# Create a observed vs. predicted plot combined for all the models
+ggplot(df_pred,aes(predicted,observed))+geom_point()+
+  lims(x = c(2.5,4) , y = c(2.5,4))+
+  labs(y = "Observed", x="Predicted")+
+  facet_grid(~model, scales="free")+
+  geom_abline()+
+  theme_bw(base_size = 15)
+```
+
+::: {style="text-align: justify"}
+Combined evaluation metrics to compare all the models can be seen in the table below.
+:::
+
+```{r}
+#| label: metrics
+#| echo: true
+#| warning: false
+#| include: true
+
+# Evaluation metrics for all the models
+metrics_all <- data.frame(Model = c("linear_model", "lasso", "ridge",
+                                 "elastic_net", "tree", "random_forest",
+                                 "svm"),
+                       RMSE = c(rmse_lm,rmse_l1, rmse_l2, rmse_en, 
+                                rmse_tree, rmse_rf, rmse_svm),
+                       MAE = c(mae_lm,mae_l1, mae_l2, mae_en, 
+                                mae_tree, mae_rf, mae_svm),
+                       R_squared = c(r2_lm, r2_l1, r2_l2, r2_en, 
+                                r2_tree, r2_rf, r2_svm))
+
+# Print evaluation metrics
+kable(metrics_all, digits = 2, caption = "Model Performance Metrics")
+```
+
+::: {style="text-align: justify"}
+Visualization of the combined evaluation metrics can be seen in the plot below.
+:::
+
+```{r}
+#| label: combine3
+#| echo: true
+#| warning: false
+#| include: true
+#| fig-width: 14
+#| fig-height: 6
+
+# To plot RMSE and MAE on the same plot
+metrics_long <- melt(metrics_all, id.vars = "Model", 
+                     variable.name = "Metric", 
+                     value.name = "Value")
+
+ggplot(metrics_long, aes(x = Model, y = Value, fill = Model)) +
+  geom_col(show.legend = FALSE) +
+  geom_text(aes(label = round(Value, 2)), 
+            #position = position_dodge(width = 0.8), 
+            size = 3) +
+  coord_flip(clip = "off") +  # horizontal bars, no clipping of text
+  facet_grid2(~Metric, scales="free")+
+  labs(title = "Model Performance Comparison", 
+       y = "Error Value", x = "Model") +
+  theme_bw(base_size = 10) +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5))
+
+```
+
+::: {style="text-align: justify"}
+Based on the evaluation metrics and observed vs. predicted plot, support vector machine plot seems to be the best model.
+:::
+
+```{r}
+#| label: combine4
+#| echo: false
+#| warning: false
+#| include: false
+# library(tidyr)
+# 
+# metrics_long <- metrics_all %>%
+#   pivot_longer(cols = c(RMSE, MAE), 
+#                names_to = "Metric", 
+#                values_to = "Value")
+# 
+# ggplot(metrics_long, aes(x = reorder(Model, Value), y = Value, fill = Model))+ 
+#   geom_col(position = position_dodge(width = 0.8)) +
+#   coord_flip() +
+#   geom_text(aes(label = round(Value, 2)),
+#             position = position_dodge(width = 0.8),
+#             hjust = -0.1, size = 3) +
+#   facet_wrap(~Metric, scales="free_x")+
+#   labs(
+#     title = "Model Performance Comparison",
+#     x = "Model",
+#     y = "Error Value"
+#   ) +
+#   theme_bw(base_size = 12) +
+#   theme(
+#     plot.title = element_text(face = "bold", hjust = 0.5)
+# #    plot.margin = margin(5.5, 40, 5.5, 5.5)
+#   ) +
+#   scale_fill_brewer(palette = "Set2")
+```
