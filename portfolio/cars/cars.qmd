@@ -4,9 +4,9 @@ subtitle: "ML models to predict fuel conumption of cars (MPG) using car informat
 author: "Aditya Ranade"
 highlight-style:
   light: github
-date: "2025-05-31"
+date: "2025-05-15"
 categories: [analysis, R]
-image: "./cars.jpg"
+image: "./car_fuel.jpg"
 ---
 
 ::: {style="text-align: justify"}
@@ -97,7 +97,6 @@ data <- data1[,-ncol(data1)] |> log()
 ggpairs(data) 
 ```
 
-
 ::: {style="text-align: justify"}
 The response variable, mpg is correlated with all the variables which is good. However, the explanatory variables are correlated within themselves which is not a good indication. This indicates there is some multicollinearity. This means two variables give similar information about the response variable. One way to mitigate the effect is to consider the principal components and then use the principal components for the models. Another way is to use some regularization to mitigate the effect of multicollinearity.
 :::
@@ -167,48 +166,6 @@ r2_lm   <- 1 - sum((data_test$mpg - y_pred_lm)^2) / sum((data_test$mpg - mean(da
 ```
 
 ::: {style="text-align: justify"}
-Next, we will try the ridge regression which uses the $L^2$ penalty.
-:::
-
-```{r}
-#| label: ridge
-#| echo: true
-#| warning: false
-#| include: true
-
-# Ridge regression (L2 penalty)
-model_l2_cv <- cv.glmnet(as.matrix(data_train[,-1]),
-                         as.matrix(data_train[,1]),
-                         alpha = 1)
-
-#find optimal lambda value that minimizes test MSE
-best_lambda <- model_l2_cv$lambda.min
-best_lambda
-
-model_l2 <- glmnet(as.matrix(data_train[,-1]),
-                   as.matrix(data_train[,1]),
-                   alpha = 1, 
-                   lambda = best_lambda)
-coef(model_l2)
-
-model_l2 |> summary()
-
-# Prediction on the testing dataset
-y_pred_l2 <- predict(model_l2,  s = best_lambda,
-                     newx= as.matrix(data_test[,-1]))
-
-# Data frame for observed vs predicted
-df_pred_l2 <- data.frame(predicted = as.vector(y_pred_l2), 
-                    observed = data_test$mpg)
-df_pred_l2$model <- "ridge"
-
-# Evaluation metrics
-rmse_l2 <- sqrt(sum(data_test$mpg-y_pred_l2)^2)
-mae_l2 <- mean(abs(data_test$mpg-y_pred_l2))
-r2_l2   <- 1 - sum((data_test$mpg - y_pred_l2)^2) / sum((data_test$mpg - mean(data_test$mpg))^2)
-```
-
-::: {style="text-align: justify"}
 Next, we will try the lasso regression which uses the $L^1$ penalty.
 :::
 
@@ -231,9 +188,9 @@ model_l1 <- glmnet(as.matrix(data_train[,-1]),
                    as.matrix(data_train[,1]),
                    alpha = 0, 
                    lambda = best_lambda_l1)
-coef(model_l1)
 
-model_l1 |> summary()
+# Coefficients of the lasso regression model 
+coef(model_l1)
 
 # Prediction on the testing dataset
 y_pred_l1 <- predict(model_l1,  s = best_lambda_l1,
@@ -250,8 +207,51 @@ mae_l1 <- mean(abs(data_test$mpg-y_pred_l1))
 r2_l1   <- 1 - sum((data_test$mpg - y_pred_l1)^2) / sum((data_test$mpg - mean(data_test$mpg))^2)
 ```
 
+
 ::: {style="text-align: justify"}
-Next, we will try the elastic net regression which is a combination of ridge ($L^2$ penalty) and lasso ($L^1$ penalty) regression.
+Next, we will try the ridge regression which uses the $L^2$ penalty.
+:::
+
+```{r}
+#| label: ridge
+#| echo: true
+#| warning: false
+#| include: true
+
+# Ridge regression (L2 penalty)
+model_l2_cv <- cv.glmnet(as.matrix(data_train[,-1]),
+                         as.matrix(data_train[,1]),
+                         alpha = 1)
+
+#find optimal lambda value that minimizes test MSE
+best_lambda <- model_l2_cv$lambda.min
+best_lambda
+
+model_l2 <- glmnet(as.matrix(data_train[,-1]),
+                   as.matrix(data_train[,1]),
+                   alpha = 1, 
+                   lambda = best_lambda)
+
+# Coefficients of the ridge regression model 
+coef(model_l2)
+
+# Prediction on the testing dataset
+y_pred_l2 <- predict(model_l2,  s = best_lambda,
+                     newx= as.matrix(data_test[,-1]))
+
+# Data frame for observed vs predicted
+df_pred_l2 <- data.frame(predicted = as.vector(y_pred_l2), 
+                    observed = data_test$mpg)
+df_pred_l2$model <- "ridge"
+
+# Evaluation metrics
+rmse_l2 <- sqrt(sum(data_test$mpg-y_pred_l2)^2)
+mae_l2 <- mean(abs(data_test$mpg-y_pred_l2))
+r2_l2   <- 1 - sum((data_test$mpg - y_pred_l2)^2) / sum((data_test$mpg - mean(data_test$mpg))^2)
+```
+
+::: {style="text-align: justify"}
+Next, we will try the elastic net regression which is a combination of lasso ($L^1$ penalty) and ridge ($L^2$ penalty) regression.
 :::
 
 ```{r}
@@ -291,7 +291,6 @@ rmse_en <- sqrt(sum(data_test$mpg-y_pred_en)^2)
 mae_en <- mean(abs(data_test$mpg-y_pred_en))
 r2_en   <- 1 - sum((data_test$mpg - y_pred_en)^2) / sum((data_test$mpg - mean(data_test$mpg))^2)
 ```
-
 
 ::: {style="text-align: justify"}
 Next, we will try the tree based approach.
