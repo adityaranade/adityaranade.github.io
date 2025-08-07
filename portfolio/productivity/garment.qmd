@@ -418,7 +418,7 @@ metrics_long <- melt(metrics_all, id.vars = "Model",
                      value.name = "Value")
 
 ggplot(metrics_long, aes(x = Model, y = Value, fill = Model)) +
-  geom_col(show.legend = FALSE) +
+  geom_col(show.legend = TRUE) +
   geom_text(aes(label = round(Value, 2)), 
             #position = position_dodge(width = 0.8), 
             size = 3) +

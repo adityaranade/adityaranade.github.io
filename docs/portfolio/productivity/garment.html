@@ -718,7 +718,7 @@ actual_productivity  5.505558e-01</code></pre>
 <span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">value.name =</span> <span class="st">"Value"</span>)</span>
 <span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(metrics_long, <span class="fu">aes</span>(<span class="at">x =</span> Model, <span class="at">y =</span> Value, <span class="at">fill =</span> Model)) <span class="sc">+</span></span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">show.legend =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
 <span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">round</span>(Value, <span class="dv">2</span>)), </span>
 <span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>            <span class="co">#position = position_dodge(width = 0.8), </span></span>
 <span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
