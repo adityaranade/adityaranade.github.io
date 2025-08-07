@@ -207,7 +207,6 @@ mae_l1 <- mean(abs(data_test$mpg-y_pred_l1))
 r2_l1   <- 1 - sum((data_test$mpg - y_pred_l1)^2) / sum((data_test$mpg - mean(data_test$mpg))^2)
 ```
 
-
 ::: {style="text-align: justify"}
 Next, we will try the ridge regression which uses the $L^2$ penalty.
 :::
@@ -466,7 +465,7 @@ ggplot(metrics_long, aes(x = Model, y = Value, fill = Model)) +
 ```
 
 ::: {style="text-align: justify"}
-Based on the evaluation metrics and observed vs. predicted plot, support vector machine plot seems to be the best model.
+Based on the evaluation metrics and observed vs. predicted plot, support vector machine model seems to be the best model.
 :::
 
 ```{r}

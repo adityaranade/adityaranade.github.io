@@ -12,6 +12,7 @@
   {
     "listing": "/portfolio.html",
     "items": [
+      "/portfolio/productivity/garment.html",
       "/portfolio/abalone/abalone.html",
       "/portfolio/wine/wine.html",
       "/portfolio/cars/cars.html",
