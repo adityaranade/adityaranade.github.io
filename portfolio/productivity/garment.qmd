@@ -381,7 +381,6 @@ mae_xgb <- mean(abs(data_test$actual_productivity-y_pred_xgb))
 r2_xgb   <- 1 - sum((data_test$actual_productivity - y_pred_xgb)^2) / sum((data_test$actual_productivity - mean(data_test$actual_productivity))^2)
 ```
 
-
 ::: {style="text-align: justify"}
 The observed vs. predicted for all the models side by side can be seen in the plot below
 :::

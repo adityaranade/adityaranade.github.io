@@ -301,7 +301,6 @@ Next, we will try the tree based approach.
 #| warning: false
 #| include: true
 #| fig-width: 14
-#| fig-height: 16
 
 # Tree approach
 library(rpart)
