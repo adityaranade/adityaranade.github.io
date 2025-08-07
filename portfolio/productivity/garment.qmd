@@ -89,7 +89,7 @@ data <- dataa
 # data <- dataa |> log()
 
 # Split data in training and testing set
-seed <- 23
+seed <- 55
 set.seed(seed)
 
 ind <- sample(floor(0.8*nrow(data)),
@@ -350,6 +350,39 @@ r2_svm   <- 1 - sum((data_test$actual_productivity - y_pred_svm)^2) / sum((data_
 ```
 
 ::: {style="text-align: justify"}
+Next, we will try the xgboost (Extreme Gradient Boosting) which is a boosting algorithm which uses trains models sequentially.
+:::
+
+```{r}
+#| label: xgboost
+#| echo: true
+#| warning: false
+#| include: true
+
+# xgboost
+library(xgboost)
+model_xgb <- xgboost(as.matrix(data_train[,-ncol(data_train)]),
+                     as.matrix(data_train[,ncol(data_train)]),
+                     objective = "reg:squarederror",
+                     nrounds = 100,
+                     verbose = 0)
+
+# Predict on test data
+y_pred_xgb <- predict(model_xgb, as.matrix(data_test[,-ncol(data_test)]))
+
+# Data frame for observed vs predicted
+df_pred_xgb <- data.frame(predicted = y_pred_xgb, 
+                    observed = data_test$actual_productivity)
+df_pred_xgb$model <- "xgboost"
+
+# Evaluation metrics
+rmse_xgb <- sqrt(sum(data_test$actual_productivity-y_pred_xgb)^2)
+mae_xgb <- mean(abs(data_test$actual_productivity-y_pred_xgb))
+r2_xgb   <- 1 - sum((data_test$actual_productivity - y_pred_xgb)^2) / sum((data_test$actual_productivity - mean(data_test$actual_productivity))^2)
+```
+
+
+::: {style="text-align: justify"}
 The observed vs. predicted for all the models side by side can be seen in the plot below
 :::
 
@@ -364,7 +397,7 @@ The observed vs. predicted for all the models side by side can be seen in the pl
 # Plot observed vs. predicted for all the models
 df_pred <- rbind(df_pred_mlr,df_pred_l1,df_pred_l2,
                  df_pred_en, df_pred_tree, df_pred_rf,
-                 df_pred_svm)
+                 df_pred_svm, df_pred_xgb)
 
 # Create a observed vs. predicted plot combined for all the models
 ggplot(df_pred,aes(predicted,observed))+geom_point()+
@@ -388,13 +421,13 @@ Combined evaluation metrics to compare all the models can be seen in the table b
 # Evaluation metrics for all the models
 metrics_all <- data.frame(Model = c("linear_model", "lasso", "ridge",
                                  "elastic_net", "tree", "random_forest",
-                                 "svm"),
+                                 "svm","xgboost"),
                        RMSE = c(rmse_lm,rmse_l1, rmse_l2, rmse_en, 
-                                rmse_tree, rmse_rf, rmse_svm),
+                                rmse_tree, rmse_rf, rmse_svm, rmse_xgb),
                        MAE = c(mae_lm,mae_l1, mae_l2, mae_en, 
-                                mae_tree, mae_rf, mae_svm),
+                                mae_tree, mae_rf, mae_svm, mae_xgb),
                        R_squared = c(r2_lm, r2_l1, r2_l2, r2_en, 
-                                r2_tree, r2_rf, r2_svm))
+                                r2_tree, r2_rf, r2_svm, r2_xgb))
 
 # Print evaluation metrics
 kable(metrics_all, digits = 2, caption = "Model Performance Metrics")
