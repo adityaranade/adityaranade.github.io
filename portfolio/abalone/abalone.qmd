@@ -81,10 +81,9 @@ ggpairs(data0)
 ```
 
 ::: {style="text-align: justify"}
-The response variable rings is high correlated with all the variables which is good. However, the explanatory variables are correlated within themselves which is not a good indication. This indicates there is severe multicollinearity. This means two variables give similar information about the response variable. 
+The response variable rings is high correlated with all the variables which is good. However, the explanatory variables are correlated within themselves which is not a good indication. This indicates there is severe multicollinearity. This means two variables give similar information about the response variable.
 
 The number of rings is a integer and the histogram can be seen below.
-
 :::
 
 ```{r}

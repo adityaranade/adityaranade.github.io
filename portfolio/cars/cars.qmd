@@ -383,6 +383,10 @@ mae_svm <- mean(abs(data_test$mpg-y_pred_svm))
 r2_svm   <- 1 - sum((data_test$mpg - y_pred_svm)^2) / sum((data_test$mpg - mean(data_test$mpg))^2)
 ```
 
+::: {style="text-align: justify"}
+Next, we will try the extreme gradiant boosting (xgboost) approach.
+:::
+
 ```{r}
 #| label: xgboost
 #| echo: true

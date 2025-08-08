@@ -79,7 +79,7 @@ ggplot(data,aes(quality))+
 ::: {style="text-align: justify"}
 This can be treated as a count data and we can use the Poisson regression. However in Poisson regression, the mean and variance of the response variable quality should be same.
 :::
-  
+
 ```{r}
 #| label: EDA2
 #| echo: true
@@ -92,12 +92,12 @@ This can be treated as a count data and we can use the Poisson regression. Howev
 data$quality %>% mean
 # Variance
 data$quality %>% var
-```  
+```
 
 ::: {style="text-align: justify"}
 The mean is considerably greater than variance. Hence Poisson regression model will not work well. An alternative is to use a quasi Poisson model or Negative Binomial model. We will start with a basic multiple linear regression model. First we process the data and standardize all the variables.
 :::
-  
+
 ```{r}
 #| label: data_split
 #| echo: true
@@ -124,11 +124,10 @@ data_test <- data2[-ind,] |> as.data.frame()
 data_test |> dim()
 ```
 
-
 ::: {style="text-align: justify"}
 Now we run a linear regression model with quality being predicted as a response to volatile acidity, chlorides, total sulfur dioxide, pH, sulphates and alcohol. These variables have been selected after trying multiple combinations of predictor variables. Once we build the model and make predictions, we will round the response variable and make a Predicted vs. actual table. This will help us understand how many correct values were predicted.
 :::
-  
+
 ```{r}
 #| label: mlr
 #| echo: true
@@ -153,10 +152,9 @@ table_lm
 ```
 
 ::: {style="text-align: justify"}
-Since there is some multicolinearity in the data, we can try to use L2  regularization which is also called as ridge regression. This helps shrink the coefficients of the model towards zero.
+Since there is some multicolinearity in the data, we can try to use L2 regularization which is also called as ridge regression. This helps shrink the coefficients of the model towards zero.
 :::
-  
-  
+
 ```{r}
 library(glmnet)
 #| label: mlr
@@ -188,11 +186,11 @@ table_l2 <- table(Predicted = as.factor(round(y_pred_l2)),
                   Actual = as.factor(data_test$quality))
 table_l2
 ```
-  
+
 ::: {style="text-align: justify"}
 Now, we will try the support vector machines regression model.
 :::
-  
+
 ```{r}
 #| label: svm
 #| echo: true
@@ -334,5 +332,5 @@ table(round(y_pred_knn),data_test$quality)
 ```
 
 ::: {style="text-align: justify"}
-Based on the multiple models, the Extreme Gradiant Boosting (xgboost) model is able to get the most accuracy in out case. It got the ratings correctly for 230 out of 320 cases in the testing data set which translates to an accuracy of around 71.88%.
+Based on the multiple models, the Extreme Gradiant Boosting (xgboost) model is able to get the most accuracy in out case. It got the quality correctly for 230 out of 320 cases in the testing data set which translates to an accuracy of around 71.88%.
 :::
