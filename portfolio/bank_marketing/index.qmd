@@ -29,6 +29,7 @@ library(pROC)
 library(naivebayes)
 library(caret)
 library(e1071)
+library(nnet)
 library(xgboost)
 
 # Load data in R
@@ -64,9 +65,10 @@ data <- data0 |> select(age,job,marital,education,default,
                         balance,housing,loan,duration,
                         campaign,pdays,previous,poutcome,y)
 
-# Check data type
-data %>% str
+# # Check data type
+# data %>% str
 
+# Convert the variables to categorical
 data$job <- as.factor(data$job)
 data$marital <- as.factor(data$marital)
 data$education <- as.factor(data$education)
@@ -82,11 +84,9 @@ ggplot(data, aes(x = factor(y))) +
   labs(x = "Target", y = "Count", title = "Distribution of Target") +
   theme_minimal()
 ```
-
 ::: {style="text-align: justify"}
 The number of yes are considerably low compared to no. This indicates we have imbalanced class. First we will look at a simple logistic regression.
 :::
-
 
 ```{r}
 #| label: data_split
@@ -138,7 +138,7 @@ cm_list$logistic <- confusionMatrix(data_test$y, as.factor(y_pred))
 ```
 
 ::: {style="text-align: justify"}
-The accuracy is close to 90% which is good. Next we will try Naive Bayes classification method.
+The accuracy is around 89.17% which is good. Next we will try Naive Bayes classification method.
 :::
 
 ```{r}
@@ -156,13 +156,12 @@ y_pred_nb <- predict(model_nb, newdata = data_test)
 # Confusion matrix
 confusionMatrix(data_test$y, y_pred_nb)
 
-# Confusion Matrix
+# Confusion Matrix data frame
 cm_list$naive_bayes <- confusionMatrix(data_test$y, y_pred_nb)
-
 ```
 
 ::: {style="text-align: justify"}
-The accuracy is close to 87.25% which is not bad. Next we will try random forest classification method.
+The accuracy is close to 86.74% which is not bad. Next we will try random forest classification method.
 :::
 
 ```{r}
@@ -184,16 +183,48 @@ model_rf <- randomForest(y ~ .,
 y_pred_rf <- predict(model_rf, data_test)
 
 # Confusion Matrix
-cm_list$random_forest <- confusionMatrix(data_test$y, y_pred_rf)
+confusionMatrix(data_test$y, y_pred_rf)
 
+# Confusion Matrix data frame
+cm_list$random_forest <- confusionMatrix(data_test$y, y_pred_rf)
 ```
 
 ::: {style="text-align: justify"}
-The accuracy is close to 88.65% which is not bad. Next we will try some method to deal with imbalanced dataset using the SMOTE (Synthetic Minority Oversampling Technique) method which tries to balance the classes by oversamling from the minority classes. We will try to run the three models based on the oversampled data.
+The accuracy is close to 88.21% which is not bad. Next we will neural network method.
 :::
 
 ```{r}
-#| label: SMOTE_logistic
+#| label: neural_network
+#| echo: true
+#| warning: false
+#| include: true
+
+
+# Neural Networks
+model_nnet <- nnet(y ~ ., 
+              data = data_train, 
+              size = 5, 
+              decay = 0.01, 
+              maxit = 200)
+
+# Predictions
+y_pred_nnet <- predict(model_nnet,
+                        data_test, 
+                        type = "class")
+
+# Confusion Matrix
+confusionMatrix(data_test$y, as.factor(y_pred_nnet))
+
+# Confusion Matrix data frame
+cm_list$neural_network <- confusionMatrix(data_test$y, as.factor(y_pred_nnet))
+```
+
+::: {style="text-align: justify"}
+The accuracy is close to 89.61% which is not bad. Next we will try some method to deal with imbalanced dataset using the SMOTE (Synthetic Minority Oversampling Technique) method which tries to balance the classes by oversampling from the minority classes. We will try to run all the models based on the over sampled data and compare them.
+:::
+
+```{r}
+#| label: SMOTE
 #| echo: true
 #| warning: false
 #| include: true
@@ -226,7 +257,7 @@ y_pred2 <- ifelse(y_pred_prob2>0.5,"yes","no")
 # Confusion matrix
 confusionMatrix(data_test$y, as.factor(y_pred2))
 
-# Confusion Matrix
+# Confusion Matrix data frame
 cm_list$smote_logistic <- confusionMatrix(data_test$y, as.factor(y_pred2))
 ```
 
@@ -246,9 +277,8 @@ y_pred_nb2 <- predict(model_nb2, newdata = data_test)
 # Confusion matrix
 confusionMatrix(data_test$y, y_pred_nb2)
 
-# Confusion Matrix
+# Confusion Matrix data frame
 cm_list$smote_naive_bayes <- confusionMatrix(data_test$y, y_pred_nb2)
-
 ```
 
 ```{r}
@@ -268,8 +298,37 @@ model_rf2 <- randomForest(y ~ .,
 y_pred_rf2 <- predict(model_rf2, data_test)
 
 # Confusion Matrix
-cm_list$smote_random_forest <- confusionMatrix(data_test$y, y_pred_rf2)
+confusionMatrix(data_test$y, y_pred_rf2)
 
+# Confusion Matrix data frame
+cm_list$smote_random_forest <- confusionMatrix(data_test$y, y_pred_rf2)
+```
+
+
+```{r}
+#| label: neural_network2
+#| echo: true
+#| warning: false
+#| include: true
+
+
+# Neural Networks
+model_nnet2 <- nnet(y ~ ., 
+              data = data_train2, 
+              size = 5, 
+              decay = 0.01, 
+              maxit = 200)
+
+# Predictions
+y_pred_nnet2 <- predict(model_nnet2,
+                        data_test, 
+                        type = "class")
+
+# Confusion Matrix
+confusionMatrix(data_test$y, as.factor(y_pred_nnet2))
+
+# Confusion Matrix data frame
+cm_list$smote_neural_network <- confusionMatrix(data_test$y, as.factor(y_pred_nnet2))
 ```
 
 ::: {style="text-align: justify"}
@@ -297,5 +356,5 @@ results_df
 ```
 
 ::: {style="text-align: justify"}
-Based on accuracy, logistic regression model on original data is the best and based on the sensitivity (true positive rate), logistic regression on oversampled data is the best.
+Based on accuracy, neural network model on original data is the best and based on the sensitivity (true positive rate), logistic regression on over sampled data is the best.
 :::
