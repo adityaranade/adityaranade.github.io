@@ -1,0 +1,301 @@
+---
+title: "Predicting bank marketing success"
+subtitle: "Comparing AI methods to predict if customer will enroll into term deposit"
+author: "Aditya Ranade"
+highlight-style: github-light
+date: "2025-06-17"
+categories: [AI, analysis, R]
+image: "./bank_deposit.jpg"
+---
+
+::: {style="text-align: justify"}
+I found this [dataset](https://archive.ics.uci.edu/dataset/222/bank+marketing) on UCI machine learning repository which gives bank marketing data for a Portuguese banking institution. The goal is to predict if the client will subscribe to a term deposit. The data has various predictor variables. We will look at the data first and then look to build a prediction model.
+
+:::
+
+```{r}
+#| label: load_packages
+#| echo: true
+#| warning: false
+#| include: true
+
+library(reshape2)
+library(ggplot2)
+library(tidyverse)
+library(dplyr)
+library(ggh4x)
+library(GGally)
+library(pROC)
+library(naivebayes)
+library(caret)
+library(e1071)
+library(xgboost)
+
+# Load data in R
+path <- "https://raw.githubusercontent.com/adityaranade/portfolio/refs/heads/main/bank_marketing/bank.csv"
+data0 <- read.csv(path, sep = ";", header = TRUE)
+
+# Check the first 6 rows of the dataset
+head(data0)
+
+# change column names
+colnames(data0)
+
+#"age" "job" "marital" "education","default" "balance"
+#"housing" "loan" "contact" "day" "month" "duration"
+#"campaign" "pdays" "previous" "poutcome" "y" 
+
+# Check the type of data
+data0 |> str()
+
+# Check the rows which do not have any entries
+sum(is.na(data0)) # No NA values
+```
+
+
+```{r}
+#| label: data_process
+#| echo: true
+#| warning: false
+#| include: true
+
+# Data processing
+data <- data0 |> select(age,job,marital,education,default,
+                        balance,housing,loan,duration,
+                        campaign,pdays,previous,poutcome,y)
+
+# Check data type
+data %>% str
+
+data$job <- as.factor(data$job)
+data$marital <- as.factor(data$marital)
+data$education <- as.factor(data$education)
+data$default <- as.factor(data$default)
+data$housing <- as.factor(data$housing)
+data$loan <- as.factor(data$loan)
+data$poutcome <- as.factor(data$poutcome)
+data$y <- as.factor(data$y)
+
+# Check the distribution of the outcome y
+ggplot(data, aes(x = factor(y))) +
+  geom_bar(fill = "purple") +
+  labs(x = "Target", y = "Count", title = "Distribution of Target") +
+  theme_minimal()
+```
+
+::: {style="text-align: justify"}
+The number of yes are considerably low compared to no. This indicates we have imbalanced class. First we will look at a simple logistic regression.
+:::
+
+
+```{r}
+#| label: data_split
+#| echo: true
+#| warning: false
+#| include: true
+
+
+# To ensure reproducibility
+set.seed(55)
+
+# Split data into training and testing set
+ind <- sample(1:nrow(data),
+              floor(0.7*nrow(data)),
+              replace = FALSE)
+
+# Training dataset
+data_train <- data[ind,]
+
+# Testing dataset
+data_test <- data[-ind,]
+
+```
+
+```{r}
+#| label: logistic
+#| echo: true
+#| warning: false
+#| include: true
+
+# Logistic regression
+model <- glm(y ~ ., data = data_train, family = binomial())
+
+# Predicted probability
+y_pred_prob <- predict(model, data_test,"response")
+
+# Predicted class
+y_pred <- ifelse(y_pred_prob>0.5,"yes","no")
+
+# Confusion matrix
+confusionMatrix(data_test$y, as.factor(y_pred))
+
+# Storage for confusion matrices
+cm_list <- list()
+
+# Confusion Matrix
+cm_list$logistic <- confusionMatrix(data_test$y, as.factor(y_pred))
+
+```
+
+::: {style="text-align: justify"}
+The accuracy is close to 90% which is good. Next we will try Naive Bayes classification method.
+:::
+
+```{r}
+#| label: naive_bayes
+#| echo: true
+#| warning: false
+#| include: true
+
+# Naive Bayes
+model_nb <- naiveBayes(y ~ ., data = data_train) 
+
+# Predictions
+y_pred_nb <- predict(model_nb, newdata = data_test)
+
+# Confusion matrix
+confusionMatrix(data_test$y, y_pred_nb)
+
+# Confusion Matrix
+cm_list$naive_bayes <- confusionMatrix(data_test$y, y_pred_nb)
+
+```
+
+::: {style="text-align: justify"}
+The accuracy is close to 87.25% which is not bad. Next we will try random forest classification method.
+:::
+
+```{r}
+#| label: random_forest
+#| echo: true
+#| warning: false
+#| include: true
+
+# Random forest
+library(randomForest)
+
+model_rf <- randomForest(y ~ ., 
+                         data = data_train, 
+                         ntree = 500, 
+                         mtry = 2, 
+                         importance = TRUE)
+
+# Predictions
+y_pred_rf <- predict(model_rf, data_test)
+
+# Confusion Matrix
+cm_list$random_forest <- confusionMatrix(data_test$y, y_pred_rf)
+
+```
+
+::: {style="text-align: justify"}
+The accuracy is close to 88.65% which is not bad. Next we will try some method to deal with imbalanced dataset using the SMOTE (Synthetic Minority Oversampling Technique) method which tries to balance the classes by oversamling from the minority classes. We will try to run the three models based on the oversampled data.
+:::
+
+```{r}
+#| label: SMOTE_logistic
+#| echo: true
+#| warning: false
+#| include: true
+
+# SMOTE method
+library(ROSE)
+
+data_train2 <- ovun.sample(y ~ ., 
+                           data = data_train,
+                           method = "over", 
+                           N = (nrow(data_train)*3))$data
+
+```
+
+```{r}
+#| label: logistic2
+#| echo: true
+#| warning: false
+#| include: true
+
+# Logistic regression
+model2 <- glm(y ~ ., data = data_train2, family = binomial())
+
+# Predicted probability
+y_pred_prob2 <- predict(model2, data_test,"response")
+
+# Predicted class
+y_pred2 <- ifelse(y_pred_prob2>0.5,"yes","no")
+
+# Confusion matrix
+confusionMatrix(data_test$y, as.factor(y_pred2))
+
+# Confusion Matrix
+cm_list$smote_logistic <- confusionMatrix(data_test$y, as.factor(y_pred2))
+```
+
+
+```{r}
+#| label: naive_bayes2
+#| echo: true
+#| warning: false
+#| include: true
+
+# Naive Bayes
+model_nb2 <- naiveBayes(y ~ ., data = data_train2) 
+
+# Predictions
+y_pred_nb2 <- predict(model_nb2, newdata = data_test)
+
+# Confusion matrix
+confusionMatrix(data_test$y, y_pred_nb2)
+
+# Confusion Matrix
+cm_list$smote_naive_bayes <- confusionMatrix(data_test$y, y_pred_nb2)
+
+```
+
+```{r}
+#| label: random_forest2
+#| echo: true
+#| warning: false
+#| include: true
+
+# Random forest
+model_rf2 <- randomForest(y ~ ., 
+                         data = data_train, 
+                         ntree = 500, 
+                         mtry = 2, 
+                         importance = TRUE)
+
+# Predictions
+y_pred_rf2 <- predict(model_rf2, data_test)
+
+# Confusion Matrix
+cm_list$smote_random_forest <- confusionMatrix(data_test$y, y_pred_rf2)
+
+```
+
+::: {style="text-align: justify"}
+The comparison of all the models is as follows
+:::
+
+```{r}
+#| label: metrics
+#| echo: true
+#| warning: false
+#| include: true
+
+# Extract multiple metrics into one table
+
+results_df <- data.frame(
+  Model = names(cm_list),
+  Accuracy     = sapply(cm_list, function(l) l$overall["Accuracy"]),
+  Sensitivity  = sapply(cm_list, function(l) l$byClass["Sensitivity"]),
+  Specificity  = sapply(cm_list, function(l) l$byClass["Specificity"])
+)
+
+rownames(results_df) <- NULL
+results_df <- results_df %>% arrange(desc(Accuracy))
+results_df
+```
+
+::: {style="text-align: justify"}
+Based on accuracy, logistic regression model on original data is the best and based on the sensitivity (true positive rate), logistic regression on oversampled data is the best.
+:::

@@ -12,6 +12,7 @@
   {
     "listing": "/portfolio.html",
     "items": [
+      "/portfolio/bank_marketing/index.html",
       "/portfolio/productivity/garment.html",
       "/portfolio/abalone/abalone.html",
       "/portfolio/wine/wine.html",
