@@ -140,7 +140,34 @@ cm_list$logistic <- confusionMatrix(data_test$y, as.factor(y_pred))
 ```
 
 ::: {style="text-align: justify"}
-The accuracy is around 89.17% which is good. Next we will try Naive Bayes classification method.
+The accuracy is around 89.17% which is good. Next we will try stepwise model selection process on the logistic regression model.
+:::
+
+```{r}
+#| label: logistic_step
+#| echo: true
+#| warning: false
+#| include: true
+
+# Stepwise both directions
+model_step <- step(model, direction = "both")  
+summary(model_step)
+
+# Predicted probability
+y_pred_prob_step <- predict(model_step, data_test,"response")
+
+# Predicted class
+y_pred_step <- ifelse(y_pred_prob_step>0.5,"yes","no")
+
+# Confusion matrix
+confusionMatrix(data_test$y, as.factor(y_pred_step))
+
+# Confusion Matrix
+cm_list$logistic_step <- confusionMatrix(data_test$y, as.factor(y_pred_step))
+```
+
+::: {style="text-align: justify"}
+The accuracy is around 89.02% which is good. Next we will try Naive Bayes classification method. 
 :::
 
 ```{r}
@@ -293,6 +320,28 @@ confusionMatrix(data_test$y, as.factor(y_pred2))
 cm_list$smote_logistic <- confusionMatrix(data_test$y, as.factor(y_pred2))
 ```
 
+```{r}
+#| label: logistic_step2
+#| echo: true
+#| warning: false
+#| include: true
+
+# Stepwise both directions
+model_step2 <- step(model2, direction = "both")  
+summary(model_step2)
+
+# Predicted probability
+y_pred_prob_step2 <- predict(model_step2, data_test,"response")
+
+# Predicted class
+y_pred_step2 <- ifelse(y_pred_prob_step2>0.5,"yes","no")
+
+# Confusion matrix
+confusionMatrix(data_test$y, as.factor(y_pred_step2))
+
+# Confusion Matrix
+cm_list$smote_logistic_step <- confusionMatrix(data_test$y, as.factor(y_pred_step2))
+```
 
 ```{r}
 #| label: naive_bayes2
