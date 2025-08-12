@@ -79,8 +79,10 @@ data$poutcome <- as.factor(data$poutcome)
 data$y <- as.factor(data$y)
 
 # Check the distribution of the outcome y
-ggplot(data, aes(x = factor(y))) +
-  geom_bar(fill = "purple") +
+ggplot(data, aes(x = factor(y), fill = factor(y))) +
+  geom_bar() +
+  #geom_bar(fill = "purple") +
+  geom_text(stat = "count", aes(label = ..count..), vjust = -0.5)+
   labs(x = "Target", y = "Count", title = "Distribution of Target") +
   theme_minimal()
 ```
@@ -220,6 +222,36 @@ cm_list$neural_network <- confusionMatrix(data_test$y, as.factor(y_pred_nnet))
 ```
 
 ::: {style="text-align: justify"}
+The accuracy is close to 89.61% which is not bad. Next we will try support vector classification method.
+:::
+
+```{r}
+#| label: svc
+#| echo: true
+#| warning: false
+#| include: true
+
+
+# support vector classifier 
+model_svc <- svm(y ~ .,
+                 data = data_train,
+                 # kernel = "linear",  # or "radial", "polynomial", "sigmoid"
+                 kernel = "sigmoid",  # or "radial", "polynomial", "sigmoid"
+                 cost = 1,           # regularization parameter 
+                 scale = FALSE)
+
+# Predictions
+y_pred_svc <- predict(model_svc,
+                        data_test)
+
+# Confusion Matrix
+confusionMatrix(data_test$y, as.factor(y_pred_svc))
+
+# Confusion Matrix data frame
+cm_list$smote_support_vector_classifier <- confusionMatrix(data_test$y, as.factor(y_pred_svc))
+```
+
+::: {style="text-align: justify"}
 The accuracy is close to 89.61% which is not bad. Next we will try some method to deal with imbalanced dataset using the SMOTE (Synthetic Minority Oversampling Technique) method which tries to balance the classes by oversampling from the minority classes. We will try to run all the models based on the over sampled data and compare them.
 :::
 
@@ -329,6 +361,31 @@ confusionMatrix(data_test$y, as.factor(y_pred_nnet2))
 
 # Confusion Matrix data frame
 cm_list$smote_neural_network <- confusionMatrix(data_test$y, as.factor(y_pred_nnet2))
+```
+
+
+```{r}
+#| label: svc2
+#| echo: true
+#| warning: false
+#| include: true
+
+# support vector classifier 
+model_svc2 <- svm(y ~ .,
+                  data = data_train2,
+                  kernel = "sigmoid",  # or "radial", "polynomial", "sigmoid" 
+                  cost = 1,           # regularization parameter 
+                  scale = TRUE)
+
+# Predictions
+y_pred_svc2 <- predict(model_svc2,
+                       data_test)
+
+# Confusion Matrix
+confusionMatrix(data_test$y, as.factor(y_pred_svc2))
+
+# Confusion Matrix data frame
+cm_list$support_vector_classifier <- confusionMatrix(data_test$y, as.factor(y_pred_svc2))
 ```
 
 ::: {style="text-align: justify"}
