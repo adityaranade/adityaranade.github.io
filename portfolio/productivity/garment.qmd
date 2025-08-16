@@ -127,7 +127,7 @@ df_pred_mlr <- data.frame(predicted = y_pred_lm,
 df_pred_mlr$model <- "mlr"
 
 # Evaluation metrics
-rmse_lm <- sqrt(sum(data_test$actual_productivity-y_pred_lm)^2)
+rmse_lm <- sqrt(mean((data_test$actual_productivity-y_pred_lm)^2))
 mae_lm <- mean(abs(data_test$actual_productivity-y_pred_lm))
 r2_lm   <- 1 - sum((data_test$actual_productivity - y_pred_lm)^2) / sum((data_test$actual_productivity - mean(data_test$actual_productivity))^2)
 ```
@@ -169,7 +169,7 @@ df_pred_l1 <- data.frame(predicted = as.vector(y_pred_l1),
 df_pred_l1$model <- "lasso"
 
 # Evaluation metrics
-rmse_l1 <- sqrt(sum(data_test$actual_productivity-y_pred_l1)^2)
+rmse_l1 <- sqrt(mean((data_test$actual_productivity-y_pred_l1)^2))
 mae_l1 <- mean(abs(data_test$actual_productivity-y_pred_l1))
 r2_l1   <- 1 - sum((data_test$actual_productivity - y_pred_l1)^2) / sum((data_test$actual_productivity - mean(data_test$actual_productivity))^2)
 ```
@@ -211,7 +211,7 @@ df_pred_l2 <- data.frame(predicted = as.vector(y_pred_l2),
 df_pred_l2$model <- "ridge"
 
 # Evaluation metrics
-rmse_l2 <- sqrt(sum(data_test$actual_productivity-y_pred_l2)^2)
+rmse_l2 <- sqrt(mean((data_test$actual_productivity-y_pred_l2)^2))
 mae_l2 <- mean(abs(data_test$actual_productivity-y_pred_l2))
 r2_l2   <- 1 - sum((data_test$actual_productivity - y_pred_l2)^2) / sum((data_test$actual_productivity - mean(data_test$actual_productivity))^2)
 ```
@@ -253,7 +253,7 @@ df_pred_en <- data.frame(predicted = as.vector(y_pred_en),
 df_pred_en$model <- "elastic_net"
 
 # Evaluation metrics
-rmse_en <- sqrt(sum(data_test$actual_productivity-y_pred_en)^2)
+rmse_en <- sqrt(mean((data_test$actual_productivity-y_pred_en)^2))
 mae_en <- mean(abs(data_test$actual_productivity-y_pred_en))
 r2_en   <- 1 - sum((data_test$actual_productivity - y_pred_en)^2) / sum((data_test$actual_productivity - mean(data_test$actual_productivity))^2)
 ```
@@ -288,7 +288,7 @@ df_pred_tree <- data.frame(predicted = y_pred_tree,
 df_pred_tree$model <- "tree"
 
 # Evaluation metrics
-rmse_tree <- sqrt(sum(data_test$actual_productivity-y_pred_tree)^2)
+rmse_tree <- sqrt(mean((data_test$actual_productivity-y_pred_tree)^2))
 mae_tree <- mean(abs(data_test$actual_productivity-y_pred_tree))
 r2_tree   <- 1 - sum((data_test$actual_productivity - y_pred_tree)^2) / sum((data_test$actual_productivity - mean(data_test$actual_productivity))^2)
 ```
@@ -315,7 +315,7 @@ df_pred_rf <- data.frame(predicted = y_pred_rf,
 df_pred_rf$model <- "random_forest"
 
 # Evaluation metrics
-rmse_rf <- sqrt(sum(data_test$actual_productivity-y_pred_rf)^2)
+rmse_rf <- sqrt(mean((data_test$actual_productivity-y_pred_rf)^2))
 mae_rf <- mean(abs(data_test$actual_productivity-y_pred_rf))
 r2_rf   <- 1 - sum((data_test$actual_productivity - y_pred_rf)^2) / sum((data_test$actual_productivity - mean(data_test$actual_productivity))^2)
 ```
@@ -344,7 +344,7 @@ df_pred_svm <- data.frame(predicted = y_pred_svm,
 df_pred_svm$model <- "svm"
 
 # Evaluation metrics
-rmse_svm <- sqrt(sum(data_test$actual_productivity-y_pred_svm)^2)
+rmse_svm <- sqrt(mean((data_test$actual_productivity-y_pred_svm)^2))
 mae_svm <- mean(abs(data_test$actual_productivity-y_pred_svm))
 r2_svm   <- 1 - sum((data_test$actual_productivity - y_pred_svm)^2) / sum((data_test$actual_productivity - mean(data_test$actual_productivity))^2)
 ```
@@ -376,9 +376,17 @@ df_pred_xgb <- data.frame(predicted = y_pred_xgb,
 df_pred_xgb$model <- "xgboost"
 
 # Evaluation metrics
-rmse_xgb <- sqrt(sum(data_test$actual_productivity-y_pred_xgb)^2)
+rmse_xgb <- sqrt(mean((data_test$actual_productivity-y_pred_xgb)^2))
 mae_xgb <- mean(abs(data_test$actual_productivity-y_pred_xgb))
 r2_xgb   <- 1 - sum((data_test$actual_productivity - y_pred_xgb)^2) / sum((data_test$actual_productivity - mean(data_test$actual_productivity))^2)
+
+abc <- (data_test$actual_productivity-y_pred_xgb)
+abcd <- abc^2
+sum(abcd)/length(abcd)
+mean(abcd)
+sqrt(mean(abcd))
+rmse_xgb
+sqrt(mean(data_test$actual_productivity-y_pred_xgb)^2)
 ```
 
 ::: {style="text-align: justify"}
@@ -429,7 +437,7 @@ metrics_all <- data.frame(Model = c("linear_model", "lasso", "ridge",
                                 r2_tree, r2_rf, r2_svm, r2_xgb))
 
 # Print evaluation metrics
-kable(metrics_all, digits = 2, caption = "Model Performance Metrics")
+kable(metrics_all, digits = 4, caption = "Model Performance Metrics")
 ```
 
 ::: {style="text-align: justify"}
@@ -451,7 +459,7 @@ metrics_long <- melt(metrics_all, id.vars = "Model",
 
 ggplot(metrics_long, aes(x = Model, y = Value, fill = Model)) +
   geom_col(show.legend = TRUE) +
-  geom_text(aes(label = round(Value, 2)), 
+  geom_text(aes(label = round(Value, 4)), 
             #position = position_dodge(width = 0.8), 
             size = 3) +
   coord_flip(clip = "off") +  # horizontal bars, no clipping of text

@@ -159,7 +159,7 @@ summary(model_lm)
 # Prediction on the testing dataset
 y_pred_lm <- predict(model_lm, data_test)
 
-rmse_lm <- sqrt(sum((y_pred_lm-data_test$Rings)^2))
+rmse_lm <- sqrt(mean((y_pred_lm-data_test$Rings)^2))
 rmse_lm
 
 table_lm <- table(Predicted = as.factor(round(y_pred_lm)),
@@ -188,7 +188,7 @@ y_pred_poisson <- predict(model_poisson,
                           data_test,
                           type = "response")
 
-rmse_poisson <- sqrt(sum((y_pred_poisson-data_test$Rings)^2))
+rmse_poisson <- sqrt(mean((y_pred_poisson-data_test$Rings)^2))
 rmse_poisson
 
 table_poisson <- table(as.factor(round(y_pred_poisson)),

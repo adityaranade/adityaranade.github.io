@@ -160,8 +160,8 @@ df_pred_mlr <- data.frame(predicted = y_pred_lm,
 df_pred_mlr$model <- "mlr"
 
 # Evaluation metrics
-rmse_lm <- sqrt(sum(data_test$mpg-y_pred_lm)^2)
-mae_lm <- mean(abs(data_test$mpg-y_pred_lm))
+rmse_lm <- (data_test$mpg-y_pred_lm) |> mean() |> sqrt()
+mae_lm <- (data_test$mpg-y_pred_lm) |> abs() |> mean()
 r2_lm   <- 1 - sum((data_test$mpg - y_pred_lm)^2) / sum((data_test$mpg - mean(data_test$mpg))^2)
 ```
 
@@ -202,8 +202,8 @@ df_pred_l1 <- data.frame(predicted = as.vector(y_pred_l1),
 df_pred_l1$model <- "lasso"
 
 # Evaluation metrics
-rmse_l1 <- sqrt(sum(data_test$mpg-y_pred_l1)^2)
-mae_l1 <- mean(abs(data_test$mpg-y_pred_l1))
+rmse_l1 <- (data_test$mpg-y_pred_l1)^2 |> mean() |> sqrt()
+mae_l1 <- (data_test$mpg-y_pred_l1) |> abs() |> mean()
 r2_l1   <- 1 - sum((data_test$mpg - y_pred_l1)^2) / sum((data_test$mpg - mean(data_test$mpg))^2)
 ```
 
@@ -244,8 +244,8 @@ df_pred_l2 <- data.frame(predicted = as.vector(y_pred_l2),
 df_pred_l2$model <- "ridge"
 
 # Evaluation metrics
-rmse_l2 <- sqrt(sum(data_test$mpg-y_pred_l2)^2)
-mae_l2 <- mean(abs(data_test$mpg-y_pred_l2))
+rmse_l2 <- (data_test$mpg-y_pred_l2)^2 |> mean() |> sqrt()
+mae_l2 <- (data_test$mpg-y_pred_l2) |> abs() |> mean()
 r2_l2   <- 1 - sum((data_test$mpg - y_pred_l2)^2) / sum((data_test$mpg - mean(data_test$mpg))^2)
 ```
 
@@ -286,8 +286,8 @@ df_pred_en <- data.frame(predicted = as.vector(y_pred_en),
 df_pred_en$model <- "elastic_net"
 
 # Evaluation metrics
-rmse_en <- sqrt(sum(data_test$mpg-y_pred_en)^2)
-mae_en <- mean(abs(data_test$mpg-y_pred_en))
+rmse_en <- (data_test$mpg-y_pred_en)^2 |> mean() |> sqrt()
+mae_en <- (data_test$mpg-y_pred_en) |> abs() |> mean()
 r2_en   <- 1 - sum((data_test$mpg - y_pred_en)^2) / sum((data_test$mpg - mean(data_test$mpg))^2)
 ```
 
@@ -322,8 +322,8 @@ df_pred_tree <- data.frame(predicted = y_pred_tree,
 df_pred_tree$model <- "tree"
 
 # Evaluation metrics
-rmse_tree <- sqrt(sum(data_test$mpg-y_pred_tree)^2)
-mae_tree <- mean(abs(data_test$mpg-y_pred_tree))
+rmse_tree <- (data_test$mpg-y_pred_tree)^2 |> mean() |> sqrt()
+mae_tree <- (data_test$mpg-y_pred_tree) |> abs() |> mean()
 r2_tree   <- 1 - sum((data_test$mpg - y_pred_tree)^2) / sum((data_test$mpg - mean(data_test$mpg))^2)
 ```
 
@@ -349,8 +349,8 @@ df_pred_rf <- data.frame(predicted = y_pred_rf,
 df_pred_rf$model <- "random_forest"
 
 # Evaluation metrics
-rmse_rf <- sqrt(sum(data_test$mpg-y_pred_rf)^2)
-mae_rf <- mean(abs(data_test$mpg-y_pred_rf))
+rmse_rf <- (data_test$mpg-y_pred_rf)^2 |> mean() |> sqrt()
+mae_rf <- (data_test$mpg-y_pred_rf) |> abs() |> mean()
 r2_rf   <- 1 - sum((data_test$mpg - y_pred_rf)^2) / sum((data_test$mpg - mean(data_test$mpg))^2)
 ```
 
@@ -378,8 +378,8 @@ df_pred_svm <- data.frame(predicted = y_pred_svm,
 df_pred_svm$model <- "svm"
 
 # Evaluation metrics
-rmse_svm <- sqrt(sum(data_test$mpg-y_pred_svm)^2)
-mae_svm <- mean(abs(data_test$mpg-y_pred_svm))
+rmse_svm <- (data_test$mpg-y_pred_svm)^2 |> mean() |> sqrt()
+mae_svm <- (data_test$mpg-y_pred_svm) |> abs() |> mean()
 r2_svm   <- 1 - sum((data_test$mpg - y_pred_svm)^2) / sum((data_test$mpg - mean(data_test$mpg))^2)
 ```
 
@@ -410,8 +410,8 @@ df_pred_xgb <- data.frame(predicted = y_pred_xgb,
 df_pred_xgb$model <- "xgboost"
 
 # Evaluation metrics
-rmse_xgb <- sqrt(sum(data_test$mpg-y_pred_xgb)^2)
-mae_xgb <- mean(abs(data_test$mpg-y_pred_xgb))
+rmse_xgb <- (data_test$mpg-y_pred_xgb)^2 |> mean() |> sqrt()
+mae_xgb <- (data_test$mpg-y_pred_xgb) |> abs() |> mean()
 r2_xgb   <- 1 - sum((data_test$mpg - y_pred_xgb)^2) / sum((data_test$mpg - mean(data_test$mpg))^2)
 ```
 

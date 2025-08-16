@@ -199,7 +199,7 @@ ggplot(NULL,aes(y_pred,data_test$price))+geom_point()+
   geom_abline()
 
 # Calculate RMSE
-rmse <- (residuals)^2 |> sum() |> sqrt()
+rmse <- (residuals)^2 |> mean() |> sqrt()
 round(rmse,2)
 
 # Check the assumptions of the regression model
@@ -232,7 +232,6 @@ model_stan <- cmdstan_model(stan_file = file_stan,
 model_stan$check_syntax()
 
 ```
-
 
 ```{r}
 #| label: GP2

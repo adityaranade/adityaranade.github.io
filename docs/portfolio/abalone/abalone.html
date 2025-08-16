@@ -390,10 +390,10 @@ F-statistic:  2130 on 1 and 3338 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prediction on the testing dataset</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>y_pred_lm <span class="ot">&lt;-</span> <span class="fu">predict</span>(model_lm, data_test)</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>rmse_lm <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>((y_pred_lm<span class="sc">-</span>data_test<span class="sc">$</span>Rings)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>rmse_lm <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((y_pred_lm<span class="sc">-</span>data_test<span class="sc">$</span>Rings)<span class="sc">^</span><span class="dv">2</span>))</span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>rmse_lm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 74.40407</code></pre>
+<pre><code>[1] 2.573319</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>table_lm <span class="ot">&lt;-</span> <span class="fu">table</span>(<span class="at">Predicted =</span> <span class="fu">as.factor</span>(<span class="fu">round</span>(y_pred_lm)),</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">Actual =</span> <span class="fu">as.factor</span>(data_test<span class="sc">$</span>Rings))</span>
@@ -452,10 +452,10 @@ Number of Fisher Scoring iterations: 4</code></pre>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>                          data_test,</span>
 <span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">type =</span> <span class="st">"response"</span>)</span>
 <span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>rmse_poisson <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>((y_pred_poisson<span class="sc">-</span>data_test<span class="sc">$</span>Rings)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>rmse_poisson <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((y_pred_poisson<span class="sc">-</span>data_test<span class="sc">$</span>Rings)<span class="sc">^</span><span class="dv">2</span>))</span>
 <span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>rmse_poisson</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 75.30501</code></pre>
+<pre><code>[1] 2.604478</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>table_poisson <span class="ot">&lt;-</span> <span class="fu">table</span>(<span class="fu">as.factor</span>(<span class="fu">round</span>(y_pred_poisson)),</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">as.factor</span>(data_test<span class="sc">$</span>Rings))</span>

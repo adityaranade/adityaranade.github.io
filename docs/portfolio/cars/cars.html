@@ -417,8 +417,8 @@ Number of Fisher Scoring iterations: 2</code></pre>
 <span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>df_pred_mlr<span class="sc">$</span>model <span class="ot">&lt;-</span> <span class="st">"mlr"</span></span>
 <span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluation metrics</span></span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>rmse_lm <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>(data_test<span class="sc">$</span>mpg<span class="sc">-</span>y_pred_lm)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>mae_lm <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(data_test<span class="sc">$</span>mpg<span class="sc">-</span>y_pred_lm))</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>rmse_lm <span class="ot">&lt;-</span> (data_test<span class="sc">$</span>mpg<span class="sc">-</span>y_pred_lm) <span class="sc">|&gt;</span> <span class="fu">mean</span>() <span class="sc">|&gt;</span> <span class="fu">sqrt</span>()</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>mae_lm <span class="ot">&lt;-</span> (data_test<span class="sc">$</span>mpg<span class="sc">-</span>y_pred_lm) <span class="sc">|&gt;</span> <span class="fu">abs</span>() <span class="sc">|&gt;</span> <span class="fu">mean</span>()</span>
 <span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>r2_lm   <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>((data_test<span class="sc">$</span>mpg <span class="sc">-</span> y_pred_lm)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">sum</span>((data_test<span class="sc">$</span>mpg <span class="sc">-</span> <span class="fu">mean</span>(data_test<span class="sc">$</span>mpg))<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div style="text-align: justify">
@@ -464,8 +464,8 @@ model_year    1.7415423</code></pre>
 <span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>df_pred_l1<span class="sc">$</span>model <span class="ot">&lt;-</span> <span class="st">"lasso"</span></span>
 <span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluation metrics</span></span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>rmse_l1 <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>(data_test<span class="sc">$</span>mpg<span class="sc">-</span>y_pred_l1)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>mae_l1 <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(data_test<span class="sc">$</span>mpg<span class="sc">-</span>y_pred_l1))</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>rmse_l1 <span class="ot">&lt;-</span> (data_test<span class="sc">$</span>mpg<span class="sc">-</span>y_pred_l1)<span class="sc">^</span><span class="dv">2</span> <span class="sc">|&gt;</span> <span class="fu">mean</span>() <span class="sc">|&gt;</span> <span class="fu">sqrt</span>()</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>mae_l1 <span class="ot">&lt;-</span> (data_test<span class="sc">$</span>mpg<span class="sc">-</span>y_pred_l1) <span class="sc">|&gt;</span> <span class="fu">abs</span>() <span class="sc">|&gt;</span> <span class="fu">mean</span>()</span>
 <span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>r2_l1   <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>((data_test<span class="sc">$</span>mpg <span class="sc">-</span> y_pred_l1)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">sum</span>((data_test<span class="sc">$</span>mpg <span class="sc">-</span> <span class="fu">mean</span>(data_test<span class="sc">$</span>mpg))<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div style="text-align: justify">
@@ -511,8 +511,8 @@ model_year    1.93416769</code></pre>
 <span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>df_pred_l2<span class="sc">$</span>model <span class="ot">&lt;-</span> <span class="st">"ridge"</span></span>
 <span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluation metrics</span></span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>rmse_l2 <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>(data_test<span class="sc">$</span>mpg<span class="sc">-</span>y_pred_l2)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>mae_l2 <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(data_test<span class="sc">$</span>mpg<span class="sc">-</span>y_pred_l2))</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>rmse_l2 <span class="ot">&lt;-</span> (data_test<span class="sc">$</span>mpg<span class="sc">-</span>y_pred_l2)<span class="sc">^</span><span class="dv">2</span> <span class="sc">|&gt;</span> <span class="fu">mean</span>() <span class="sc">|&gt;</span> <span class="fu">sqrt</span>()</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>mae_l2 <span class="ot">&lt;-</span> (data_test<span class="sc">$</span>mpg<span class="sc">-</span>y_pred_l2) <span class="sc">|&gt;</span> <span class="fu">abs</span>() <span class="sc">|&gt;</span> <span class="fu">mean</span>()</span>
 <span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>r2_l2   <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>((data_test<span class="sc">$</span>mpg <span class="sc">-</span> y_pred_l2)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">sum</span>((data_test<span class="sc">$</span>mpg <span class="sc">-</span> <span class="fu">mean</span>(data_test<span class="sc">$</span>mpg))<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div style="text-align: justify">
@@ -572,8 +572,8 @@ nobs      1      -none-    numeric</code></pre>
 <span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>df_pred_en<span class="sc">$</span>model <span class="ot">&lt;-</span> <span class="st">"elastic_net"</span></span>
 <span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluation metrics</span></span>
-<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>rmse_en <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>(data_test<span class="sc">$</span>mpg<span class="sc">-</span>y_pred_en)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>mae_en <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(data_test<span class="sc">$</span>mpg<span class="sc">-</span>y_pred_en))</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>rmse_en <span class="ot">&lt;-</span> (data_test<span class="sc">$</span>mpg<span class="sc">-</span>y_pred_en)<span class="sc">^</span><span class="dv">2</span> <span class="sc">|&gt;</span> <span class="fu">mean</span>() <span class="sc">|&gt;</span> <span class="fu">sqrt</span>()</span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>mae_en <span class="ot">&lt;-</span> (data_test<span class="sc">$</span>mpg<span class="sc">-</span>y_pred_en) <span class="sc">|&gt;</span> <span class="fu">abs</span>() <span class="sc">|&gt;</span> <span class="fu">mean</span>()</span>
 <span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>r2_en   <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>((data_test<span class="sc">$</span>mpg <span class="sc">-</span> y_pred_en)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">sum</span>((data_test<span class="sc">$</span>mpg <span class="sc">-</span> <span class="fu">mean</span>(data_test<span class="sc">$</span>mpg))<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div style="text-align: justify">
@@ -606,8 +606,8 @@ nobs      1      -none-    numeric</code></pre>
 <span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>df_pred_tree<span class="sc">$</span>model <span class="ot">&lt;-</span> <span class="st">"tree"</span></span>
 <span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluation metrics</span></span>
-<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>rmse_tree <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>(data_test<span class="sc">$</span>mpg<span class="sc">-</span>y_pred_tree)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>mae_tree <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(data_test<span class="sc">$</span>mpg<span class="sc">-</span>y_pred_tree))</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>rmse_tree <span class="ot">&lt;-</span> (data_test<span class="sc">$</span>mpg<span class="sc">-</span>y_pred_tree)<span class="sc">^</span><span class="dv">2</span> <span class="sc">|&gt;</span> <span class="fu">mean</span>() <span class="sc">|&gt;</span> <span class="fu">sqrt</span>()</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>mae_tree <span class="ot">&lt;-</span> (data_test<span class="sc">$</span>mpg<span class="sc">-</span>y_pred_tree) <span class="sc">|&gt;</span> <span class="fu">abs</span>() <span class="sc">|&gt;</span> <span class="fu">mean</span>()</span>
 <span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>r2_tree   <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>((data_test<span class="sc">$</span>mpg <span class="sc">-</span> y_pred_tree)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">sum</span>((data_test<span class="sc">$</span>mpg <span class="sc">-</span> <span class="fu">mean</span>(data_test<span class="sc">$</span>mpg))<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div style="text-align: justify">
@@ -626,8 +626,8 @@ nobs      1      -none-    numeric</code></pre>
 <span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>df_pred_rf<span class="sc">$</span>model <span class="ot">&lt;-</span> <span class="st">"random_forest"</span></span>
 <span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluation metrics</span></span>
-<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>rmse_rf <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>(data_test<span class="sc">$</span>mpg<span class="sc">-</span>y_pred_rf)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>mae_rf <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(data_test<span class="sc">$</span>mpg<span class="sc">-</span>y_pred_rf))</span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>rmse_rf <span class="ot">&lt;-</span> (data_test<span class="sc">$</span>mpg<span class="sc">-</span>y_pred_rf)<span class="sc">^</span><span class="dv">2</span> <span class="sc">|&gt;</span> <span class="fu">mean</span>() <span class="sc">|&gt;</span> <span class="fu">sqrt</span>()</span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>mae_rf <span class="ot">&lt;-</span> (data_test<span class="sc">$</span>mpg<span class="sc">-</span>y_pred_rf) <span class="sc">|&gt;</span> <span class="fu">abs</span>() <span class="sc">|&gt;</span> <span class="fu">mean</span>()</span>
 <span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>r2_rf   <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>((data_test<span class="sc">$</span>mpg <span class="sc">-</span> y_pred_rf)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">sum</span>((data_test<span class="sc">$</span>mpg <span class="sc">-</span> <span class="fu">mean</span>(data_test<span class="sc">$</span>mpg))<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div style="text-align: justify">
@@ -648,8 +648,8 @@ nobs      1      -none-    numeric</code></pre>
 <span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>df_pred_svm<span class="sc">$</span>model <span class="ot">&lt;-</span> <span class="st">"svm"</span></span>
 <span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluation metrics</span></span>
-<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>rmse_svm <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>(data_test<span class="sc">$</span>mpg<span class="sc">-</span>y_pred_svm)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>mae_svm <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(data_test<span class="sc">$</span>mpg<span class="sc">-</span>y_pred_svm))</span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>rmse_svm <span class="ot">&lt;-</span> (data_test<span class="sc">$</span>mpg<span class="sc">-</span>y_pred_svm)<span class="sc">^</span><span class="dv">2</span> <span class="sc">|&gt;</span> <span class="fu">mean</span>() <span class="sc">|&gt;</span> <span class="fu">sqrt</span>()</span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>mae_svm <span class="ot">&lt;-</span> (data_test<span class="sc">$</span>mpg<span class="sc">-</span>y_pred_svm) <span class="sc">|&gt;</span> <span class="fu">abs</span>() <span class="sc">|&gt;</span> <span class="fu">mean</span>()</span>
 <span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>r2_svm   <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>((data_test<span class="sc">$</span>mpg <span class="sc">-</span> y_pred_svm)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">sum</span>((data_test<span class="sc">$</span>mpg <span class="sc">-</span> <span class="fu">mean</span>(data_test<span class="sc">$</span>mpg))<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div style="text-align: justify">
@@ -673,8 +673,8 @@ nobs      1      -none-    numeric</code></pre>
 <span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>df_pred_xgb<span class="sc">$</span>model <span class="ot">&lt;-</span> <span class="st">"xgboost"</span></span>
 <span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluation metrics</span></span>
-<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a>rmse_xgb <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>(data_test<span class="sc">$</span>mpg<span class="sc">-</span>y_pred_xgb)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a>mae_xgb <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(data_test<span class="sc">$</span>mpg<span class="sc">-</span>y_pred_xgb))</span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a>rmse_xgb <span class="ot">&lt;-</span> (data_test<span class="sc">$</span>mpg<span class="sc">-</span>y_pred_xgb)<span class="sc">^</span><span class="dv">2</span> <span class="sc">|&gt;</span> <span class="fu">mean</span>() <span class="sc">|&gt;</span> <span class="fu">sqrt</span>()</span>
+<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a>mae_xgb <span class="ot">&lt;-</span> (data_test<span class="sc">$</span>mpg<span class="sc">-</span>y_pred_xgb) <span class="sc">|&gt;</span> <span class="fu">abs</span>() <span class="sc">|&gt;</span> <span class="fu">mean</span>()</span>
 <span id="cb38-20"><a href="#cb38-20" aria-hidden="true" tabindex="-1"></a>r2_xgb   <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>((data_test<span class="sc">$</span>mpg <span class="sc">-</span> y_pred_xgb)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">sum</span>((data_test<span class="sc">$</span>mpg <span class="sc">-</span> <span class="fu">mean</span>(data_test<span class="sc">$</span>mpg))<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div style="text-align: justify">
@@ -732,49 +732,49 @@ nobs      1      -none-    numeric</code></pre>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">linear_model</td>
-<td style="text-align: right;">5.20</td>
+<td style="text-align: right;">0.26</td>
 <td style="text-align: right;">0.12</td>
 <td style="text-align: right;">0.38</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">lasso</td>
-<td style="text-align: right;">6.61</td>
+<td style="text-align: right;">0.16</td>
 <td style="text-align: right;">0.12</td>
 <td style="text-align: right;">0.33</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">ridge</td>
-<td style="text-align: right;">5.36</td>
+<td style="text-align: right;">0.16</td>
 <td style="text-align: right;">0.12</td>
 <td style="text-align: right;">0.38</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">elastic_net</td>
-<td style="text-align: right;">5.40</td>
+<td style="text-align: right;">0.16</td>
 <td style="text-align: right;">0.12</td>
 <td style="text-align: right;">0.38</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">tree</td>
-<td style="text-align: right;">14.31</td>
+<td style="text-align: right;">0.24</td>
 <td style="text-align: right;">0.19</td>
 <td style="text-align: right;">-0.52</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">random_forest</td>
-<td style="text-align: right;">8.85</td>
+<td style="text-align: right;">0.18</td>
 <td style="text-align: right;">0.14</td>
 <td style="text-align: right;">0.17</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">svm</td>
-<td style="text-align: right;">0.14</td>
+<td style="text-align: right;">0.15</td>
 <td style="text-align: right;">0.11</td>
 <td style="text-align: right;">0.45</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">xgboost</td>
-<td style="text-align: right;">4.38</td>
+<td style="text-align: right;">0.16</td>
 <td style="text-align: right;">0.12</td>
 <td style="text-align: right;">0.32</td>
 </tr>

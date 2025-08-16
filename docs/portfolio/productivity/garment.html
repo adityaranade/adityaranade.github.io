@@ -397,7 +397,7 @@ Number of Fisher Scoring iterations: 2</code></pre>
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>df_pred_mlr<span class="sc">$</span>model <span class="ot">&lt;-</span> <span class="st">"mlr"</span></span>
 <span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluation metrics</span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>rmse_lm <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>(data_test<span class="sc">$</span>actual_productivity<span class="sc">-</span>y_pred_lm)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>rmse_lm <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((data_test<span class="sc">$</span>actual_productivity<span class="sc">-</span>y_pred_lm)<span class="sc">^</span><span class="dv">2</span>))</span>
 <span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>mae_lm <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(data_test<span class="sc">$</span>actual_productivity<span class="sc">-</span>y_pred_lm))</span>
 <span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>r2_lm   <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>((data_test<span class="sc">$</span>actual_productivity <span class="sc">-</span> y_pred_lm)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">sum</span>((data_test<span class="sc">$</span>actual_productivity <span class="sc">-</span> <span class="fu">mean</span>(data_test<span class="sc">$</span>actual_productivity))<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -441,7 +441,7 @@ actual_productivity  4.535232e-01</code></pre>
 <span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>df_pred_l1<span class="sc">$</span>model <span class="ot">&lt;-</span> <span class="st">"lasso"</span></span>
 <span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluation metrics</span></span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>rmse_l1 <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>(data_test<span class="sc">$</span>actual_productivity<span class="sc">-</span>y_pred_l1)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>rmse_l1 <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((data_test<span class="sc">$</span>actual_productivity<span class="sc">-</span>y_pred_l1)<span class="sc">^</span><span class="dv">2</span>))</span>
 <span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>mae_l1 <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(data_test<span class="sc">$</span>actual_productivity<span class="sc">-</span>y_pred_l1))</span>
 <span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>r2_l1   <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>((data_test<span class="sc">$</span>actual_productivity <span class="sc">-</span> y_pred_l1)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">sum</span>((data_test<span class="sc">$</span>actual_productivity <span class="sc">-</span> <span class="fu">mean</span>(data_test<span class="sc">$</span>actual_productivity))<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -485,7 +485,7 @@ actual_productivity  5.515953e-01</code></pre>
 <span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>df_pred_l2<span class="sc">$</span>model <span class="ot">&lt;-</span> <span class="st">"ridge"</span></span>
 <span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluation metrics</span></span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>rmse_l2 <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>(data_test<span class="sc">$</span>actual_productivity<span class="sc">-</span>y_pred_l2)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>rmse_l2 <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((data_test<span class="sc">$</span>actual_productivity<span class="sc">-</span>y_pred_l2)<span class="sc">^</span><span class="dv">2</span>))</span>
 <span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>mae_l2 <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(data_test<span class="sc">$</span>actual_productivity<span class="sc">-</span>y_pred_l2))</span>
 <span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>r2_l2   <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>((data_test<span class="sc">$</span>actual_productivity <span class="sc">-</span> y_pred_l2)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">sum</span>((data_test<span class="sc">$</span>actual_productivity <span class="sc">-</span> <span class="fu">mean</span>(data_test<span class="sc">$</span>actual_productivity))<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -529,7 +529,7 @@ actual_productivity  5.510806e-01</code></pre>
 <span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>df_pred_en<span class="sc">$</span>model <span class="ot">&lt;-</span> <span class="st">"elastic_net"</span></span>
 <span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluation metrics</span></span>
-<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>rmse_en <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>(data_test<span class="sc">$</span>actual_productivity<span class="sc">-</span>y_pred_en)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>rmse_en <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((data_test<span class="sc">$</span>actual_productivity<span class="sc">-</span>y_pred_en)<span class="sc">^</span><span class="dv">2</span>))</span>
 <span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>mae_en <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(data_test<span class="sc">$</span>actual_productivity<span class="sc">-</span>y_pred_en))</span>
 <span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>r2_en   <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>((data_test<span class="sc">$</span>actual_productivity <span class="sc">-</span> y_pred_en)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">sum</span>((data_test<span class="sc">$</span>actual_productivity <span class="sc">-</span> <span class="fu">mean</span>(data_test<span class="sc">$</span>actual_productivity))<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -563,7 +563,7 @@ actual_productivity  5.510806e-01</code></pre>
 <span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>df_pred_tree<span class="sc">$</span>model <span class="ot">&lt;-</span> <span class="st">"tree"</span></span>
 <span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluation metrics</span></span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>rmse_tree <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>(data_test<span class="sc">$</span>actual_productivity<span class="sc">-</span>y_pred_tree)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>rmse_tree <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((data_test<span class="sc">$</span>actual_productivity<span class="sc">-</span>y_pred_tree)<span class="sc">^</span><span class="dv">2</span>))</span>
 <span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>mae_tree <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(data_test<span class="sc">$</span>actual_productivity<span class="sc">-</span>y_pred_tree))</span>
 <span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>r2_tree   <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>((data_test<span class="sc">$</span>actual_productivity <span class="sc">-</span> y_pred_tree)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">sum</span>((data_test<span class="sc">$</span>actual_productivity <span class="sc">-</span> <span class="fu">mean</span>(data_test<span class="sc">$</span>actual_productivity))<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -583,7 +583,7 @@ actual_productivity  5.510806e-01</code></pre>
 <span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>df_pred_rf<span class="sc">$</span>model <span class="ot">&lt;-</span> <span class="st">"random_forest"</span></span>
 <span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluation metrics</span></span>
-<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>rmse_rf <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>(data_test<span class="sc">$</span>actual_productivity<span class="sc">-</span>y_pred_rf)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>rmse_rf <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((data_test<span class="sc">$</span>actual_productivity<span class="sc">-</span>y_pred_rf)<span class="sc">^</span><span class="dv">2</span>))</span>
 <span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>mae_rf <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(data_test<span class="sc">$</span>actual_productivity<span class="sc">-</span>y_pred_rf))</span>
 <span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>r2_rf   <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>((data_test<span class="sc">$</span>actual_productivity <span class="sc">-</span> y_pred_rf)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">sum</span>((data_test<span class="sc">$</span>actual_productivity <span class="sc">-</span> <span class="fu">mean</span>(data_test<span class="sc">$</span>actual_productivity))<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -605,7 +605,7 @@ actual_productivity  5.510806e-01</code></pre>
 <span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>df_pred_svm<span class="sc">$</span>model <span class="ot">&lt;-</span> <span class="st">"svm"</span></span>
 <span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluation metrics</span></span>
-<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>rmse_svm <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>(data_test<span class="sc">$</span>actual_productivity<span class="sc">-</span>y_pred_svm)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>rmse_svm <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((data_test<span class="sc">$</span>actual_productivity<span class="sc">-</span>y_pred_svm)<span class="sc">^</span><span class="dv">2</span>))</span>
 <span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>mae_svm <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(data_test<span class="sc">$</span>actual_productivity<span class="sc">-</span>y_pred_svm))</span>
 <span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>r2_svm   <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>((data_test<span class="sc">$</span>actual_productivity <span class="sc">-</span> y_pred_svm)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">sum</span>((data_test<span class="sc">$</span>actual_productivity <span class="sc">-</span> <span class="fu">mean</span>(data_test<span class="sc">$</span>actual_productivity))<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -630,26 +630,49 @@ actual_productivity  5.510806e-01</code></pre>
 <span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>df_pred_xgb<span class="sc">$</span>model <span class="ot">&lt;-</span> <span class="st">"xgboost"</span></span>
 <span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluation metrics</span></span>
-<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>rmse_xgb <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>(data_test<span class="sc">$</span>actual_productivity<span class="sc">-</span>y_pred_xgb)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>rmse_xgb <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((data_test<span class="sc">$</span>actual_productivity<span class="sc">-</span>y_pred_xgb)<span class="sc">^</span><span class="dv">2</span>))</span>
 <span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>mae_xgb <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(data_test<span class="sc">$</span>actual_productivity<span class="sc">-</span>y_pred_xgb))</span>
-<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a>r2_xgb   <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>((data_test<span class="sc">$</span>actual_productivity <span class="sc">-</span> y_pred_xgb)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">sum</span>((data_test<span class="sc">$</span>actual_productivity <span class="sc">-</span> <span class="fu">mean</span>(data_test<span class="sc">$</span>actual_productivity))<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a>r2_xgb   <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>((data_test<span class="sc">$</span>actual_productivity <span class="sc">-</span> y_pred_xgb)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">sum</span>((data_test<span class="sc">$</span>actual_productivity <span class="sc">-</span> <span class="fu">mean</span>(data_test<span class="sc">$</span>actual_productivity))<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>abc <span class="ot">&lt;-</span> (data_test<span class="sc">$</span>actual_productivity<span class="sc">-</span>y_pred_xgb)</span>
+<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a>abcd <span class="ot">&lt;-</span> abc<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(abcd)<span class="sc">/</span><span class="fu">length</span>(abcd)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.009577971</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(abcd)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.009577971</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">mean</span>(abcd))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.09786711</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>rmse_xgb</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.09786711</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">mean</span>(data_test<span class="sc">$</span>actual_productivity<span class="sc">-</span>y_pred_xgb)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.005350966</code></pre>
+</div>
 </div>
 <div style="text-align: justify">
 <p>The observed vs.&nbsp;predicted for all the models side by side can be seen in the plot below</p>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot observed vs. predicted for all the models</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>df_pred <span class="ot">&lt;-</span> <span class="fu">rbind</span>(df_pred_mlr,df_pred_l1,df_pred_l2,</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>                 df_pred_en, df_pred_tree, df_pred_rf,</span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>                 df_pred_svm, df_pred_xgb)</span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a observed vs. predicted plot combined for all the models</span></span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_pred,<span class="fu">aes</span>(predicted,observed))<span class="sc">+</span><span class="fu">geom_point</span>()<span class="sc">+</span></span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lims</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">1.15</span>) , <span class="at">y =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">1.15</span>))<span class="sc">+</span></span>
-<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"Observed"</span>, <span class="at">x=</span><span class="st">"Predicted"</span>)<span class="sc">+</span></span>
-<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span>model, <span class="at">scales=</span><span class="st">"free"</span>)<span class="sc">+</span></span>
-<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>()<span class="sc">+</span></span>
-<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot observed vs. predicted for all the models</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>df_pred <span class="ot">&lt;-</span> <span class="fu">rbind</span>(df_pred_mlr,df_pred_l1,df_pred_l2,</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>                 df_pred_en, df_pred_tree, df_pred_rf,</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>                 df_pred_svm, df_pred_xgb)</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a observed vs. predicted plot combined for all the models</span></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_pred,<span class="fu">aes</span>(predicted,observed))<span class="sc">+</span><span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lims</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">1.15</span>) , <span class="at">y =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">1.15</span>))<span class="sc">+</span></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"Observed"</span>, <span class="at">x=</span><span class="st">"Predicted"</span>)<span class="sc">+</span></span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span>model, <span class="at">scales=</span><span class="st">"free"</span>)<span class="sc">+</span></span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>()<span class="sc">+</span></span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -662,19 +685,19 @@ actual_productivity  5.510806e-01</code></pre>
 <p>Combined evaluation metrics to compare all the models can be seen in the table below.</p>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluation metrics for all the models</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>metrics_all <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Model =</span> <span class="fu">c</span>(<span class="st">"linear_model"</span>, <span class="st">"lasso"</span>, <span class="st">"ridge"</span>,</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"elastic_net"</span>, <span class="st">"tree"</span>, <span class="st">"random_forest"</span>,</span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"svm"</span>,<span class="st">"xgboost"</span>),</span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>                       <span class="at">RMSE =</span> <span class="fu">c</span>(rmse_lm,rmse_l1, rmse_l2, rmse_en, </span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>                                rmse_tree, rmse_rf, rmse_svm, rmse_xgb),</span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>                       <span class="at">MAE =</span> <span class="fu">c</span>(mae_lm,mae_l1, mae_l2, mae_en, </span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>                                mae_tree, mae_rf, mae_svm, mae_xgb),</span>
-<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>                       <span class="at">R_squared =</span> <span class="fu">c</span>(r2_lm, r2_l1, r2_l2, r2_en, </span>
-<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>                                r2_tree, r2_rf, r2_svm, r2_xgb))</span>
-<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Print evaluation metrics</span></span>
-<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(metrics_all, <span class="at">digits =</span> <span class="dv">2</span>, <span class="at">caption =</span> <span class="st">"Model Performance Metrics"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluation metrics for all the models</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>metrics_all <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Model =</span> <span class="fu">c</span>(<span class="st">"linear_model"</span>, <span class="st">"lasso"</span>, <span class="st">"ridge"</span>,</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"elastic_net"</span>, <span class="st">"tree"</span>, <span class="st">"random_forest"</span>,</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"svm"</span>,<span class="st">"xgboost"</span>),</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>                       <span class="at">RMSE =</span> <span class="fu">c</span>(rmse_lm,rmse_l1, rmse_l2, rmse_en, </span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>                                rmse_tree, rmse_rf, rmse_svm, rmse_xgb),</span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>                       <span class="at">MAE =</span> <span class="fu">c</span>(mae_lm,mae_l1, mae_l2, mae_en, </span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>                                mae_tree, mae_rf, mae_svm, mae_xgb),</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>                       <span class="at">R_squared =</span> <span class="fu">c</span>(r2_lm, r2_l1, r2_l2, r2_en, </span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>                                r2_tree, r2_rf, r2_svm, r2_xgb))</span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Print evaluation metrics</span></span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(metrics_all, <span class="at">digits =</span> <span class="dv">4</span>, <span class="at">caption =</span> <span class="st">"Model Performance Metrics"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
 <caption>Model Performance Metrics</caption>
@@ -689,51 +712,51 @@ actual_productivity  5.510806e-01</code></pre>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">linear_model</td>
-<td style="text-align: right;">1.70</td>
-<td style="text-align: right;">0.04</td>
-<td style="text-align: right;">0.71</td>
+<td style="text-align: right;">0.0644</td>
+<td style="text-align: right;">0.0429</td>
+<td style="text-align: right;">0.7117</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">lasso</td>
-<td style="text-align: right;">1.74</td>
-<td style="text-align: right;">0.05</td>
-<td style="text-align: right;">0.65</td>
+<td style="text-align: right;">0.0711</td>
+<td style="text-align: right;">0.0484</td>
+<td style="text-align: right;">0.6490</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">ridge</td>
-<td style="text-align: right;">1.87</td>
-<td style="text-align: right;">0.05</td>
-<td style="text-align: right;">0.69</td>
+<td style="text-align: right;">0.0670</td>
+<td style="text-align: right;">0.0464</td>
+<td style="text-align: right;">0.6880</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">elastic_net</td>
-<td style="text-align: right;">1.87</td>
-<td style="text-align: right;">0.05</td>
-<td style="text-align: right;">0.69</td>
+<td style="text-align: right;">0.0670</td>
+<td style="text-align: right;">0.0465</td>
+<td style="text-align: right;">0.6877</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">tree</td>
-<td style="text-align: right;">1.36</td>
-<td style="text-align: right;">0.05</td>
-<td style="text-align: right;">0.58</td>
+<td style="text-align: right;">0.0780</td>
+<td style="text-align: right;">0.0492</td>
+<td style="text-align: right;">0.5776</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">random_forest</td>
-<td style="text-align: right;">1.13</td>
-<td style="text-align: right;">0.04</td>
-<td style="text-align: right;">0.63</td>
+<td style="text-align: right;">0.0728</td>
+<td style="text-align: right;">0.0428</td>
+<td style="text-align: right;">0.6317</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">svm</td>
-<td style="text-align: right;">1.38</td>
-<td style="text-align: right;">0.04</td>
-<td style="text-align: right;">0.62</td>
+<td style="text-align: right;">0.0739</td>
+<td style="text-align: right;">0.0408</td>
+<td style="text-align: right;">0.6201</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">xgboost</td>
-<td style="text-align: right;">0.74</td>
-<td style="text-align: right;">0.05</td>
-<td style="text-align: right;">0.33</td>
+<td style="text-align: right;">0.0979</td>
+<td style="text-align: right;">0.0526</td>
+<td style="text-align: right;">0.3345</td>
 </tr>
 </tbody>
 </table>
@@ -743,22 +766,22 @@ actual_productivity  5.510806e-01</code></pre>
 <p>Visualization of the combined evaluation metrics can be seen in the plot below.</p>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># To plot RMSE and MAE on the same plot</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>metrics_long <span class="ot">&lt;-</span> <span class="fu">melt</span>(metrics_all, <span class="at">id.vars =</span> <span class="st">"Model"</span>, </span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">variable.name =</span> <span class="st">"Metric"</span>, </span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">value.name =</span> <span class="st">"Value"</span>)</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(metrics_long, <span class="fu">aes</span>(<span class="at">x =</span> Model, <span class="at">y =</span> Value, <span class="at">fill =</span> Model)) <span class="sc">+</span></span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">show.legend =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">round</span>(Value, <span class="dv">2</span>)), </span>
-<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>            <span class="co">#position = position_dodge(width = 0.8), </span></span>
-<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>(<span class="at">clip =</span> <span class="st">"off"</span>) <span class="sc">+</span>  <span class="co"># horizontal bars, no clipping of text</span></span>
-<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid2</span>(<span class="sc">~</span>Metric, <span class="at">scales=</span><span class="st">"free"</span>)<span class="sc">+</span></span>
-<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Model Performance Comparison"</span>, </span>
-<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Error Value"</span>, <span class="at">x =</span> <span class="st">"Model"</span>) <span class="sc">+</span></span>
-<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">10</span>) <span class="sc">+</span></span>
-<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># To plot RMSE and MAE on the same plot</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>metrics_long <span class="ot">&lt;-</span> <span class="fu">melt</span>(metrics_all, <span class="at">id.vars =</span> <span class="st">"Model"</span>, </span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">variable.name =</span> <span class="st">"Metric"</span>, </span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">value.name =</span> <span class="st">"Value"</span>)</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(metrics_long, <span class="fu">aes</span>(<span class="at">x =</span> Model, <span class="at">y =</span> Value, <span class="at">fill =</span> Model)) <span class="sc">+</span></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">show.legend =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">round</span>(Value, <span class="dv">4</span>)), </span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>            <span class="co">#position = position_dodge(width = 0.8), </span></span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>(<span class="at">clip =</span> <span class="st">"off"</span>) <span class="sc">+</span>  <span class="co"># horizontal bars, no clipping of text</span></span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid2</span>(<span class="sc">~</span>Metric, <span class="at">scales=</span><span class="st">"free"</span>)<span class="sc">+</span></span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Model Performance Comparison"</span>, </span>
+<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Error Value"</span>, <span class="at">x =</span> <span class="st">"Model"</span>) <span class="sc">+</span></span>
+<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">10</span>) <span class="sc">+</span></span>
+<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
