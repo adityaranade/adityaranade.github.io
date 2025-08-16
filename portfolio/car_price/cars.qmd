@@ -400,8 +400,9 @@ df_pred <- rbind(df_pred_mlr, df_pred_tree,
 
 # Create a observed vs. predicted plot combined for all the models
 ggplot(df_pred,aes(predicted,observed))+geom_point()+
+  lims(x = c(10000,50000) , y = c(10000,50000))+
   labs(y = "Observed", x="Predicted")+
- facet_grid(~model, scales="free")+
+  facet_grid(~model, scales="free")+
   geom_abline()+
   theme_bw(base_size = 15)
 
@@ -416,7 +417,7 @@ metrics_all <- data.frame(Model = c("linear_model", "lasso", "ridge",
                                   mae_tree, mae_rf, mae_svm))
 
 # Print evaluation metrics
-kable(metrics_all, digits = 2, caption = "Model Performance Metrics")
+kable(metrics_all, digits = 0, caption = "Model Performance Metrics")
 ```
 
 ```{r}
@@ -424,24 +425,39 @@ kable(metrics_all, digits = 2, caption = "Model Performance Metrics")
 #| echo: true
 #| warning: false
 #| include: true
+#| fig-width: 14
 
-# To plot RMSE and MAE on the same plot
 metrics_long <- melt(metrics_all, id.vars = "Model",
                      variable.name = "Metric",
                      value.name = "Value")
 
-ggplot(metrics_long, aes(x = Model, y = Value, fill = Metric)) +
-  geom_col(position = position_dodge(width = 0.8)) +
-  geom_text(aes(label = round(Value, 2)),
-            position = position_dodge(width = 0.8),
-            vjust = -0.3, size = 3) +
-  labs(title = "Model Performance Comparison",
+# To plot RMSE and MAE side by side
+ggplot(metrics_long, aes(x = Model, y = Value, fill = Model)) +
+  geom_col(show.legend = FALSE) +
+  geom_text(aes(label = round(Value)), 
+            position = position_dodge(width = 0.5),
+            hjust = 1.25, size = 3) +
+  coord_flip(clip = "off") +  # horizontal bars, no clipping of text
+  facet_grid2(~Metric, scales="free")+
+  labs(title = "Model Performance Comparison", 
        y = "Error Value", x = "Model") +
-  theme_bw(base_size = 10) +
+  theme_bw(base_size = 15) +
   theme(plot.title = element_text(face = "bold", hjust = 0.5))
+
+
+# # To plot RMSE and MAE on the same plot
+# ggplot(metrics_long, aes(x = Model, y = Value, fill = Metric)) +
+#   geom_col(position = position_dodge(width = 0.8)) +
+#   geom_text(aes(label = round(Value, 2)),
+#             position = position_dodge(width = 0.8),
+#             vjust = -0.3, size = 3) +
+#   labs(title = "Model Performance Comparison",
+#        y = "Error Value", x = "Model") +
+#   theme_bw(base_size = 10) +
+#   theme(plot.title = element_text(face = "bold", hjust = 0.5))
 
 ```
 
 ::: {style="text-align: justify"}
-Based on the metrics, a tree model or a random forest model seems to be the better models.
+Based on the metrics, random forest model seems to be the best model.
 :::
