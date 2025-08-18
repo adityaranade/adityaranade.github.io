@@ -9,7 +9,7 @@ about:
   links:
     - icon: linkedin
       text: LinkedIn
-      href: https://www.linkedin.com/in/aditya-ranade-phd-a3944349/
+      href: https://github.com/adityaranade
       target: _blank
     - icon: github
       text: Github
