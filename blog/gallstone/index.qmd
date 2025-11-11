@@ -1,0 +1,307 @@
+---
+title: "Predicting Gallstone Disease"
+subtitle: "Comparing AI methods to predict gallstone disease"
+author: "Aditya Ranade"
+highlight-style: github-light
+date: "2025-05-07"
+categories: [AI, analysis, python, R]
+image: "./gallbladder.png"
+jupyter: python3
+---
+
+::: {style="text-align: justify"}
+I found this [dataset](https://archive.ics.uci.edu/dataset/1150/gallstone-1) on UCI machine learning repository which gives gallstone disease identification data. First, we look at the exploratory data analysis and later try to build predictive models like logistic regression, support vector classifier and k nearest neighbour model. First let us access and process the data through python.
+:::
+
+```{python}
+#| label: load-packages
+#| echo: true
+#| warning: false
+#| include: true
+
+# Load Libraries
+import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
+from plotnine import *
+import numpy as np # linear algebra
+# import statsmodels.api as sm
+import statsmodels.formula.api as smf
+import matplotlib.pyplot as plt
+import seaborn as sns
+import random
+import openpyxl
+
+# Get gallstone data from github repo
+path = "https://raw.githubusercontent.com/adityaranade/portfolio/refs/heads/main/gallstone/gallstone_dataset.csv"
+df0=pd.read_csv(path)
+
+df0.head()
+
+```
+
+```{python}
+#| label: data_processing1
+#| echo: true
+#| warning: false
+#| include: true
+
+# select specific columns
+df = df0[["Gallstone Status","Vitamin D","Total Body Water (TBW)","Lean Mass (LM) (%)","C-Reactive Protein (CRP)"]]
+# df.head()
+```
+
+```{python}
+#| label: data_processing2
+#| echo: true
+#| warning: false
+#| include: true
+
+# Use melt function for the histograms
+df2 = pd.melt(df, id_vars=['Gallstone Status'])
+# df2.head()
+```
+
+::: {style="text-align: justify"}
+Now that we have the data ready, let us look at the histogram of each variables namely calories, fat, carbs, fiber, protein and sodium
+:::
+
+```{python}
+#| label: EDA
+#| echo: true
+#| warning: false
+#| include: true
+
+p = (
+ggplot(df2, aes("value"))
++ geom_histogram(bins=20)
++ facet_grid("Gallstone Status ~ variable", scales="free")+
+  theme_bw()
+)
+
+p.show()
+```
+
+The histogram of each of the variables do not show any problems as all the plots look decent. We will look at the correlation plot.
+
+```{python}
+#| label: EDA2
+#| echo: true
+#| warning: false
+#| include: true
+
+# Correlation plot
+plt.figure(figsize=(15,10))
+sns.heatmap(df.iloc[:,1:].corr(),annot=True)
+plt.show()
+```
+
+::: {style="text-align: justify"}
+Correlation plot indicates weak association between all the variables which indicates there might not be severe multicolinearity. It does not warrant any cause of concern. Now we will look at the pairs plot which will show the pairwise relationship.
+:::
+
+```{python}
+#| label: EDA3
+#| echo: true
+#| warning: false
+#| include: true
+
+# Pairs plot
+g = sns.PairGrid(df.iloc[:,1:])
+g.map_diag(sns.histplot)
+g.map_upper(sns.kdeplot)
+g.map_lower(sns.scatterplot)
+plt.show()
+```
+
+::: {style="text-align: justify"}
+The scatterplots of each variable with which can be seen in the lower triangular plots. No strong association between any two variables. We will try to run different models like logistic regression, k nearest neighbours and support vector classification model on the data. First we will split the data into training (70%) and testing set (30%) and standardize the data.
+:::
+
+```{python}
+#| label: data_split
+#| echo: true
+#| warning: false
+#| include: true
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+# Split data into training and testing set
+df_train0, df_test0 = train_test_split(df, test_size=0.3, random_state=23)
+
+# Scale (exclude first column)
+scaler = StandardScaler()
+
+df_train = df_train0.copy()
+df_test = df_test0.copy()
+
+df_train.iloc[:, 1:] = scaler.fit_transform(df_train0.iloc[:, 1:])
+df_test.iloc[:, 1:] = scaler.transform(df_test0.iloc[:, 1:])
+
+X_train = df_train.iloc[:,1:]
+y_train = df_train.iloc[:,0]
+X_test = df_test.iloc[:,1:]
+y_test = df_test.iloc[:,0]
+```
+
+::: {style="text-align: justify"}
+Now we will run a logistic regression model first.
+:::
+
+```{python}
+#| label: logistic_model1
+#| echo: true
+#| warning: false
+#| include: true
+
+# Create logistic regression model
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+# Predictions
+y_pred_logistic = model.predict(X_test)
+
+# Evaluation
+print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred_logistic))
+print("Accuracy:", accuracy_score(y_test, y_pred_logistic))
+print("\nClassification Report:\n", classification_report(y_test, y_pred_logistic))
+
+```
+
+```{python}
+#| label: logistic_model2
+#| echo: true
+#| warning: false
+#| include: true
+
+from sklearn.metrics import roc_auc_score, roc_curve
+
+y_prob = model.predict_proba(X_test)[:, 1]  # probability of positive class
+auc = roc_auc_score(y_test, y_prob)
+print("AUC:", auc)
+
+fpr, tpr, _ = roc_curve(y_test, y_prob)
+plt.plot(fpr, tpr, label=f"AUC = {auc:.2f}")
+plt.plot([0, 1], [0, 1], linestyle="--")
+plt.xlabel("False Positive Rate")
+plt.ylabel("True Positive Rate")
+plt.legend()
+plt.show()
+```
+
+::: {style="text-align: justify"}
+Next, we will run a k nearest neighbour model.
+:::
+
+```{python}
+#| label: knn_model
+#| echo: true
+#| warning: false
+#| include: true
+
+# KNN model
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, classification_report
+
+from sklearn.model_selection import cross_val_score
+k_values = range(1, 11)
+scores = []
+
+for k in k_values:
+  knn = KNeighborsClassifier(n_neighbors=k)
+  score = cross_val_score(knn, X_train, y_train, cv=5).mean()
+  scores.append(score)
+
+best_k = k_values[np.argmax(scores)]
+print("Best k:", best_k)
+
+# Create KNN model using the best k
+knn = KNeighborsClassifier(n_neighbors=best_k)
+knn.fit(X_train, y_train)
+
+# Predictions
+y_pred_knn = knn.predict(X_test)
+
+# Accuracy
+print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred_knn))
+print("Accuracy:", accuracy_score(y_test, y_pred_knn))
+print("\nClassification Report:\n", classification_report(y_test, y_pred_knn))
+```
+
+::: {style="text-align: justify"}
+Next, we will run a support vector classification model.
+:::
+
+```{python}
+#| label: svc_model
+#| echo: true
+#| warning: false
+#| include: true
+
+# svc model
+from sklearn.svm import SVC
+# Identify the best parameter through CV
+from sklearn.model_selection import GridSearchCV
+
+param_grid = {
+'C': [0.1, 1, 10],
+'gamma': ['scale', 0.01, 0.1, 1],
+'kernel': ['rbf', 'linear']
+}
+
+grid = GridSearchCV(SVC(), param_grid, refit=True, cv=5)
+grid.fit(X_train, y_train)
+
+print("Best parameters:", grid.best_params_)
+
+# Create SVM model using the best parameters
+svm_model = SVC(kernel='rbf', C=10, gamma=0.01)
+svm_model.fit(X_train, y_train)
+
+# Predictions
+y_pred_svm = svm_model.predict(X_test)
+
+# Evaluation
+print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred_svm))
+print("Accuracy:", accuracy_score(y_test, y_pred_svm))
+print("\nClassification Report:\n", classification_report(y_test, y_pred_svm))
+```
+
+```{python}
+#| label: combine_results
+#| echo: true
+#| warning: false
+#| include: true
+
+# Combine the results of all the models.
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+
+# Store all models
+models = {
+    "Logistic Regression": y_pred_logistic,
+    "KNN": y_pred_knn,
+    "SVM": y_pred_knn
+}
+
+# Calculate metrics for each model
+results = []
+for name, y_pred in models.items():
+    results.append({
+        "Model": name,
+        "Accuracy": round(accuracy_score(y_test, y_pred),4),
+        "Precision": round(precision_score(y_test, y_pred),4),
+        "Recall": round(recall_score(y_test, y_pred),4),
+        "F1 Score": round(f1_score(y_test, y_pred),4)
+    })
+
+# Create DataFrame
+results_df = pd.DataFrame(results)
+print(results_df)
+
+```
+
+::: {style="text-align: justify"}
+The combined evaluation metrics can be seen in the table above. It seems the k nearest neighbor model has the highest accuracy. However, the accuracy for the logistic regression and support vector machine models is not too bad. The R code for the analysis can be found [here](https://raw.githubusercontent.com/adityaranade/portfolio/refs/heads/main/gallstone/gallstone.R)
+:::

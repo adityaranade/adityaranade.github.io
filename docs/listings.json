@@ -33,5 +33,30 @@
       "/portfolio/ipl_best_team/index.html",
       "/portfolio/fab4/index.html"
     ]
+  },
+  {
+    "listing": "/blog.html",
+    "items": [
+      "/blog/bank_marketing/index.html",
+      "/blog/productivity/garment.html",
+      "/blog/abalone/abalone.html",
+      "/blog/wine/wine.html",
+      "/blog/cars/cars.html",
+      "/blog/car_price/cars.html",
+      "/blog/gallstone/index.html",
+      "/blog/penguins/penguins.html",
+      "/blog/interview/index.html",
+      "/blog/room_occupancy/index.html",
+      "/blog/breast_cancer/breast_cancer.html",
+      "/blog/credit_approval/index.html",
+      "/blog/house_price/index.html",
+      "/blog/cereals_ratings/index.html",
+      "/blog/cereals/index.html",
+      "/blog/starbucks_food_python/index.html",
+      "/blog/starbucks/index.html",
+      "/blog/cherry_blossom_prediction/index.html",
+      "/blog/ipl_best_team/index.html",
+      "/blog/fab4/index.html"
+    ]
   }
 ]

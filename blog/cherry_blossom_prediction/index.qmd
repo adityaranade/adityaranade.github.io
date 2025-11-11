@@ -1,0 +1,202 @@
+---
+title: "Cherry Blossom prediction using Time Series"
+subtitle: "A time series analysis to forecast 2024 cherry blossom bloom date"
+author: "Aditya Ranade"
+date: "2024-03-01"
+categories: [analysis, R]
+image: "./cherry_blossom.jpg"
+---
+
+::: {style="text-align: justify"}
+Cherry Blossom is one of the most scenic visuals one can experience. Cherry blossom season marks the arrival of spring season and can be considered as transition from winter to summer. People try to make plans travel to enjoy this phenomenon. So how about using some simple statistical techniques to try and forecast / predict the peak cherry blossom time ?
+:::
+
+::: {style="text-align: justify"}
+Along with some of my fellow PhD classmates, I participated in the International Cherry Blossom Prediction Competition hosted by George Mason university. We explored a lot of models and I am going to show a very basic model which I tried during the early stages. The model is the Autogegressive (AR) model. The notation of this model is AR(1) model is as follows
+:::
+
+$$
+Y_{t} = \beta_{1} Y_{t-1} + \epsilon_{t}
+$$ where \$Y\_{t}\$ is the bloom day for year \$t\$, $\beta_{i}$ is the model parameter and $\epsilon_{t}$ is the white noise
+
+::: {style="text-align: justify"}
+This simply means the present value of the response variable \$Y\$ (in our case the bloom day for this year) is influenced by previous value of the response variable (in our case the bloom day of the previous year). If you are aware of the simple linear regression, think of this as the explanatory variable being the same as the predictor variable in rough sense. In the competition, we tried to predict the bloom date for multiple location across the world based on the data available provide by the university. However, for the purpose of this post, I will show the analysis only for one location, Kyoto in Japan.
+:::
+
+::: {style="text-align: justify"}
+Let us start with first reading in the dataset and loading the R packages required for the analysis
+:::
+
+```{r}
+#| label: load-packages
+#| echo: true
+#| warning: false
+#| include: true
+
+# Load the packages
+library(forecast)
+library(ggplot2)
+library(fpp2)
+library(dplyr)
+library(vars)
+
+# Load the dataset
+kyoto <- read.csv("https://raw.githubusercontent.com/GMU-CherryBlossomCompetition/peak-bloom-prediction/main/data/kyoto.csv",header=T)
+
+# Plot of the bloom date over the years
+ggplot(kyoto,aes(x=year,y=bloom_doy))+
+  geom_point()+
+  labs(x="Year",y="Bloom Day")+
+  ggtitle("Bloom Day by Year")
+```
+
+::: {style="text-align: justify"}
+As we can see from the plot, towards the later end (in the recent past), the bloom day has started to go down. This means in the recent past, the bloom day is happening earlier than before. Let us look at the plot only from the year 1950.
+:::
+
+```{r}
+#| label: filter-data
+#| echo: true
+#| warning: false
+#| include: true
+
+
+# Filter data only for year since 1951
+kyoto_new <- kyoto %>% filter(year>1950)
+
+# Plot of the bloom date over the years
+ggplot(kyoto_new,aes(x=year,y=bloom_doy))+
+  geom_point()+
+  labs(x="Year",y="Bloom Day")+
+  ggtitle("Bloom Day by Year")
+
+```
+
+::: {style="text-align: justify"}
+As we can see from the plot for year 1951 onward, there seems to be a downward trend which indicates the bloom date is in general arriving earlier.
+:::
+
+::: {style="text-align: justify"}
+We will use the data from 1951 to 2022 to predict the bloom date for year 2023 and compare that to actual bloom date. For this, we will use the bloom day as response and the year as the predictor
+:::
+
+```{r}
+#| label: forecast-2023 p1
+#| echo: true
+#| warning: false
+#| include: true
+
+# Prepare the data for ARIMA(1,0,0) model
+y_kyoto <- kyoto_new$bloom_doy # bloom day as the response
+```
+
+Exclude the year 2023 from response and explanatory variable to test the model on year 2023
+
+```{r}
+#| label: forecast-2023 p2
+#| echo: true
+#| warning: false
+#| include: true
+# First test on 2023 model
+ytest <- y_kyoto[-length(y_kyoto)] # exclude the bloom day for 2023 year
+
+# Model based on year 1951 to 2022
+fit_kyoto_test <- Arima(ytest, order=c(1,0,0)) # order=c(1,0,0) indicates AR(1) model
+fit_kyoto_test
+
+#Forecast
+fcast_kyoto_test <- forecast(fit_kyoto_test)
+fcast_kyoto_test
+
+# Check actual bloom date for 2023
+y_kyoto[length(y_kyoto)] 
+
+```
+
+::: {style="text-align: justify"}
+The AR(1) model predicts 96 as the bloom day for year 2023 whereas the actual bloom day was 84 for year 2023 which is a difference of 12 days. Considering its a basic model, this does not seem to be too bad.
+:::
+
+::: {style="text-align: justify"}
+Now we check the performance of the model using some charts where we first check the prediction plot, then the Regression and model errors.
+:::
+
+```{r}
+#| label: f2023-plots 1
+#| echo: true
+#| warning: false
+#| include: true
+
+# Plot the prediction
+autoplot(fcast_kyoto_test) + xlab("Year") +
+  ylab("Percentage change")
+
+# recover estimates of nu(t) and epsilon(t) 
+cbind("Regression Errors" = residuals(fit_kyoto_test, type="regression"),
+      "ARIMA errors" = residuals(fit_kyoto_test, type="innovation")) %>%
+  autoplot(facets=TRUE)
+
+```
+
+::: {style="text-align: justify"}
+There does not seem to be any issues with either of the plots. Now we check the residuals to see if they are normally distributed.
+:::
+
+```{r}
+#| label: f2023-plots 2
+#| echo: true
+#| warning: false
+#| include: true
+
+# Check the residuals
+checkresiduals(fit_kyoto_test)
+```
+
+::: {style="text-align: justify"}
+The residuals seem to be normally distributed and the Ljung-Box test indicates we have little evidence against the null hypothesis of independently distributed errors.
+:::
+
+::: {style="text-align: justify"}
+Now we will use the data from 1951 upto 2023 to predict the bloom date for the year 2024. Basically its the same model with one extra data point available
+:::
+
+```{r}
+#| label: forecast-2024 p1
+#| echo: true
+#| warning: false
+#| include: true
+
+# Now use data upto 2023 to predict 2024
+fit_kyoto <- Arima(y_kyoto, order=c(1,0,0)) # order=c(1,0,0) indicates AR(1) model
+fit_kyoto
+
+#Forecast
+fcast_kyoto <- forecast(fit_kyoto)
+fcast_kyoto
+```
+
+::: {style="text-align: justify"}
+The model predicts the cherry blossom to bloom on day 93 which is 2nd April 2024 (due to 2024 being a leap year) for Kyoto, Tokyo. Now lets look at the diagnostics of the model to see if the model is reasonable.
+:::
+
+```{r}
+#| label: forecast-2024 p2
+#| echo: true
+#| warning: false
+#| include: true
+# Plot the forecast
+autoplot(fcast_kyoto) + xlab("Year") +
+  ylab("Percentage change")
+
+# recover estimates of nu(t) and epsilon(t) 
+cbind("Regression Errors" = residuals(fit_kyoto, type="regression"),
+      "ARIMA errors" = residuals(fit_kyoto, type="innovation")) %>%
+  autoplot(facets=TRUE)
+
+# Check the residuals
+checkresiduals(fit_kyoto)
+```
+
+::: {style="text-align: justify"}
+Again, the residuals seem to be normally distributed and the Ljung-Box test indicates we have little evidence against the null hypothesis of independently distributed errors.
+:::

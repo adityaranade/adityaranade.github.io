@@ -1,0 +1,1745 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Aditya Ranade">
+<meta name="dcterms.date" content="2025-06-17">
+
+<title>Predicting bank marketing success</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-de84f8d6bb715db06a919283c2d1e787.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-367fd2a6e8590decf2dad014886a102b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-LC5NNGZ782"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
+</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Aditya Ranade</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../teaching.html"> 
+<span class="menu-text">Teaching</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/aditya-ranade-phd-a3944349/" target="_blank"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/adityaranade" target="_blank"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="mailto:aranade@iastate.edu"> <i class="bi bi-envelope" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-page">
+      <h1 class="title">Predicting bank marketing success</h1>
+            <p class="subtitle lead">Comparing AI methods to predict if customer will enroll into term deposit</p>
+                                <div class="quarto-categories">
+                <div class="quarto-category">AI</div>
+                <div class="quarto-category">analysis</div>
+                <div class="quarto-category">R</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta column-page">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Aditya Ranade </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">June 17, 2025</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block column-page" id="quarto-document-content">
+
+
+
+
+
+<div style="text-align: justify">
+<p>I found this <a href="https://archive.ics.uci.edu/dataset/222/bank+marketing">dataset</a> on UCI machine learning repository which gives bank marketing data for a Portuguese banking institution. The goal is to predict if the client will subscribe to a term deposit. The data has various predictor variables. We will look at the data first and then look to build a prediction model.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reshape2)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggh4x)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GGally)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pROC)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(naivebayes)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(e1071)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nnet)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(xgboost)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data in R</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/adityaranade/portfolio/refs/heads/main/bank_marketing/bank.csv"</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>data0 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(path, <span class="at">sep =</span> <span class="st">";"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the first 6 rows of the dataset</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data0)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  age         job marital education default balance housing loan  contact day
+1  30  unemployed married   primary      no    1787      no   no cellular  19
+2  33    services married secondary      no    4789     yes  yes cellular  11
+3  35  management  single  tertiary      no    1350     yes   no cellular  16
+4  30  management married  tertiary      no    1476     yes  yes  unknown   3
+5  59 blue-collar married secondary      no       0     yes   no  unknown   5
+6  35  management  single  tertiary      no     747      no   no cellular  23
+  month duration campaign pdays previous poutcome  y
+1   oct       79        1    -1        0  unknown no
+2   may      220        1   339        4  failure no
+3   apr      185        1   330        1  failure no
+4   jun      199        4    -1        0  unknown no
+5   may      226        1    -1        0  unknown no
+6   feb      141        2   176        3  failure no</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># change column names</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(data0)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "age"       "job"       "marital"   "education" "default"   "balance"  
+ [7] "housing"   "loan"      "contact"   "day"       "month"     "duration" 
+[13] "campaign"  "pdays"     "previous"  "poutcome"  "y"        </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#"age" "job" "marital" "education","default" "balance"</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">#"housing" "loan" "contact" "day" "month" "duration"</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#"campaign" "pdays" "previous" "poutcome" "y" </span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the type of data</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>data0 <span class="sc">|&gt;</span> <span class="fu">str</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   4521 obs. of  17 variables:
+ $ age      : int  30 33 35 30 59 35 36 39 41 43 ...
+ $ job      : chr  "unemployed" "services" "management" "management" ...
+ $ marital  : chr  "married" "married" "single" "married" ...
+ $ education: chr  "primary" "secondary" "tertiary" "tertiary" ...
+ $ default  : chr  "no" "no" "no" "no" ...
+ $ balance  : int  1787 4789 1350 1476 0 747 307 147 221 -88 ...
+ $ housing  : chr  "no" "yes" "yes" "yes" ...
+ $ loan     : chr  "no" "yes" "no" "yes" ...
+ $ contact  : chr  "cellular" "cellular" "cellular" "unknown" ...
+ $ day      : int  19 11 16 3 5 23 14 6 14 17 ...
+ $ month    : chr  "oct" "may" "apr" "jun" ...
+ $ duration : int  79 220 185 199 226 141 341 151 57 313 ...
+ $ campaign : int  1 1 1 4 1 2 1 2 2 1 ...
+ $ pdays    : int  -1 339 330 -1 -1 176 330 -1 -1 147 ...
+ $ previous : int  0 4 1 0 0 3 2 0 0 2 ...
+ $ poutcome : chr  "unknown" "failure" "failure" "unknown" ...
+ $ y        : chr  "no" "no" "no" "no" ...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the rows which do not have any entries</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(data0)) <span class="co"># No NA values</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Data processing</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data0 <span class="sc">|&gt;</span> <span class="fu">select</span>(age,job,marital,education,default,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                        balance,housing,loan,duration,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>                        campaign,pdays,previous,poutcome,y)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co"># # Check data type</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># data %&gt;% str</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the variables to categorical</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>job <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(data<span class="sc">$</span>job)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>marital <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(data<span class="sc">$</span>marital)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>education <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(data<span class="sc">$</span>education)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>default <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(data<span class="sc">$</span>default)</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>housing <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(data<span class="sc">$</span>housing)</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>loan <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(data<span class="sc">$</span>loan)</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>poutcome <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(data<span class="sc">$</span>poutcome)</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>y <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(data<span class="sc">$</span>y)</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the distribution of the outcome y</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(y), <span class="at">fill =</span> <span class="fu">factor</span>(y))) <span class="sc">+</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>  <span class="co">#geom_bar(fill = "purple") +</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">stat =</span> <span class="st">"count"</span>, <span class="fu">aes</span>(<span class="at">label =</span> ..count..), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Target"</span>, <span class="at">y =</span> <span class="st">"Count"</span>, <span class="at">title =</span> <span class="st">"Distribution of Target"</span>) <span class="sc">+</span></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/data_process-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div style="text-align: justify">
+<p>The number of yes are considerably low compared to no. This indicates we have imbalanced class. First we will look at a simple logistic regression.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># To ensure reproducibility</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">55</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Split data into training and testing set</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>ind <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(data),</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>              <span class="fu">floor</span>(<span class="fl">0.7</span><span class="sc">*</span><span class="fu">nrow</span>(data)),</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">replace =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Training dataset</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>data_train <span class="ot">&lt;-</span> data[ind,]</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Testing dataset</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>data_test <span class="ot">&lt;-</span> data[<span class="sc">-</span>ind,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Logistic regression</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">glm</span>(y <span class="sc">~</span> ., <span class="at">data =</span> data_train, <span class="at">family =</span> <span class="fu">binomial</span>())</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Predicted probability</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>y_pred_prob <span class="ot">&lt;-</span> <span class="fu">predict</span>(model, data_test,<span class="st">"response"</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Predicted class</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>y_pred <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(y_pred_prob<span class="sc">&gt;</span><span class="fl">0.5</span>,<span class="st">"yes"</span>,<span class="st">"no"</span>)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Confusion matrix</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(data_test<span class="sc">$</span>y, <span class="fu">as.factor</span>(y_pred))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction   no  yes
+       no  1163   30
+       yes  117   47
+                                          
+               Accuracy : 0.8917          
+                 95% CI : (0.8739, 0.9077)
+    No Information Rate : 0.9433          
+    P-Value [Acc &gt; NIR] : 1               
+                                          
+                  Kappa : 0.339           
+                                          
+ Mcnemar's Test P-Value : 1.311e-12       
+                                          
+            Sensitivity : 0.9086          
+            Specificity : 0.6104          
+         Pos Pred Value : 0.9749          
+         Neg Pred Value : 0.2866          
+             Prevalence : 0.9433          
+         Detection Rate : 0.8570          
+   Detection Prevalence : 0.8791          
+      Balanced Accuracy : 0.7595          
+                                          
+       'Positive' Class : no              
+                                          </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Storage for confusion matrices</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>cm_list <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Confusion Matrix</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>cm_list<span class="sc">$</span>logistic <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(data_test<span class="sc">$</span>y, <span class="fu">as.factor</span>(y_pred))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div style="text-align: justify">
+<p>The accuracy is around 89.17% which is good. Next we will try stepwise model selection process on the logistic regression model.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Stepwise both directions</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>model_step <span class="ot">&lt;-</span> <span class="fu">step</span>(model, <span class="at">direction =</span> <span class="st">"both"</span>)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Start:  AIC=1618.01
+y ~ age + job + marital + education + default + balance + housing + 
+    loan + duration + campaign + pdays + previous + poutcome
+
+            Df Deviance    AIC
+- age        1   1560.0 1616.0
+- previous   1   1560.0 1616.0
+- balance    1   1560.0 1616.0
+- job       11   1580.1 1616.1
+- pdays      1   1560.3 1616.3
+- marital    2   1562.7 1616.7
+- default    1   1562.0 1618.0
+&lt;none&gt;           1560.0 1618.0
+- education  3   1569.6 1621.6
+- campaign   1   1567.5 1623.5
+- loan       1   1569.7 1625.7
+- housing    1   1574.3 1630.3
+- poutcome   3   1668.7 1720.7
+- duration   1   1954.8 2010.8
+
+Step:  AIC=1616.03
+y ~ job + marital + education + default + balance + housing + 
+    loan + duration + campaign + pdays + previous + poutcome
+
+            Df Deviance    AIC
+- previous   1   1560.0 1614.0
+- balance    1   1560.0 1614.0
+- pdays      1   1560.3 1614.3
+- marital    2   1562.9 1614.9
+- default    1   1562.0 1616.0
+&lt;none&gt;           1560.0 1616.0
+- job       11   1582.9 1616.9
++ age        1   1560.0 1618.0
+- education  3   1570.0 1620.0
+- campaign   1   1567.5 1621.5
+- loan       1   1569.7 1623.7
+- housing    1   1574.5 1628.5
+- poutcome   3   1668.7 1718.7
+- duration   1   1955.1 2009.1
+
+Step:  AIC=1614.05
+y ~ job + marital + education + default + balance + housing + 
+    loan + duration + campaign + pdays + poutcome
+
+            Df Deviance    AIC
+- balance    1   1560.1 1612.1
+- pdays      1   1560.3 1612.3
+- marital    2   1562.9 1612.9
+- default    1   1562.0 1614.0
+&lt;none&gt;           1560.0 1614.0
+- job       11   1582.9 1614.9
++ previous   1   1560.0 1616.0
++ age        1   1560.0 1616.0
+- education  3   1570.0 1618.0
+- campaign   1   1567.5 1619.5
+- loan       1   1569.7 1621.7
+- housing    1   1574.6 1626.6
+- poutcome   3   1677.9 1725.9
+- duration   1   1955.2 2007.2
+
+Step:  AIC=1612.07
+y ~ job + marital + education + default + housing + loan + duration + 
+    campaign + pdays + poutcome
+
+            Df Deviance    AIC
+- pdays      1   1560.3 1610.3
+- marital    2   1563.0 1611.0
+- default    1   1562.1 1612.1
+&lt;none&gt;           1560.1 1612.1
+- job       11   1582.9 1612.9
++ balance    1   1560.0 1614.0
++ age        1   1560.0 1614.0
++ previous   1   1560.0 1614.0
+- education  3   1570.0 1616.0
+- campaign   1   1567.6 1617.6
+- loan       1   1569.7 1619.7
+- housing    1   1574.6 1624.6
+- poutcome   3   1677.9 1723.9
+- duration   1   1955.4 2005.4
+
+Step:  AIC=1610.35
+y ~ job + marital + education + default + housing + loan + duration + 
+    campaign + poutcome
+
+            Df Deviance    AIC
+- marital    2   1563.3 1609.3
+&lt;none&gt;           1560.3 1610.3
+- default    1   1562.4 1610.4
+- job       11   1583.1 1611.1
++ pdays      1   1560.1 1612.1
++ balance    1   1560.3 1612.3
++ age        1   1560.3 1612.3
++ previous   1   1560.3 1612.3
+- education  3   1570.2 1614.2
+- campaign   1   1567.8 1615.8
+- loan       1   1569.9 1617.9
+- housing    1   1574.6 1622.6
+- poutcome   3   1721.4 1765.4
+- duration   1   1955.5 2003.5
+
+Step:  AIC=1609.29
+y ~ job + education + default + housing + loan + duration + campaign + 
+    poutcome
+
+            Df Deviance    AIC
+&lt;none&gt;           1563.3 1609.3
+- default    1   1565.8 1609.8
++ marital    2   1560.3 1610.3
++ pdays      1   1563.0 1611.0
+- job       11   1587.1 1611.1
++ age        1   1563.1 1611.1
++ balance    1   1563.2 1611.2
++ previous   1   1563.3 1611.3
+- education  3   1574.3 1614.3
+- campaign   1   1570.7 1614.7
+- loan       1   1572.9 1616.9
+- housing    1   1578.0 1622.0
+- poutcome   3   1723.7 1763.7
+- duration   1   1962.6 2006.6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_step)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = y ~ job + education + default + housing + loan + 
+    duration + campaign + poutcome, family = binomial(), data = data_train)
+
+Coefficients:
+                     Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)        -2.9206986  0.3848207  -7.590  3.2e-14 ***
+jobblue-collar     -0.3983436  0.2844555  -1.400 0.161402    
+jobentrepreneur    -0.6110379  0.4715547  -1.296 0.195046    
+jobhousemaid       -0.8500412  0.5432529  -1.565 0.117647    
+jobmanagement      -0.2057875  0.2866986  -0.718 0.472891    
+jobretired          0.8255495  0.3253605   2.537 0.011170 *  
+jobself-employed    0.0226447  0.4001233   0.057 0.954868    
+jobservices        -0.1731728  0.3259470  -0.531 0.595217    
+jobstudent          0.3476402  0.4376270   0.794 0.426977    
+jobtechnician      -0.0850288  0.2719354  -0.313 0.754524    
+jobunemployed      -0.1266363  0.4461336  -0.284 0.776523    
+jobunknown         -0.5545394  0.7945078  -0.698 0.485198    
+educationsecondary  0.1854277  0.2371710   0.782 0.434314    
+educationtertiary   0.6573345  0.2701526   2.433 0.014966 *  
+educationunknown   -0.2956239  0.4108627  -0.720 0.471821    
+defaultyes          0.7489408  0.4421353   1.694 0.090281 .  
+housingyes         -0.5532075  0.1449790  -3.816 0.000136 ***
+loanyes            -0.6490925  0.2211968  -2.934 0.003341 ** 
+duration            0.0042745  0.0002405  17.774  &lt; 2e-16 ***
+campaign           -0.0863822  0.0346880  -2.490 0.012765 *  
+poutcomeother       0.3088592  0.3227868   0.957 0.338642    
+poutcomesuccess     2.5223389  0.3064338   8.231  &lt; 2e-16 ***
+poutcomeunknown    -0.5724993  0.2106880  -2.717 0.006582 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 2230.0  on 3163  degrees of freedom
+Residual deviance: 1563.3  on 3141  degrees of freedom
+AIC: 1609.3
+
+Number of Fisher Scoring iterations: 6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predicted probability</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>y_pred_prob_step <span class="ot">&lt;-</span> <span class="fu">predict</span>(model_step, data_test,<span class="st">"response"</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Predicted class</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>y_pred_step <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(y_pred_prob_step<span class="sc">&gt;</span><span class="fl">0.5</span>,<span class="st">"yes"</span>,<span class="st">"no"</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Confusion matrix</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(data_test<span class="sc">$</span>y, <span class="fu">as.factor</span>(y_pred_step))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction   no  yes
+       no  1162   31
+       yes  118   46
+                                          
+               Accuracy : 0.8902          
+                 95% CI : (0.8723, 0.9063)
+    No Information Rate : 0.9433          
+    P-Value [Acc &gt; NIR] : 1               
+                                          
+                  Kappa : 0.33            
+                                          
+ Mcnemar's Test P-Value : 1.849e-12       
+                                          
+            Sensitivity : 0.9078          
+            Specificity : 0.5974          
+         Pos Pred Value : 0.9740          
+         Neg Pred Value : 0.2805          
+             Prevalence : 0.9433          
+         Detection Rate : 0.8563          
+   Detection Prevalence : 0.8791          
+      Balanced Accuracy : 0.7526          
+                                          
+       'Positive' Class : no              
+                                          </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Confusion Matrix</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>cm_list<span class="sc">$</span>logistic_step <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(data_test<span class="sc">$</span>y, <span class="fu">as.factor</span>(y_pred_step))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div style="text-align: justify">
+<p>The accuracy is around 89.02% which is good. Next we will try Naive Bayes classification method.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Naive Bayes</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>model_nb <span class="ot">&lt;-</span> <span class="fu">naiveBayes</span>(y <span class="sc">~</span> ., <span class="at">data =</span> data_train) </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Predictions</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>y_pred_nb <span class="ot">&lt;-</span> <span class="fu">predict</span>(model_nb, <span class="at">newdata =</span> data_test)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Confusion matrix</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(data_test<span class="sc">$</span>y, y_pred_nb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction   no  yes
+       no  1098   95
+       yes   85   79
+                                         
+               Accuracy : 0.8674         
+                 95% CI : (0.8481, 0.885)
+    No Information Rate : 0.8718         
+    P-Value [Acc &gt; NIR] : 0.7037         
+                                         
+                  Kappa : 0.3918         
+                                         
+ Mcnemar's Test P-Value : 0.5023         
+                                         
+            Sensitivity : 0.9281         
+            Specificity : 0.4540         
+         Pos Pred Value : 0.9204         
+         Neg Pred Value : 0.4817         
+             Prevalence : 0.8718         
+         Detection Rate : 0.8091         
+   Detection Prevalence : 0.8791         
+      Balanced Accuracy : 0.6911         
+                                         
+       'Positive' Class : no             
+                                         </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Confusion Matrix data frame</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>cm_list<span class="sc">$</span>naive_bayes <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(data_test<span class="sc">$</span>y, y_pred_nb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div style="text-align: justify">
+<p>The accuracy is close to 86.74% which is not bad. Next we will try random forest classification method.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Random forest</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(randomForest)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>model_rf <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(y <span class="sc">~</span> ., </span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>                         <span class="at">data =</span> data_train, </span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>                         <span class="at">ntree =</span> <span class="dv">500</span>, </span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>                         <span class="at">mtry =</span> <span class="dv">2</span>, </span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>                         <span class="at">importance =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Predictions</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>y_pred_rf <span class="ot">&lt;-</span> <span class="fu">predict</span>(model_rf, data_test)</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Confusion Matrix</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(data_test<span class="sc">$</span>y, y_pred_rf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction   no  yes
+       no  1179   14
+       yes  146   18
+                                          
+               Accuracy : 0.8821          
+                 95% CI : (0.8637, 0.8988)
+    No Information Rate : 0.9764          
+    P-Value [Acc &gt; NIR] : 1               
+                                          
+                  Kappa : 0.1501          
+                                          
+ Mcnemar's Test P-Value : &lt;2e-16          
+                                          
+            Sensitivity : 0.8898          
+            Specificity : 0.5625          
+         Pos Pred Value : 0.9883          
+         Neg Pred Value : 0.1098          
+             Prevalence : 0.9764          
+         Detection Rate : 0.8688          
+   Detection Prevalence : 0.8791          
+      Balanced Accuracy : 0.7262          
+                                          
+       'Positive' Class : no              
+                                          </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Confusion Matrix data frame</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>cm_list<span class="sc">$</span>random_forest <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(data_test<span class="sc">$</span>y, y_pred_rf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div style="text-align: justify">
+<p>The accuracy is close to 88.21% which is not bad. Next we will neural network method.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Neural Networks</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>model_nnet <span class="ot">&lt;-</span> <span class="fu">nnet</span>(y <span class="sc">~</span> ., </span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> data_train, </span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">size =</span> <span class="dv">5</span>, </span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">decay =</span> <span class="fl">0.01</span>, </span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">maxit =</span> <span class="dv">200</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># weights:  151
+initial  value 1932.835777 
+iter  10 value 1084.378919
+iter  20 value 1008.871476
+iter  30 value 1000.762095
+iter  40 value 980.193591
+iter  50 value 940.441583
+iter  60 value 926.854358
+iter  70 value 921.815841
+iter  80 value 917.811037
+iter  90 value 884.518071
+iter 100 value 825.223570
+iter 110 value 802.825670
+iter 120 value 794.840877
+iter 130 value 784.739292
+iter 140 value 766.855650
+iter 150 value 759.677806
+iter 160 value 757.825474
+iter 170 value 756.109305
+iter 180 value 752.439765
+iter 190 value 748.184352
+iter 200 value 746.727211
+final  value 746.727211 
+stopped after 200 iterations</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predictions</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>y_pred_nnet <span class="ot">&lt;-</span> <span class="fu">predict</span>(model_nnet,</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>                        data_test, </span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">type =</span> <span class="st">"class"</span>)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Confusion Matrix</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(data_test<span class="sc">$</span>y, <span class="fu">as.factor</span>(y_pred_nnet))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction   no  yes
+       no  1158   35
+       yes  106   58
+                                          
+               Accuracy : 0.8961          
+                 95% CI : (0.8786, 0.9118)
+    No Information Rate : 0.9315          
+    P-Value [Acc &gt; NIR] : 1               
+                                          
+                  Kappa : 0.3988          
+                                          
+ Mcnemar's Test P-Value : 3.745e-09       
+                                          
+            Sensitivity : 0.9161          
+            Specificity : 0.6237          
+         Pos Pred Value : 0.9707          
+         Neg Pred Value : 0.3537          
+             Prevalence : 0.9315          
+         Detection Rate : 0.8534          
+   Detection Prevalence : 0.8791          
+      Balanced Accuracy : 0.7699          
+                                          
+       'Positive' Class : no              
+                                          </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Confusion Matrix data frame</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>cm_list<span class="sc">$</span>neural_network <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(data_test<span class="sc">$</span>y, <span class="fu">as.factor</span>(y_pred_nnet))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div style="text-align: justify">
+<p>The accuracy is close to 89.61% which is not bad. Next we will try support vector classification method.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># support vector classifier </span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>model_svc <span class="ot">&lt;-</span> <span class="fu">svm</span>(y <span class="sc">~</span> .,</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> data_train,</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>                 <span class="co"># kernel = "linear",  # or "radial", "polynomial", "sigmoid"</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">kernel =</span> <span class="st">"sigmoid"</span>,  <span class="co"># or "radial", "polynomial", "sigmoid"</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">cost =</span> <span class="dv">1</span>,           <span class="co"># regularization parameter </span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">scale =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Predictions</span></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>y_pred_svc <span class="ot">&lt;-</span> <span class="fu">predict</span>(model_svc,</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>                        data_test)</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Confusion Matrix</span></span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(data_test<span class="sc">$</span>y, <span class="fu">as.factor</span>(y_pred_svc))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction   no  yes
+       no  1017  176
+       yes  147   17
+                                          
+               Accuracy : 0.762           
+                 95% CI : (0.7384, 0.7844)
+    No Information Rate : 0.8578          
+    P-Value [Acc &gt; NIR] : 1.0000          
+                                          
+                  Kappa : -0.0408         
+                                          
+ Mcnemar's Test P-Value : 0.1192          
+                                          
+            Sensitivity : 0.87371         
+            Specificity : 0.08808         
+         Pos Pred Value : 0.85247         
+         Neg Pred Value : 0.10366         
+             Prevalence : 0.85777         
+         Detection Rate : 0.74945         
+   Detection Prevalence : 0.87915         
+      Balanced Accuracy : 0.48090         
+                                          
+       'Positive' Class : no              
+                                          </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Confusion Matrix data frame</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>cm_list<span class="sc">$</span>smote_support_vector_classifier <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(data_test<span class="sc">$</span>y, <span class="fu">as.factor</span>(y_pred_svc))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div style="text-align: justify">
+<p>The accuracy is close to 89.61% which is not bad. Next we will try some method to deal with imbalanced dataset using the SMOTE (Synthetic Minority Oversampling Technique) method which tries to balance the classes by oversampling from the minority classes. We will try to run all the models based on the over sampled data and compare them.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># SMOTE method</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ROSE)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>data_train2 <span class="ot">&lt;-</span> <span class="fu">ovun.sample</span>(y <span class="sc">~</span> ., </span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>                           <span class="at">data =</span> data_train,</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>                           <span class="at">method =</span> <span class="st">"over"</span>, </span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>                           <span class="at">N =</span> (<span class="fu">nrow</span>(data_train)<span class="sc">*</span><span class="dv">3</span>))<span class="sc">$</span>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Logistic regression</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">glm</span>(y <span class="sc">~</span> ., <span class="at">data =</span> data_train2, <span class="at">family =</span> <span class="fu">binomial</span>())</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Predicted probability</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>y_pred_prob2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(model2, data_test,<span class="st">"response"</span>)</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Predicted class</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>y_pred2 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(y_pred_prob2<span class="sc">&gt;</span><span class="fl">0.5</span>,<span class="st">"yes"</span>,<span class="st">"no"</span>)</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Confusion matrix</span></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(data_test<span class="sc">$</span>y, <span class="fu">as.factor</span>(y_pred2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction  no yes
+       no  748 445
+       yes  14 150
+                                          
+               Accuracy : 0.6618          
+                 95% CI : (0.6359, 0.6869)
+    No Information Rate : 0.5615          
+    P-Value [Acc &gt; NIR] : 3.163e-14       
+                                          
+                  Kappa : 0.2539          
+                                          
+ Mcnemar's Test P-Value : &lt; 2.2e-16       
+                                          
+            Sensitivity : 0.9816          
+            Specificity : 0.2521          
+         Pos Pred Value : 0.6270          
+         Neg Pred Value : 0.9146          
+             Prevalence : 0.5615          
+         Detection Rate : 0.5512          
+   Detection Prevalence : 0.8791          
+      Balanced Accuracy : 0.6169          
+                                          
+       'Positive' Class : no              
+                                          </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Confusion Matrix data frame</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>cm_list<span class="sc">$</span>smote_logistic <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(data_test<span class="sc">$</span>y, <span class="fu">as.factor</span>(y_pred2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Stepwise both directions</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>model_step2 <span class="ot">&lt;-</span> <span class="fu">step</span>(model2, <span class="at">direction =</span> <span class="st">"both"</span>)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Start:  AIC=7440.23
+y ~ age + job + marital + education + default + balance + housing + 
+    loan + duration + campaign + pdays + previous + poutcome
+
+            Df Deviance     AIC
+- age        1   7382.3  7438.3
+- balance    1   7382.6  7438.6
+- previous   1   7382.7  7438.7
+- default    1   7382.8  7438.8
+&lt;none&gt;           7382.2  7440.2
+- pdays      1   7386.2  7442.2
+- marital    2   7392.7  7446.7
+- education  3   7423.7  7475.7
+- housing    1   7481.0  7537.0
+- job       11   7519.7  7555.7
+- loan       1   7540.3  7596.3
+- campaign   1   7540.6  7596.6
+- poutcome   3   7756.2  7808.2
+- duration   1  10193.3 10249.3
+
+Step:  AIC=7438.25
+y ~ job + marital + education + default + balance + housing + 
+    loan + duration + campaign + pdays + previous + poutcome
+
+            Df Deviance     AIC
+- balance    1   7382.7  7436.7
+- previous   1   7382.7  7436.7
+- default    1   7382.8  7436.8
+&lt;none&gt;           7382.3  7438.3
++ age        1   7382.2  7440.2
+- pdays      1   7386.2  7440.2
+- marital    2   7393.5  7445.5
+- education  3   7425.9  7475.9
+- housing    1   7482.9  7536.9
+- job       11   7546.8  7580.8
+- loan       1   7540.4  7594.4
+- campaign   1   7540.6  7594.6
+- poutcome   3   7756.4  7806.4
+- duration   1  10194.7 10248.7
+
+Step:  AIC=7436.68
+y ~ job + marital + education + default + housing + loan + duration + 
+    campaign + pdays + previous + poutcome
+
+            Df Deviance     AIC
+- previous   1   7383.2  7435.2
+- default    1   7383.3  7435.3
+&lt;none&gt;           7382.7  7436.7
++ balance    1   7382.3  7438.3
+- pdays      1   7386.6  7438.6
++ age        1   7382.6  7438.6
+- marital    2   7394.0  7444.0
+- education  3   7426.0  7474.0
+- housing    1   7483.1  7535.1
+- job       11   7546.8  7578.8
+- loan       1   7540.5  7592.5
+- campaign   1   7540.8  7592.8
+- poutcome   3   7756.4  7804.4
+- duration   1  10195.4 10247.4
+
+Step:  AIC=7435.17
+y ~ job + marital + education + default + housing + loan + duration + 
+    campaign + pdays + poutcome
+
+            Df Deviance     AIC
+- default    1   7383.8  7433.8
+&lt;none&gt;           7383.2  7435.2
++ previous   1   7382.7  7436.7
++ balance    1   7382.7  7436.7
+- pdays      1   7386.8  7436.8
++ age        1   7383.1  7437.1
+- marital    2   7394.5  7442.5
+- education  3   7426.5  7472.5
+- housing    1   7483.6  7533.6
+- job       11   7546.9  7576.9
+- loan       1   7540.7  7590.7
+- campaign   1   7541.0  7591.0
+- poutcome   3   7841.6  7887.6
+- duration   1  10202.1 10252.1
+
+Step:  AIC=7433.76
+y ~ job + marital + education + housing + loan + duration + campaign + 
+    pdays + poutcome
+
+            Df Deviance     AIC
+&lt;none&gt;           7383.8  7433.8
++ default    1   7383.2  7435.2
++ balance    1   7383.2  7435.2
++ previous   1   7383.3  7435.3
+- pdays      1   7387.4  7435.4
++ age        1   7383.7  7435.7
+- marital    2   7395.8  7441.8
+- education  3   7427.4  7471.4
+- housing    1   7484.9  7532.9
+- job       11   7546.9  7574.9
+- loan       1   7540.8  7588.8
+- campaign   1   7542.9  7590.9
+- poutcome   3   7841.6  7885.6
+- duration   1  10208.6 10256.6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_step2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = y ~ job + marital + education + housing + loan + 
+    duration + campaign + pdays + poutcome, family = binomial(), 
+    data = data_train2)
+
+Coefficients:
+                     Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)        -0.1052809  0.2082530  -0.506 0.613177    
+jobblue-collar     -0.8114544  0.1154661  -7.028 2.10e-12 ***
+jobentrepreneur    -0.5055734  0.1830097  -2.763 0.005735 ** 
+jobhousemaid       -1.0576435  0.2196267  -4.816 1.47e-06 ***
+jobmanagement      -0.4349114  0.1233348  -3.526 0.000421 ***
+jobretired          0.5651946  0.1513535   3.734 0.000188 ***
+jobself-employed   -0.3235794  0.1738904  -1.861 0.062769 .  
+jobservices        -0.5776775  0.1348496  -4.284 1.84e-05 ***
+jobstudent          0.0991976  0.2075718   0.478 0.632725    
+jobtechnician      -0.3372895  0.1133161  -2.977 0.002915 ** 
+jobunemployed      -0.4847497  0.1946102  -2.491 0.012743 *  
+jobunknown         -1.4111436  0.3711723  -3.802 0.000144 ***
+maritalmarried     -0.2163072  0.0927979  -2.331 0.019756 *  
+maritalsingle      -0.0078369  0.1038239  -0.075 0.939830    
+educationsecondary  0.2633713  0.0993298   2.651 0.008014 ** 
+educationtertiary   0.6399636  0.1143595   5.596 2.19e-08 ***
+educationunknown   -0.1708036  0.1756055  -0.973 0.330725    
+housingyes         -0.6224268  0.0623738  -9.979  &lt; 2e-16 ***
+loanyes            -1.1926751  0.0969035 -12.308  &lt; 2e-16 ***
+duration            0.0060072  0.0001572  38.218  &lt; 2e-16 ***
+campaign           -0.1844988  0.0153296 -12.035  &lt; 2e-16 ***
+pdays               0.0009013  0.0004785   1.883 0.059655 .  
+poutcomeother       0.3051444  0.1484881   2.055 0.039878 *  
+poutcomesuccess     2.6996244  0.2030783  13.294  &lt; 2e-16 ***
+poutcomeunknown    -0.3949296  0.1456172  -2.712 0.006686 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 11527.0  on 9491  degrees of freedom
+Residual deviance:  7383.8  on 9467  degrees of freedom
+AIC: 7433.8
+
+Number of Fisher Scoring iterations: 6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predicted probability</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>y_pred_prob_step2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(model_step2, data_test,<span class="st">"response"</span>)</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Predicted class</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>y_pred_step2 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(y_pred_prob_step2<span class="sc">&gt;</span><span class="fl">0.5</span>,<span class="st">"yes"</span>,<span class="st">"no"</span>)</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Confusion matrix</span></span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(data_test<span class="sc">$</span>y, <span class="fu">as.factor</span>(y_pred_step2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction  no yes
+       no  749 444
+       yes  14 150
+                                          
+               Accuracy : 0.6625          
+                 95% CI : (0.6366, 0.6876)
+    No Information Rate : 0.5623          
+    P-Value [Acc &gt; NIR] : 3.111e-14       
+                                          
+                  Kappa : 0.2546          
+                                          
+ Mcnemar's Test P-Value : &lt; 2.2e-16       
+                                          
+            Sensitivity : 0.9817          
+            Specificity : 0.2525          
+         Pos Pred Value : 0.6278          
+         Neg Pred Value : 0.9146          
+             Prevalence : 0.5623          
+         Detection Rate : 0.5520          
+   Detection Prevalence : 0.8791          
+      Balanced Accuracy : 0.6171          
+                                          
+       'Positive' Class : no              
+                                          </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Confusion Matrix</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>cm_list<span class="sc">$</span>smote_logistic_step <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(data_test<span class="sc">$</span>y, <span class="fu">as.factor</span>(y_pred_step2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Naive Bayes</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>model_nb2 <span class="ot">&lt;-</span> <span class="fu">naiveBayes</span>(y <span class="sc">~</span> ., <span class="at">data =</span> data_train2) </span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Predictions</span></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>y_pred_nb2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(model_nb2, <span class="at">newdata =</span> data_test)</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Confusion matrix</span></span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(data_test<span class="sc">$</span>y, y_pred_nb2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction  no yes
+       no  797 396
+       yes  25 139
+                                          
+               Accuracy : 0.6898          
+                 95% CI : (0.6644, 0.7143)
+    No Information Rate : 0.6057          
+    P-Value [Acc &gt; NIR] : 7.788e-11       
+                                          
+                  Kappa : 0.261           
+                                          
+ Mcnemar's Test P-Value : &lt; 2.2e-16       
+                                          
+            Sensitivity : 0.9696          
+            Specificity : 0.2598          
+         Pos Pred Value : 0.6681          
+         Neg Pred Value : 0.8476          
+             Prevalence : 0.6057          
+         Detection Rate : 0.5873          
+   Detection Prevalence : 0.8791          
+      Balanced Accuracy : 0.6147          
+                                          
+       'Positive' Class : no              
+                                          </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Confusion Matrix data frame</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>cm_list<span class="sc">$</span>smote_naive_bayes <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(data_test<span class="sc">$</span>y, y_pred_nb2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Random forest</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>model_rf2 <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(y <span class="sc">~</span> ., </span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">data =</span> data_train, </span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>                         <span class="at">ntree =</span> <span class="dv">500</span>, </span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>                         <span class="at">mtry =</span> <span class="dv">2</span>, </span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>                         <span class="at">importance =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Predictions</span></span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>y_pred_rf2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(model_rf2, data_test)</span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Confusion Matrix</span></span>
+<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(data_test<span class="sc">$</span>y, y_pred_rf2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction   no  yes
+       no  1179   14
+       yes  147   17
+                                         
+               Accuracy : 0.8814         
+                 95% CI : (0.863, 0.8981)
+    No Information Rate : 0.9772         
+    P-Value [Acc &gt; NIR] : 1              
+                                         
+                  Kappa : 0.1414         
+                                         
+ Mcnemar's Test P-Value : &lt;2e-16         
+                                         
+            Sensitivity : 0.8891         
+            Specificity : 0.5484         
+         Pos Pred Value : 0.9883         
+         Neg Pred Value : 0.1037         
+             Prevalence : 0.9772         
+         Detection Rate : 0.8688         
+   Detection Prevalence : 0.8791         
+      Balanced Accuracy : 0.7188         
+                                         
+       'Positive' Class : no             
+                                         </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Confusion Matrix data frame</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>cm_list<span class="sc">$</span>smote_random_forest <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(data_test<span class="sc">$</span>y, y_pred_rf2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Neural Networks</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>model_nnet2 <span class="ot">&lt;-</span> <span class="fu">nnet</span>(y <span class="sc">~</span> ., </span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> data_train2, </span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">size =</span> <span class="dv">5</span>, </span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">decay =</span> <span class="fl">0.01</span>, </span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">maxit =</span> <span class="dv">200</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># weights:  151
+initial  value 6672.439994 
+iter  10 value 5444.151418
+iter  20 value 4928.673252
+iter  30 value 4668.104777
+iter  40 value 4574.222061
+iter  50 value 4493.420471
+iter  60 value 4331.950671
+iter  70 value 4099.714709
+iter  80 value 4002.793010
+iter  90 value 3980.135694
+iter 100 value 3847.275435
+iter 110 value 3731.594349
+iter 120 value 3678.434483
+iter 130 value 3672.812783
+iter 140 value 3671.252056
+iter 150 value 3665.833513
+iter 160 value 3665.133792
+iter 170 value 3663.637799
+iter 180 value 3659.793664
+iter 190 value 3659.407716
+iter 200 value 3658.453928
+final  value 3658.453928 
+stopped after 200 iterations</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predictions</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>y_pred_nnet2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(model_nnet2,</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>                        data_test, </span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">type =</span> <span class="st">"class"</span>)</span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Confusion Matrix</span></span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(data_test<span class="sc">$</span>y, <span class="fu">as.factor</span>(y_pred_nnet2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction  no yes
+       no  806 387
+       yes  25 139
+                                          
+               Accuracy : 0.6964          
+                 95% CI : (0.6711, 0.7208)
+    No Information Rate : 0.6124          
+    P-Value [Acc &gt; NIR] : 6.596e-11       
+                                          
+                  Kappa : 0.268           
+                                          
+ Mcnemar's Test P-Value : &lt; 2.2e-16       
+                                          
+            Sensitivity : 0.9699          
+            Specificity : 0.2643          
+         Pos Pred Value : 0.6756          
+         Neg Pred Value : 0.8476          
+             Prevalence : 0.6124          
+         Detection Rate : 0.5940          
+   Detection Prevalence : 0.8791          
+      Balanced Accuracy : 0.6171          
+                                          
+       'Positive' Class : no              
+                                          </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Confusion Matrix data frame</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>cm_list<span class="sc">$</span>smote_neural_network <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(data_test<span class="sc">$</span>y, <span class="fu">as.factor</span>(y_pred_nnet2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># support vector classifier </span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>model_svc2 <span class="ot">&lt;-</span> <span class="fu">svm</span>(y <span class="sc">~</span> .,</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">data =</span> data_train2,</span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">kernel =</span> <span class="st">"sigmoid"</span>,  <span class="co"># or "radial", "polynomial", "sigmoid" </span></span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">cost =</span> <span class="dv">1</span>,           <span class="co"># regularization parameter </span></span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">scale =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Predictions</span></span>
+<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a>y_pred_svc2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(model_svc2,</span>
+<span id="cb57-10"><a href="#cb57-10" aria-hidden="true" tabindex="-1"></a>                       data_test)</span>
+<span id="cb57-11"><a href="#cb57-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-12"><a href="#cb57-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Confusion Matrix</span></span>
+<span id="cb57-13"><a href="#cb57-13" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(data_test<span class="sc">$</span>y, <span class="fu">as.factor</span>(y_pred_svc2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction  no yes
+       no  629 564
+       yes  17 147
+                                         
+               Accuracy : 0.5718         
+                 95% CI : (0.545, 0.5984)
+    No Information Rate : 0.5239         
+    P-Value [Acc &gt; NIR] : 0.0002213      
+                                         
+                  Kappa : 0.1737         
+                                         
+ Mcnemar's Test P-Value : &lt; 2.2e-16      
+                                         
+            Sensitivity : 0.9737         
+            Specificity : 0.2068         
+         Pos Pred Value : 0.5272         
+         Neg Pred Value : 0.8963         
+             Prevalence : 0.4761         
+         Detection Rate : 0.4635         
+   Detection Prevalence : 0.8791         
+      Balanced Accuracy : 0.5902         
+                                         
+       'Positive' Class : no             
+                                         </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Confusion Matrix data frame</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>cm_list<span class="sc">$</span>support_vector_classifier <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(data_test<span class="sc">$</span>y, <span class="fu">as.factor</span>(y_pred_svc2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div style="text-align: justify">
+<p>The comparison of all the models is as follows</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract multiple metrics into one table</span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>results_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">Model =</span> <span class="fu">names</span>(cm_list),</span>
+<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">Accuracy     =</span> <span class="fu">sapply</span>(cm_list, <span class="cf">function</span>(l) l<span class="sc">$</span>overall[<span class="st">"Accuracy"</span>]),</span>
+<span id="cb60-6"><a href="#cb60-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">Sensitivity  =</span> <span class="fu">sapply</span>(cm_list, <span class="cf">function</span>(l) l<span class="sc">$</span>byClass[<span class="st">"Sensitivity"</span>]),</span>
+<span id="cb60-7"><a href="#cb60-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">Specificity  =</span> <span class="fu">sapply</span>(cm_list, <span class="cf">function</span>(l) l<span class="sc">$</span>byClass[<span class="st">"Specificity"</span>])</span>
+<span id="cb60-8"><a href="#cb60-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb60-9"><a href="#cb60-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-10"><a href="#cb60-10" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(results_df) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb60-11"><a href="#cb60-11" aria-hidden="true" tabindex="-1"></a>results_df <span class="ot">&lt;-</span> results_df <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(Accuracy))</span>
+<span id="cb60-12"><a href="#cb60-12" aria-hidden="true" tabindex="-1"></a>results_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                             Model  Accuracy Sensitivity Specificity
+1                   neural_network 0.8960943   0.9161392   0.6236559
+2                         logistic 0.8916728   0.9085937   0.6103896
+3                    logistic_step 0.8901990   0.9078125   0.5974026
+4                    random_forest 0.8820929   0.8898113   0.5625000
+5              smote_random_forest 0.8813559   0.8891403   0.5483871
+6                      naive_bayes 0.8673545   0.9281488   0.4540230
+7  smote_support_vector_classifier 0.7619749   0.8737113   0.0880829
+8             smote_neural_network 0.6963891   0.9699158   0.2642586
+9                smote_naive_bayes 0.6897568   0.9695864   0.2598131
+10             smote_logistic_step 0.6624908   0.9816514   0.2525253
+11                  smote_logistic 0.6617539   0.9816273   0.2521008
+12       support_vector_classifier 0.5718497   0.9736842   0.2067511</code></pre>
+</div>
+</div>
+<div style="text-align: justify">
+<p>Based on accuracy, neural network model on original data is the best and based on the sensitivity (true positive rate), logistic regression on over sampled data is the best.</p>
+</div>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Copyright 2024, Aditya Ranade</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>This website is built with <a href="https://quarto.org/">Quarto</a>, by Aditya Ranade. License: <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

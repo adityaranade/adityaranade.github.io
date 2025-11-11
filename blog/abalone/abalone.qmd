@@ -1,0 +1,201 @@
+---
+title: "Predicting Abalone age using Poisson Regression"
+subtitle: "Predicting Abalone age using Poisson Regression"
+author: "Aditya Ranade"
+highlight-style:
+  light: github
+date: "2025-05-31"
+categories: [analysis, R]
+image: "./abalone.jpg"
+---
+
+::: {style="text-align: justify"}
+I found this [dataset](https://archive.ics.uci.edu/dataset/1/abalone) on UCI machine learning repository which gives the dataset measuring the characteristics of Abalone. The goal is to predict the age of Abalone which is done using the number of rings in Abalone. Generally, the age of abalone is the number of rings plus 1.5 As an example, if the number of rings of Abalone is 2, the age is estimated to be 2 + 1.5 = 3 years. However, measuring the number of rings is a painful process for the Abalone. Hence we will try to build a predictive model to predict the number of rings in Abalone using the phisical characteristics like the weight, height, diameter, etc.
+:::
+
+```{r}
+#| label: load-packages
+#| echo: true
+#| warning: false
+#| include: true
+
+library(reshape2)
+library(ggplot2)
+library(ggh4x)
+library(ggcorrplot)
+library(GGally) # for pairs plot using ggplot framework
+library(dplyr)
+
+# Load the data
+path <- "https://raw.githubusercontent.com/adityaranade/portfolio/refs/heads/main/abalone/abalone.data"
+data0 <- read.csv(path, header = TRUE)
+colnames(data0) <- c("Sex", "Length", "Diameter", "Height", "whole_weight"
+              ,"shucked_weight", "viscera_weight", "shell_weight", "Rings")
+
+# Data processing
+
+# Check the type of data
+data0 |> str()
+
+# Check the rows which do not have any entries
+sum(is.na(data0)) # no NA values
+
+# Check the first 6 rows of the dataset
+data0 |> head()
+```
+
+```{r}
+#| label: EDA0
+#| echo: true
+#| warning: false
+#| include: true
+#| fig-width: 14
+#| fig-height: 16
+
+# Correlation plot
+ggcorrplot(round(cor(data0[,-1]), 2), 
+           lab = TRUE,
+           hc.order = TRUE,
+           type = "upper")
+
+# num_data <- data0[, sapply(data0, is.numeric)]
+# 
+# # Compute correlation matrix
+# corr <- round(cor(num_data, use = "pairwise.complete.obs"), 2)
+# 
+# # Plot with correlation values
+# ggcorrplot(
+#   corr,
+#   hc.order = TRUE,       # Cluster variables
+#   type = "lower",        # Show only lower triangle
+#   lab = TRUE,            # Add correlation numbers
+#   lab_size = 3,          # Number size
+#   show.legend = TRUE,    # Keep color legend
+#   colors = c("red", "white", "blue") # Optional custom colors
+# )
+
+
+# Pairs plot between the explanatory variables to 
+# check correlation between each pair of the variables
+ggpairs(data0)
+```
+
+::: {style="text-align: justify"}
+The response variable rings is high correlated with all the variables which is good. However, the explanatory variables are correlated within themselves which is not a good indication. This indicates there is severe multicollinearity. This means two variables give similar information about the response variable.
+
+The number of rings is a integer and the histogram can be seen below.
+:::
+
+```{r}
+#| label: EDA1
+#| echo: true
+#| warning: false
+#| include: true
+#| fig-width: 14
+#| fig-height: 6
+
+# Check the histogram of the response variable
+ggplot(data0,aes(Rings))+
+  geom_histogram(bins=100)+
+  theme_bw()
+```
+
+::: {style="text-align: justify"}
+This can be treated as a count data and we can use the Poisson regression. However in Poisson regression, the mean and variance of the response variable quality should be same.
+:::
+
+```{r}
+#| label: EDA2
+#| echo: true
+#| warning: false
+#| include: true
+
+# Check if the mean and variance of response variable is same.
+
+# Mean
+data0$Rings %>% mean
+# Variance
+data0$Rings %>% var
+```
+
+::: {style="text-align: justify"}
+The mean is quite similar to the variance. Hence we can use the Poisson regression to model the data. Based on the correlation plot, shell weight has the highest correlation with rings, so we will use only shell weight and sex as response variable. First we split the data into training and testing set and then run the regression model. We will compare a linear regression model and Poisson regression model. The predictions will be rounded and compared to the raw data through a table.
+:::
+
+```{r}
+#| label: data_split
+#| echo: true
+#| warning: false
+#| include: true
+
+# Only select the variables
+data <- data0 |> select(Sex, shell_weight, Rings)
+
+# split the data into training and testing data
+seed <- 23
+set.seed(seed)
+
+ind <- sample(1:nrow(data),
+              floor(0.8*nrow(data)),
+              replace = FALSE)
+
+# Training dataset
+data_train <- data[ind,]
+# Testing dataset
+data_test <- data[-ind,]
+```
+
+```{r}
+#| label: mlr
+#| echo: true
+#| warning: false
+#| include: true
+
+model_lm <- lm(Rings ~ shell_weight,
+            data = data_train)
+
+summary(model_lm)
+
+# Prediction on the testing dataset
+y_pred_lm <- predict(model_lm, data_test)
+
+rmse_lm <- sqrt(mean((y_pred_lm-data_test$Rings)^2))
+rmse_lm
+
+table_lm <- table(Predicted = as.factor(round(y_pred_lm)),
+                  Actual = as.factor(data_test$Rings))
+table_lm
+```
+
+::: {style="text-align: justify"}
+Now we will try the Poisson regression model.
+:::
+
+```{r}
+#| label: poisson
+#| echo: true
+#| warning: false
+#| include: true
+
+# Poisson regression
+model_poisson <- glm(Rings ~ shell_weight + Sex, 
+                     family = poisson,
+                     data = data_train)
+summary(model_poisson)
+
+# Prediction for testing data
+y_pred_poisson <- predict(model_poisson, 
+                          data_test,
+                          type = "response")
+
+rmse_poisson <- sqrt(mean((y_pred_poisson-data_test$Rings)^2))
+rmse_poisson
+
+table_poisson <- table(as.factor(round(y_pred_poisson)),
+                       as.factor(data_test$Rings))
+table_poisson
+```
+
+::: {style="text-align: justify"}
+If we look carefully, after rounding, the predictions are just around the diagonals, which is decent. Due to multicolinearity, we cannot use multiple variables in the model without some data reduction techniques. We can use the principal component analysis then use the linear regression or Poisson regression. I did try them and the results were similar. So overall, its not a bad model but not extremely good model.
+:::

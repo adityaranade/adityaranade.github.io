@@ -1,0 +1,389 @@
+---
+title: "Rating of cereals based on nutritional information"
+subtitle: "Can we predict the rating of cereals based on nutritional information?"
+author: "Aditya Ranade"
+highlight-style: github-light
+date: "2025-02-23"
+categories: [analysis, python]
+image: "./cereals.jpg"
+jupyter: python3
+---
+
+::: {style="text-align: justify"}
+Cereals are commonly consumed for breakfast and there are plenty of options available for cereals. I found this dataset on Kaggle which gives the nutritional information about cereals as well as the ratings. It is not clear where the rating come from, but I think they are the average ratings from the customers. Can we predict the ratings based on the nutritional information of cereals ? First, we look at the exploratory data analysis and later try some simple regression models. First let us access and process the data through python.
+:::
+
+```{python}
+#| label: load-packages
+#| echo: true
+#| warning: false
+#| include: true
+
+# Load Libraries
+
+# Load Libraries
+import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
+from plotnine import *
+import numpy as np # linear algebra
+# import statsmodels.api as sm
+import statsmodels.formula.api as smf
+import matplotlib.pyplot as plt
+import seaborn as sns
+import random
+from scipy.stats import pearsonr
+
+# Get data from github repo
+path = "https://raw.githubusercontent.com//adityaranade//portfolio//refs//heads//main//cereals//cereal.csv"
+
+df0=pd.read_csv(path, encoding='unicode_escape')
+
+df0.head()
+
+```
+
+```{python}
+#| label: data_processing1
+#| echo: true
+#| warning: false
+#| include: true
+
+# modify the column names
+df0.columns = ['name', 'manufacturer','type','calories','protein','fat','sodium','fiber','carbohydrates','sugar','potassium','vitamins','shelf','weight','cups', 'rating']
+df0.head()
+
+```
+
+```{python}
+#| label: data_processing2
+#| echo: true
+#| warning: false
+#| include: true
+
+# select data for the histogram
+df = df0[["calories", "protein", "fat", "sodium", "fiber", "carbohydrates", "sugar","potassium","rating","name"]]
+df.head()
+
+```
+
+::: {style="text-align: justify"}
+Now that we have the data ready, let us look at the histogram of each variables namely nutritional contents, specifically calories, protein, fat, sodium, fiber, carbo, sugars and potassium
+:::
+
+```{python}
+#| label: EDA
+#| echo: true
+#| warning: false
+#| include: true
+
+# Use melt function for the histograms of variables 
+df2 = pd.melt(df, id_vars=['name'])
+# df2.head()
+
+p = (
+    ggplot(df2, aes("value"))
+    + geom_histogram(bins=10)
+    + facet_grid(". ~ variable", scales='free_x')
+    + theme(figure_size=(12, 3))
+    )
+
+# If we want the density on y axis
+# p = (
+#     ggplot(df2, aes("value", after_stat("density")))
+#     + geom_histogram(bins=10)
+#     + facet_grid(". ~ variable", scales='free_x')
+#     + theme(figure_size=(12, 3))
+#     )
+
+p.show()
+```
+
+The histogram of each of the variables do not show any problems as all the plots look decent. We will look at the correlation plot, which shows the correlation between each pair of variables in a visual form.
+
+```{python}
+#| label: EDA2
+#| echo: true
+#| warning: false
+#| include: true
+# Check the correlation between the variables
+plt.figure(figsize=(20,10))
+sns.heatmap(df.iloc[:,:-1].corr(),annot=True,cmap="viridis")
+plt.show()
+```
+
+::: {style="text-align: justify"}
+Rating variable has positive correlation with all the variables except sugar, sodium, fat and calories . This seems logical and will be useful when we build a regression model for the same. Next we take a look at the pairs plot which will give us idea about relationship between each pair of variables. Most important from the point of prediction is the last row where rating is the y axis and each of the variable is x axis.
+:::
+
+```{python}
+#| label: test
+#| echo: false
+#| warning: false
+#| include: false
+
+# def reg_coef(x,y,label=None,color=None,hue=None,**kwargs):
+#     ax = plt.gca()
+#     r,p = pearsonr(x,y)
+#     ax.annotate('r = {:.2f}'.format(r), xy=(0.5,0.5), xycoords='axes fraction', ha='center')
+#     ax.set_axis_off()
+# 
+# g = sns.PairGrid(df.iloc[:,1:])
+# g.map_diag(sns.histplot)
+# g.map_upper(sns.scatterplot)
+# g.map_lower(reg_coef, hue=None)
+# g.add_legend()
+# plt.show()
+```
+
+```{python}
+#| label: EDA3
+#| echo: true
+#| warning: false
+#| include: true
+
+# Pairs plot
+g = sns.PairGrid(df.iloc[:,:-1])
+g.map_diag(sns.histplot)
+g.map_lower(sns.scatterplot)
+g.map_upper(sns.kdeplot)
+plt.show()
+
+```
+
+::: {style="text-align: justify"}
+The scatterplots of each variable with calories which can be seen in the upper triangular plots in the very first row. It seems there is a linear association between calories and fat, carbs and protein. However, it does not seem to have a linear association with fiber.
+:::
+
+```{python}
+#| label: mlr_train
+#| echo: true
+#| warning: false
+#| include: true
+
+# Split data into train and test set
+indices = range(len(df)) # Create a list of indices
+
+# Get 75% random indices
+random.seed(55) # for reproducible example
+random_indices = random.sample(indices, round(0.75*len(df)))
+
+# Training dataset
+data_train = df.iloc[random_indices,:-1]
+
+# Testing dataset
+data_test = df.iloc[df.index.difference(random_indices),:-1]
+
+# Build a multiple linear regression model to predict calories using other variables using training data
+result = smf.ols("rating ~ calories + protein + fat + sodium + fiber + carbohydrates + sugar + potassium", data = data_train).fit()
+# check the summary
+result.summary()
+
+```
+
+::: {style="text-align: justify"}
+p-value for all the variables is low so all the variables are significantly affecting the response variable, rating. However the model output indicates there might be multicollinearity issue. Multicollinearity means the predictor variables are have high correlation among themselves. If we look at the correlation plot, fiber and potassium has 0.9 correlation which is high. One way to tackle multicollinearity is to consider principal component analysis (PCA). We will look at it in a while but let us first try to make predictions and look at the evaluation metrics.
+:::
+
+::: {style="text-align: justify"}
+Now let us make prediction on the testing data and plot the observed vs. predicted plot
+:::
+
+```{python}
+#| label: prediction_test
+#| echo: true
+#| warning: false
+#| include: true
+
+# Make predictions using testing data
+predictions = result.predict(data_test)
+
+# Observed vs. Predicted plot
+plt.figure(figsize=(20,7))
+plt.scatter(predictions, data_test["rating"])
+plt.ylabel("Observed rating")
+plt.xlabel("Predicted rating")
+# Create the abline
+x_line = np.linspace(min(data_test["rating"])-2, max(data_test["rating"])+2, 100)
+y_line = 1 * x_line + 1
+plt.plot(x_line, y_line, color='red')
+plt.show()
+```
+
+::: {style="text-align: justify"}
+The observed vs. predicted looks good. However there is low number of data points and hence we should take this with a grain of salt. Let us check some evaluation metrics like the Root Mean Squared Error (RMSE) and Mean Absolute Error (MAE).
+:::
+
+```{python}
+#| label: evaluation_metrics
+#| echo: true
+#| warning: false
+#| include: true
+
+from sklearn.metrics import mean_absolute_error,mean_squared_error
+print("Mean Absolute Error:",round(mean_absolute_error(data_test["rating"],predictions),2))
+print("Root Mean Squared Error:",round((mean_squared_error(data_test["rating"],predictions))** 0.5,2))
+```
+
+::: {style="text-align: justify"}
+Root Mean Squared Error (RMSE) of 1.05 and Mean Absolute Error (MAE) of 1.72 is decent and indicates model is performing fairly well.
+:::
+
+::: {style="text-align: justify"}
+Now, we will run regression model based on principal component analysis since it helps with multicollinearity.
+:::
+
+```{python}
+#| label: PCA_processing
+#| echo: true
+#| warning: false
+#| include: true
+
+# Principal component analysis
+from sklearn.decomposition import PCA
+
+# separate the x and y variable for the training data first
+y_train = data_train.iloc[:,-1:]
+X0_train = data_train.iloc[:,:-1]
+
+# Standardize the predictor data first
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+# training data
+X_train_scaled = sc.fit_transform(X0_train)
+
+# Now calculate the principal components
+from sklearn.decomposition import PCA
+pca = PCA()
+principalComponents = pca.fit_transform(X_train_scaled)
+# Training data
+X_train_pca = pd.DataFrame(data = principalComponents,
+             columns=['PC{}'.format(i+1)
+                      for i in range(principalComponents.shape[1])])
+
+
+
+explained_variance = pca.explained_variance_ratio_
+explained_variance
+
+```
+
+::: {style="text-align: justify"}
+The first six principal components explain around 98% of the data, so we will use the first six principal components to build a regression model.
+:::
+
+```{python}
+#| label: PCA_processing2
+#| echo: true
+#| warning: false
+#| include: true
+
+X_train_pca = pd.DataFrame(data = principalComponents,
+             columns=['PC{}'.format(i+1)
+                      for i in range(principalComponents.shape[1])])
+
+# combine the X and Y for the training data
+data_train_pca = X_train_pca
+data_train_pca.set_index(X0_train.index,inplace = True)
+data_train_pca['rating'] = y_train
+data_train_pca.head()
+```
+
+```{python}
+#| label: correlation_plot
+#| echo: true
+#| warning: false
+#| include: true
+
+# Correlation plot for principal components
+plt.figure(figsize=(20,10))
+sns.heatmap(data_train_pca.corr().round(4),annot=True, cmap="viridis")
+plt.show()
+```
+
+::: {style="text-align: justify"}
+We can observe that only rating variable has correlation with the principal components and the correlation between the principal components is 0. The correlation of rating with principal component 6 and 8 is considerably low and hence we will not use them in the model. So we will use the principal components 1,2,3,4,5 and 8 to build a regression model.
+:::
+
+```{python}
+#| label: PCA_model
+#| echo: true
+#| warning: false
+#| include: true
+
+# Now run the OLS regression model on the first five principal components
+# Fit the OLS regression
+result_pca = smf.ols("rating ~ PC1 + PC2 + PC3 + PC4 + PC5 + PC8", data = data_train_pca).fit()
+# check the summary
+result_pca.summary()
+
+```
+
+::: {style="text-align: justify"}
+$R^{2}$ is 99.7% which is decent and all the predictor variables have a low p-value value. We make predictions using the test data and then plot the out of sample observed vs. predicted. First we calculate the principal components of the testing data and then make the predictions.
+:::
+
+```{python}
+#| label: PCA_test_data
+#| echo: true
+#| warning: false
+#| include: true
+
+# X for testing data
+X0_test = data_test.iloc[:,:-1]
+
+# scaled test data
+X_test_scaled = sc.transform(X0_test)
+
+# calculate the principal components for the testing data
+X_test = pca.transform(X_test_scaled)
+X_test_pca = pd.DataFrame(data = X_test,
+             columns=['PC{}'.format(i+1)
+                      for i in range(X_test.shape[1])])
+# calculate the predictions
+predictions_pca = result_pca.predict(X_test_pca)
+```
+
+::: {style="text-align: justify"}
+Now we plot the out of sample predictions obtained from regression model using raw data as well as the predictions obtained from model using the six principal components on the same plot with different colors.
+:::
+
+```{python}
+#| label: PCA_predicted
+#| echo: true
+#| warning: false
+#| include: true
+
+# Observed vs. Predicted plot
+plt.figure(figsize=(20,7))
+
+plt.scatter(predictions, data_test["rating"], label='raw model', color='black', marker='o')
+plt.scatter(predictions_pca, data_test["rating"],  label='PCA model', color='blue', marker='o')
+# sns.regplot(y = data_test["calories"],x = predictions,ci=None,line_kws={"color":"red"})
+plt.ylabel("Observed rating")
+plt.xlabel("Predicted rating")
+plt.legend()
+
+# Create the abline
+x_line = np.linspace(min(data_test["rating"]), max(data_test["rating"]), 100)
+y_line = 1 * x_line + 1
+plt.plot(x_line, y_line, color='red')
+plt.show()
+```
+
+::: {style="text-align: justify"}
+The out of sample observed vs. predicted plot looks decent with all the points just around the red line. WE look at the evaluation metrics for the model built using the principal components.
+:::
+
+```{python}
+#| label: PCA_metrics
+#| echo: true
+#| warning: false
+#| include: true
+
+from sklearn.metrics import mean_absolute_error,mean_squared_error
+print("Mean Absolute Error:",round(mean_absolute_error(data_test["rating"],predictions_pca),2))
+print("Root Mean Squared Error:",round((mean_squared_error(data_test["rating"],predictions_pca))** 0.5,2))
+```
+
+::: {style="text-align: justify"}
+For the regression model using first six principal components, Root Mean Squared Error (RMSE) is 1.23 and Mean Absolute Error (MAE) is 1.89 which is slightly higher than the regression model using the raw data.
+:::

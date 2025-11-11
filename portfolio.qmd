@@ -1,9 +1,0 @@
----
-title: "Blog"
-subtitle: "Some fun data analytics projects"
-listing:
-  contents: portfolio 
-  type: grid #default 
-  sort: "date desc" 
-  categories: true 
----
