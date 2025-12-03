@@ -12,6 +12,7 @@ website:
       - href: index.qmd
         text: Aditya Ranade
       - teaching.qmd
+      - portfolio.qmd
     right:
       - icon: linkedin
         href: https://www.linkedin.com/in/aditya-ranade-phd-a3944349/
