@@ -7,211 +7,185 @@ highlight-style:
 date: "2026-01-13"
 categories: [analysis, R]
 image: "./emi.png"
-output: html_document
-runtime: shiny
+format: html
 ---
 
 ::: {style="text-align: justify"}
 We generally buy an asset on loan. In order to repay the loan, we have to pay Equated Monthly Payments (EMI). Every EMI payment contains a principal component and interest component. Let us look at the amortization of a loan.
 :::
 
-```{r}
-#| label: load-packages
-#| echo: false
-#| warning: false
-#| include: true
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
+  }
+  input, select, button {
+    margin: 5px;
+    padding: 5px;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 15px;
+  }
+  th, td {
+    border: 1px solid #aaa;
+    padding: 6px;
+    text-align: center;
+  }
+  th {
+    background: #f2f2f2;
+  }
+  #plots {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .plotBox {
+    width: 48%;
+    min-width: 300px;
+  }
+</style>
 
-library(shiny)
-library(ggplot2)
-library(DT)
+<h2>Loan EMI & Amortization Calculator</h2>
 
-loan_schedule <- function(P, annual_rate, years, freq) {
-  
-  n <- years * freq                 # total number of payments
-  r <- annual_rate / 100 / freq     # interest rate per period
-  
-  if (r == 0) {
-    payment <- P / n
+<div>
+  <label>Loan Amount:</label>
+  <input type="number" id="loan" value="1000000"><br>
+
+  <label>Annual Interest Rate (%):</label>
+  <input type="number" id="rate" value="8"><br>
+
+  <label>Tenure (Years):</label>
+  <input type="number" id="years" value="10"><br>
+
+  <label>Payments per Year:</label>
+  <select id="freq">
+    <option value="12">Monthly</option>
+    <option value="4">Quarterly</option>
+    <option value="2">Semi-Annual</option>
+    <option value="1">Annual</option>
+  </select>
+
+  <br><br>
+  <button onclick="update()">Calculate</button>
+</div>
+
+<h3 id="emi"></h3>
+
+<div id="plots">
+  <div id="balancePlot" class="plotBox"></div>
+  <div id="ipPlot" class="plotBox"></div>
+</div>
+
+<h3>Amortization Schedule</h3>
+<table id="scheduleTable"></table>
+
+<script>
+// ---- EMI Logic ----
+function loanSchedule(P, annualRate, years, freq) {
+  const n = years * freq;
+  const r = annualRate / 100 / freq;
+
+  let payment;
+  if (r === 0) {
+    payment = P / n;
   } else {
-    payment <- P * r * (1+r)^n / ((1+r)^n - 1)
+    payment = P * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1);
   }
-  
-  schedule <- data.frame(
-    Period = 1:n,
-    Opening_Balance = numeric(n),
-    Payment = rep(round(payment), n),
-    Interest = numeric(n),
-    Principal = numeric(n),
-    Interest_as_Percent_of_EMI = numeric(n),
-    Closing_Balance = numeric(n)
-  )
-  
-  balance <- P
-  
-  for (i in 1:n) {
-    interest <- balance * r
-    principal <- payment - interest
-    closing <- balance - principal
-    perc_emi <- (interest / payment ) *100
-    
-    
-    schedule$Opening_Balance[i] <- round(balance)
-    schedule$Interest[i] <- round(interest)
-    schedule$Principal[i] <- round(principal)
-    schedule$Interest_as_Percent_of_EMI[i] <- round(perc_emi,2)
-    schedule$Closing_Balance[i] <- round(closing)
-    
-    balance <- closing
+
+  let schedule = [];
+  let balance = P;
+
+  for (let i = 1; i <= n; i++) {
+    const interest = balance * r;
+    const principal = payment - interest;
+    const closing = balance - principal;
+    const percEmi = (interest / payment) * 100;
+
+    schedule.push({
+      period: i,
+      opening: Math.round(balance),
+      payment: Math.round(payment),
+      interest: Math.round(interest),
+      principal: Math.round(principal),
+      percEmi: percEmi.toFixed(2),
+      closing: Math.round(closing)
+    });
+
+    balance = closing;
   }
-  
-  return(list(payment = round(payment), table = schedule))
+
+  return {payment: Math.round(payment), table: schedule};
 }
 
+// ---- Table ----
+function renderTable(data) {
+  let html = "<tr>\
+    <th>Period</th>\
+    <th>Opening Balance</th>\
+    <th>Payment</th>\
+    <th>Interest</th>\
+    <th>Principal</th>\
+    <th>Interest (% of EMI)</th>\
+    <th>Closing Balance</th>\
+    </tr>";
 
-# ---- UI ----
-ui <- fluidPage(
-  
-  tags$head(
-    tags$style(HTML("
-    table, th, td {
-      text-align: center !important;
-      vertical-align: middle !important;
-    }
-  "))
-  ),
-  
-  titlePanel("Loan Installments  & Amortization Schedule"),
-  
-  sidebarLayout(
-    sidebarPanel(
-      numericInput("loan", "Loan Amount", value = 1000000, min = 1000),
-      numericInput("rate", "Annual Interest Rate (%)", value = 8, min = 0.1),
-      numericInput("years", "Tenure (Years)", value = 10, min = 1),
-      selectInput("freq", "Payments per Year",
-                  choices = c("Monthly" = 12,
-                              "Quarterly" = 4,
-                              "Semi-Annual" = 2,
-                              "Annual" = 1),
-                  selected = 12)
-    ),
-    
-    mainPanel(
-      
-      fluidRow(
-        
-        # Panel 1 — EMI + Small summary
-        column(3,
-               h4("Installment Amount"),
-               verbatimTextOutput("emi")
-        ),
-        
-        # Panel 2 — Outstanding Balance Plot
-        column(4,
-               h4("Outstanding Balance"),
-               plotOutput("balancePlot", height = "300px")
-        ),
-        
-        # Panel 3 — Interest vs Principal Plot
-        column(5,
-               h4("Interest vs Principal"),
-               plotOutput("ipPlot", height = "300px")
-        )
-      ),
-      
-      br(),
-      
-      h4("Amortization Schedule"),
-      # tableOutput("schedule")
-      DT::DTOutput("schedule")
-    )
-    
-    
-  )
-)
+  data.forEach(row => {
+    html += `<tr>
+      <td>${row.period}</td>
+      <td>${row.opening}</td>
+      <td>${row.payment}</td>
+      <td>${row.interest}</td>
+      <td>${row.principal}</td>
+      <td>${row.percEmi}</td>
+      <td>${row.closing}</td>
+    </tr>`;
+  });
 
-# ---- Server ----
-server <- function(input, output) {
-  
-  result <- reactive({
-    loan_schedule(input$loan, input$rate, input$years, as.numeric(input$freq))
-  })
-  
-  # Display payment per period
-  output$emi <- renderText({
-    paste("Payment per period =", result()$payment)
-  })
-  
-  # Table
-  output$schedule <- DT::renderDT({
-    df <- result()$table  # this is a data frame
-    # Set nice display names
-    colnames(df) <- c(
-      "Period",
-      "Opening Balance",
-      "Payment",
-      "Interest",
-      "Principal",
-      "Interest (% of Payment)",
-      "Closing Balance"
-    )
-    
-    DT::datatable(
-      df,
-      options = list(
-        pageLength = 15,   # show 15 rows per page
-        lengthChange = FALSE,  # hide "show 10/25/50" dropdown
-        scrollX = TRUE,
-        ordering = TRUE,
-        searching = FALSE,          # ← disables the search box
-        columnDefs = list(list(className = 'dt-center', targets = "_all"))
-      ),
-      rownames = FALSE,
-      class = "cell-border stripe"  # adds lines/grid
-    )
-  })
-  
-  # Outstanding balance plot
-  output$balancePlot <- renderPlot({
-    df <- result()$table
-    
-    ggplot(df, aes(x = Period, y = Closing_Balance)) +
-      geom_line(linewidth = 1) +
-      labs(title = "Outstanding Loan Balance Over Time",
-           x = "Payment Period",
-           y = "Balance") +
-      scale_x_continuous(
-        breaks = seq(0, max(df$Period), by = as.numeric(input$freq))
-      ) +
-      theme_bw()
-  })
-  
-  # Interest vs Principal plot
-  output$ipPlot <- renderPlot({
-    df <- result()$table
-    
-    ggplot(df, aes(x = Period)) +
-      geom_line(aes(y = Interest, color = "Interest"), linewidth = 1) +
-      geom_line(aes(y = Principal, color = "Principal"), linewidth = 1) +
-      labs(title = "Interest vs Principal Components",
-           x = "Payment Period",
-           y = "Amount",
-           color = NULL) +
-      scale_color_manual(values = c("Interest" = "red",
-                                    "Principal" = "green")) +
-      scale_x_continuous(
-        breaks = seq(0, max(df$Period), by = as.numeric(input$freq))
-      ) +
-      theme_bw() +
-      theme(legend.position = "bottom")
-  })
+  document.getElementById("scheduleTable").innerHTML = html;
 }
 
-# ---- Run App ----
-shinyApp(ui = ui, server = server)
+// ---- Plots ----
+function renderPlots(table) {
+  const periods = table.map(r => r.period);
+  const closing = table.map(r => r.closing);
+  const interest = table.map(r => r.interest);
+  const principal = table.map(r => r.principal);
 
+  Plotly.newPlot("balancePlot", [{
+    x: periods, y: closing, type: "scatter", mode: "lines"
+  }], {title: "Outstanding Balance"});
 
-```
+  Plotly.newPlot("ipPlot", [
+    {x: periods, y: interest, type: "scatter", mode: "lines", name: "Interest"},
+    {x: periods, y: principal, type: "scatter", mode: "lines", name: "Principal"}
+  ], {title: "Interest vs Principal"});
+}
+
+// ---- Update ----
+function update() {
+  const P = Number(document.getElementById("loan").value);
+  const rate = Number(document.getElementById("rate").value);
+  const years = Number(document.getElementById("years").value);
+  const freq = Number(document.getElementById("freq").value);
+
+  const result = loanSchedule(P, rate, years, freq);
+
+  document.getElementById("emi").innerText =
+    "Payment per period = " + result.payment;
+
+  renderTable(result.table);
+  renderPlots(result.table);
+}
+
+window.onload = update;
+</script>
+
 
 ::: {style="text-align: justify"}
 If we keep the loan amount as 10,00,000; interest rate of 8% and tenure of 10 years with monthly payments, the EMI comes out to be 12133. In the very first payment, the interest component is 6667 and principal is of 5466. The interest os 54.95% of the total payment of the first payment.In every subsequent payment, the interest % goes down and the principal component goes up. If we look at the installment number 17, it is the first time the principal component is higher than the interest component. This will change if the amount, interest rate, tenure and frequency of payment changes. Change the components to check how much EMI we will pay.

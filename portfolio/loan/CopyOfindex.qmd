@@ -1,0 +1,218 @@
+---
+title: "Loan Schedule"
+subtitle: "Let us understand the components of EMI"
+author: "Aditya Ranade"
+highlight-style:
+            light: github
+date: "2026-01-13"
+categories: [analysis, R]
+image: "./emi.png"
+output: html_document
+runtime: shiny
+---
+
+::: {style="text-align: justify"}
+We generally buy an asset on loan. In order to repay the loan, we have to pay Equated Monthly Payments (EMI). Every EMI payment contains a principal component and interest component. Let us look at the amortization of a loan.
+:::
+
+```{r}
+#| label: load-packages
+#| echo: false
+#| warning: false
+#| include: true
+
+
+library(shiny)
+library(ggplot2)
+library(DT)
+
+loan_schedule <- function(P, annual_rate, years, freq) {
+  
+  n <- years * freq                 # total number of payments
+  r <- annual_rate / 100 / freq     # interest rate per period
+  
+  if (r == 0) {
+    payment <- P / n
+  } else {
+    payment <- P * r * (1+r)^n / ((1+r)^n - 1)
+  }
+  
+  schedule <- data.frame(
+    Period = 1:n,
+    Opening_Balance = numeric(n),
+    Payment = rep(round(payment), n),
+    Interest = numeric(n),
+    Principal = numeric(n),
+    Interest_as_Percent_of_EMI = numeric(n),
+    Closing_Balance = numeric(n)
+  )
+  
+  balance <- P
+  
+  for (i in 1:n) {
+    interest <- balance * r
+    principal <- payment - interest
+    closing <- balance - principal
+    perc_emi <- (interest / payment ) *100
+    
+    
+    schedule$Opening_Balance[i] <- round(balance)
+    schedule$Interest[i] <- round(interest)
+    schedule$Principal[i] <- round(principal)
+    schedule$Interest_as_Percent_of_EMI[i] <- round(perc_emi,2)
+    schedule$Closing_Balance[i] <- round(closing)
+    
+    balance <- closing
+  }
+  
+  return(list(payment = round(payment), table = schedule))
+}
+
+
+# ---- UI ----
+ui <- fluidPage(
+  
+  tags$head(
+    tags$style(HTML("
+    table, th, td {
+      text-align: center !important;
+      vertical-align: middle !important;
+    }
+  "))
+  ),
+  
+  titlePanel("Loan Installments  & Amortization Schedule"),
+  
+  sidebarLayout(
+    sidebarPanel(
+      numericInput("loan", "Loan Amount", value = 1000000, min = 1000),
+      numericInput("rate", "Annual Interest Rate (%)", value = 8, min = 0.1),
+      numericInput("years", "Tenure (Years)", value = 10, min = 1),
+      selectInput("freq", "Payments per Year",
+                  choices = c("Monthly" = 12,
+                              "Quarterly" = 4,
+                              "Semi-Annual" = 2,
+                              "Annual" = 1),
+                  selected = 12)
+    ),
+    
+    mainPanel(
+      
+      fluidRow(
+        
+        # Panel 1 — EMI + Small summary
+        column(3,
+               h4("Installment Amount"),
+               verbatimTextOutput("emi")
+        ),
+        
+        # Panel 2 — Outstanding Balance Plot
+        column(4,
+               h4("Outstanding Balance"),
+               plotOutput("balancePlot", height = "300px")
+        ),
+        
+        # Panel 3 — Interest vs Principal Plot
+        column(5,
+               h4("Interest vs Principal"),
+               plotOutput("ipPlot", height = "300px")
+        )
+      ),
+      
+      br(),
+      
+      h4("Amortization Schedule"),
+      # tableOutput("schedule")
+      DT::DTOutput("schedule")
+    )
+    
+    
+  )
+)
+
+# ---- Server ----
+server <- function(input, output) {
+  
+  result <- reactive({
+    loan_schedule(input$loan, input$rate, input$years, as.numeric(input$freq))
+  })
+  
+  # Display payment per period
+  output$emi <- renderText({
+    paste("Payment per period =", result()$payment)
+  })
+  
+  # Table
+  output$schedule <- DT::renderDT({
+    df <- result()$table  # this is a data frame
+    # Set nice display names
+    colnames(df) <- c(
+      "Period",
+      "Opening Balance",
+      "Payment",
+      "Interest",
+      "Principal",
+      "Interest (% of Payment)",
+      "Closing Balance"
+    )
+    
+    DT::datatable(
+      df,
+      options = list(
+        pageLength = 15,   # show 15 rows per page
+        lengthChange = FALSE,  # hide "show 10/25/50" dropdown
+        scrollX = TRUE,
+        ordering = TRUE,
+        searching = FALSE,          # ← disables the search box
+        columnDefs = list(list(className = 'dt-center', targets = "_all"))
+      ),
+      rownames = FALSE,
+      class = "cell-border stripe"  # adds lines/grid
+    )
+  })
+  
+  # Outstanding balance plot
+  output$balancePlot <- renderPlot({
+    df <- result()$table
+    
+    ggplot(df, aes(x = Period, y = Closing_Balance)) +
+      geom_line(linewidth = 1) +
+      labs(title = "Outstanding Loan Balance Over Time",
+           x = "Payment Period",
+           y = "Balance") +
+      scale_x_continuous(
+        breaks = seq(0, max(df$Period), by = as.numeric(input$freq))
+      ) +
+      theme_bw()
+  })
+  
+  # Interest vs Principal plot
+  output$ipPlot <- renderPlot({
+    df <- result()$table
+    
+    ggplot(df, aes(x = Period)) +
+      geom_line(aes(y = Interest, color = "Interest"), linewidth = 1) +
+      geom_line(aes(y = Principal, color = "Principal"), linewidth = 1) +
+      labs(title = "Interest vs Principal Components",
+           x = "Payment Period",
+           y = "Amount",
+           color = NULL) +
+      scale_color_manual(values = c("Interest" = "red",
+                                    "Principal" = "green")) +
+      scale_x_continuous(
+        breaks = seq(0, max(df$Period), by = as.numeric(input$freq))
+      ) +
+      theme_bw() +
+      theme(legend.position = "bottom")
+  })
+}
+
+# ---- Run App ----
+shinyApp(ui = ui, server = server)
+
+
+```
+
+::: {style="text-align: justify"}
+If we keep the loan amount as 10,00,000; interest rate of 8% and tenure of 10 years with monthly payments, the EMI comes out to be 12133. In the very first payment, the interest component is 6667 and principal is of 5466. The interest os 54.95% of the total payment of the first payment.In every subsequent payment, the interest % goes down and the principal component goes up. If we look at the installment number 17, it is the first time the principal component is higher than the interest component. This will change if the amount, interest rate, tenure and frequency of payment changes. Change the components to check how much EMI we will pay.
+:::
