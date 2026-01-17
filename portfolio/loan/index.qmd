@@ -6,7 +6,7 @@ highlight-style:
             light: github
 date: "2026-01-13"
 categories: [analysis, R]
-image: "./emi.jpg"
+image: "./emi.png"
 output: html_document
 runtime: shiny
 ---
