@@ -12,6 +12,7 @@
   {
     "listing": "/portfolio.html",
     "items": [
+      "/portfolio/loan/index.html",
       "/portfolio/bank_marketing/index.html",
       "/portfolio/productivity/garment.html",
       "/portfolio/abalone/abalone.html",
@@ -28,7 +29,6 @@
       "/portfolio/cereals_ratings/index.html",
       "/portfolio/cereals/index.html",
       "/portfolio/starbucks_food_python/index.html",
-      "/portfolio/loan/index.html",
       "/portfolio/starbucks/index.html",
       "/portfolio/cherry_blossom_prediction/index.html",
       "/portfolio/ipl_best_team/index.html",

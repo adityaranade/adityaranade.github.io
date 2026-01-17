@@ -4,7 +4,7 @@ subtitle: "Let us understand the components of EMI"
 author: "Aditya Ranade"
 highlight-style:
             light: github
-date: "2025-01-13"
+date: "2026-01-13"
 categories: [analysis, R]
 image: "./emi.jpg"
 output: html_document
