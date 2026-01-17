@@ -24,7 +24,7 @@ about:
 ------------------------------------------------------------------------
 
 ::: {#hero-heading}
-Hello! My name is Aditya Ranade. I earned my doctorate in Statistics from the Iowa State University, [Department of Statistics](https://www.stat.iastate.edu/){target="_blank"} under the guidance of [Dr. Jarad Niemi](https://www.stat.iastate.edu/people/jarad-niemi){target="_blank"}. My doctoral research focused on developing machine learning techniques for high dimensional functional data. Current research interest is application of Bayesian methods and statistical modeling in sports especially Cricket about which I try to write during my free time.
+Hello! My name is Aditya Ranade. I work at Novartis as a principal Biostatistician. I earned my doctorate in Statistics from the Iowa State University, [Department of Statistics](https://www.stat.iastate.edu/){target="_blank"} under the guidance of [Dr. Jarad Niemi](https://www.stat.iastate.edu/people/jarad-niemi){target="_blank"}. My doctoral research focused on developing machine learning techniques for high dimensional functional data. Current research interest is application of Bayesian methods and statistical modeling in sports especially Cricket about which I try to write during my free time.
 
 ## Education
 
