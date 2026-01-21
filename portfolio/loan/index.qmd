@@ -11,7 +11,8 @@ format: html
 ---
 
 ::: {style="text-align: justify"}
-We generally buy an asset on loan. In order to repay the loan, we have to pay Equated Monthly Payments (EMI). Every EMI payment contains a principal component and interest component. Let us look at the amortization of a loan.
+We generally buy an asset on loan. In order to repay the loan, we have to pay Equated Monthly Instalment (EMI). Every EMI payment contains a principal component and interest component. Let us look at the amortization of a loan. For initial calculation, we will keep the loan amount as 1,00,00,000; interest rate of 7.5% and tenure of 20 years with monthly payments.
+
 :::
 
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
@@ -55,13 +56,13 @@ We generally buy an asset on loan. In order to repay the loan, we have to pay Eq
 
 <div>
   <label>Loan Amount:</label>
-  <input type="number" id="loan" value="1000000"><br>
+  <input type="number" id="loan" value="10000000"><br>
 
   <label>Annual Interest Rate (%):</label>
-  <input type="number" id="rate" value="8"><br>
+  <input type="number" id="rate" value="7.5"><br>
 
   <label>Tenure (Years):</label>
-  <input type="number" id="years" value="10"><br>
+  <input type="number" id="years" value="20"><br>
 
   <label>Payments per Year:</label>
   <select id="freq">
@@ -188,5 +189,5 @@ window.onload = update;
 
 
 ::: {style="text-align: justify"}
-If we keep the loan amount as 10,00,000; interest rate of 8% and tenure of 10 years with monthly payments, the EMI comes out to be 12133. In the very first payment, the interest component is 6667 and principal is of 5466. The interest os 54.95% of the total payment of the first payment.In every subsequent payment, the interest % goes down and the principal component goes up. If we look at the installment number 17, it is the first time the principal component is higher than the interest component. This will change if the amount, interest rate, tenure and frequency of payment changes. Change the components to check how much EMI we will pay.
+For loan amount 1,00,00,000; interest rate of 7.5% and tenure of 20 years with monthly payments, the EMI comes out to be 80559. In the very first payment, the interest component is 62500 and principal component is of 18059. The interest component is 77.58% of the total payment of the first payment.In every subsequent payment, the interest component % (of the total payment) goes down and the principal component % (of the total payment) goes up. If we look at installment number 130, it is the first time the principal component is higher than the interest component. This means for the first 129 months (10 years and 9 months), majority of the monthly payment goes towards the interest payment. This will change if the amount, interest rate, tenure and frequency of payment changes. To get your specific EMI, you can change amount, interest rate, tenure and frequency of payment (in which case it will not be technically Equated Monthly Installments but it will be equated installments) .
 :::
