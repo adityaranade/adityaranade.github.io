@@ -179,51 +179,58 @@ gtag('config', 'G-LC5NNGZ782', { 'anonymize_ip': true});
 <div style="text-align: justify">
 <p>We generally buy an asset on loan. In order to repay the loan, we have to pay Equated Monthly Instalment (EMI). Every EMI payment contains a principal component and interest component. Let us look at the amortization of a loan. For initial calculation, we will keep the loan amount as 1,00,00,000; interest rate of 7.5% and tenure of 20 years with monthly payments.</p>
 </div>
+&lt;!DOCTYPE html&gt;
+
+
+<title>
+Loan EMI &amp; Amortization Calculator
+</title>
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    max-width: 1100px;
-    margin: auto;
-    padding: 20px;
-  }
-  input, select, button {
-    margin: 5px;
-    padding: 5px;
-  }
-  table {
-    border-collapse: collapse;
-    width: 100%;
-    margin-top: 15px;
-  }
-  th, td {
-    border: 1px solid #aaa;
-    padding: 6px;
-    text-align: center;
-  }
-  th {
-    background: #f2f2f2;
-  }
-  #plots {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-  .plotBox {
-    width: 48%;
-    min-width: 300px;
-  }
-</style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 1100px;
+      margin: auto;
+      padding: 20px;
+    }
+    input, select, button {
+      margin: 5px;
+      padding: 5px;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 15px;
+    }
+    th, td {
+      border: 1px solid #aaa;
+      padding: 6px;
+      text-align: center;
+    }
+    th {
+      background: #f2f2f2;
+    }
+    #plots {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .plotBox {
+      width: 48%;
+      min-width: 300px;
+    }
+  </style>
+
+
 <h2 class="anchored">
-Loan EMI &amp; Amortization Calculator
+Loan EMI &amp; Amortization Calculator (Monthly)
 </h2>
-<div>
 <p><label>Loan Amount:</label> <input type="number" id="loan" value="10000000"><br></p>
 <p><label>Annual Interest Rate (%):</label> <input type="number" id="rate" value="7.5"><br></p>
 <p><label>Tenure (Years):</label> <input type="number" id="years" value="20"><br></p>
-<p><label>Payments per Year:</label> <select id="freq"> <option value="12">Monthly</option> <option value="4">Quarterly</option> <option value="2">Semi-Annual</option> <option value="1">Annual</option> </select></p>
-<p><br><br> <button onclick="update()">Calculate</button></p>
-</div>
+<button onclick="update()">
+Calculate
+</button>
 <h3 id="emi" class="anchored">
 </h3>
 <div id="plots">
@@ -239,18 +246,35 @@ Amortization Schedule
 </h3>
 <table id="scheduleTable">
 </table>
+<hr>
+<h3 class="anchored">
+EMI Sensitivity Plot
+</h3>
+<p><label>Vary:</label> <select id="varyVar" onchange="toggleFixedInputs()"> <option value="loan">Loan Amount</option> <option value="rate">Interest Rate (%)</option> <option value="years">Tenure (Years)</option> </select></p>
+<p><br><br></p>
+<p><label>Loan Amount:</label> <input type="number" id="fixedLoan" value="10000000"></p>
+<p><label>Interest Rate (%):</label> <input type="number" id="fixedRate" value="7.5"></p>
+<p><label>Tenure (Years):</label> <input type="number" id="fixedYears" value="20"></p>
+<p><br><br></p>
+<p><label>From:</label> <input type="number" id="vMin" value="5000000"></p>
+<p><label>To:</label> <input type="number" id="vMax" value="15000000"></p>
+<p><label>Step:</label> <input type="number" id="vStep" value="1000000"></p>
+<button onclick="plotSensitivity()">
+Plot EMI Sensitivity
+</button>
+<div id="sensitivityPlot" style="width:90%;height:450px;">
+
+</div>
 <script>
-// ---- EMI Logic ----
-function loanSchedule(P, annualRate, years, freq) {
+// ---------------- EMI & Schedule ----------------
+function loanSchedule(P, annualRate, years) {
+  const freq = 12; 
   const n = years * freq;
   const r = annualRate / 100 / freq;
 
   let payment;
-  if (r === 0) {
-    payment = P / n;
-  } else {
-    payment = P * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1);
-  }
+  if (r === 0) payment = P / n;
+  else payment = P * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1);
 
   let schedule = [];
   let balance = P;
@@ -277,12 +301,12 @@ function loanSchedule(P, annualRate, years, freq) {
   return {payment: Math.round(payment), table: schedule};
 }
 
-// ---- Table ----
+// ---------------- Table ----------------
 function renderTable(data) {
   let html = "<tr>\
-    <th>Period</th>\
+    <th>Month</th>\
     <th>Opening Balance</th>\
-    <th>Payment</th>\
+    <th>EMI</th>\
     <th>Interest</th>\
     <th>Principal</th>\
     <th>Interest (% of EMI)</th>\
@@ -304,7 +328,7 @@ function renderTable(data) {
   document.getElementById("scheduleTable").innerHTML = html;
 }
 
-// ---- Plots ----
+// ---------------- Plots ----------------
 function renderPlots(table) {
   const periods = table.map(r => r.period);
   const closing = table.map(r => r.closing);
@@ -321,24 +345,84 @@ function renderPlots(table) {
   ], {title: "Interest vs Principal"});
 }
 
-// ---- Update ----
+// ---------------- Main Update ----------------
 function update() {
   const P = Number(document.getElementById("loan").value);
   const rate = Number(document.getElementById("rate").value);
   const years = Number(document.getElementById("years").value);
-  const freq = Number(document.getElementById("freq").value);
 
-  const result = loanSchedule(P, rate, years, freq);
+  const result = loanSchedule(P, rate, years);
 
   document.getElementById("emi").innerText =
-    "Payment per period = " + result.payment;
+    "Monthly EMI = " + result.payment;
 
   renderTable(result.table);
   renderPlots(result.table);
 }
 
-window.onload = update;
+// ---------------- Sensitivity Helpers ----------------
+function toggleFixedInputs() {
+  const varyVar = document.getElementById("varyVar").value;
+
+  document.getElementById("fixedLoan").disabled = (varyVar === "loan");
+  document.getElementById("fixedRate").disabled = (varyVar === "rate");
+  document.getElementById("fixedYears").disabled = (varyVar === "years");
+}
+
+// ---------------- Sensitivity Plot ----------------
+function plotSensitivity() {
+  const varyVar = document.getElementById("varyVar").value;
+
+  const fixedLoan = Number(document.getElementById("fixedLoan").value);
+  const fixedRate = Number(document.getElementById("fixedRate").value);
+  const fixedYears = Number(document.getElementById("fixedYears").value);
+
+  const vMin = Number(document.getElementById("vMin").value);
+  const vMax = Number(document.getElementById("vMax").value);
+  const vStep = Number(document.getElementById("vStep").value);
+
+  let xVals = [];
+  let emiVals = [];
+
+  for (let v = vMin; v <= vMax; v += vStep) {
+    let P = fixedLoan;
+    let r = fixedRate;
+    let y = fixedYears;
+
+    if (varyVar === "loan") P = v;
+    if (varyVar === "rate") r = v;
+    if (varyVar === "years") y = v;
+
+    const result = loanSchedule(P, r, y);
+    xVals.push(v);
+    emiVals.push(result.payment);
+  }
+
+  let xLabel;
+  if (varyVar === "loan") xLabel = "Loan Amount";
+  if (varyVar === "rate") xLabel = "Interest Rate (%)";
+  if (varyVar === "years") xLabel = "Tenure (Years)";
+
+  Plotly.newPlot("sensitivityPlot", [{
+    x: xVals,
+    y: emiVals,
+    type: "scatter",
+    mode: "lines+markers"
+  }], {
+    title: "Monthly EMI vs " + xLabel,
+    xaxis: {title: xLabel},
+    yaxis: {title: "Monthly EMI"}
+  });
+}
+
+// ---------------- Initial Load ----------------
+window.onload = function() {
+  update();
+  toggleFixedInputs();
+};
 </script>
+
+
 <div style="text-align: justify">
 <p>For loan amount 1,00,00,000; interest rate of 7.5% and tenure of 20 years with monthly payments, the EMI comes out to be 80559. In the very first payment, the interest component is 62500 and principal component is of 18059. The interest component is 77.58% of the total payment of the first payment.In every subsequent payment, the interest component % (of the total payment) goes down and the principal component % (of the total payment) goes up. If we look at installment number 130, it is the first time the principal component is higher than the interest component. This means for the first 129 months (10 years and 9 months), majority of the monthly payment goes towards the interest payment. This will change if the amount, interest rate, tenure and frequency of payment changes. To get your specific EMI, you can change amount, interest rate, tenure and frequency of payment (in which case it will not be technically Equated Monthly Installments but it will be equated installments) .</p>
 </div>
