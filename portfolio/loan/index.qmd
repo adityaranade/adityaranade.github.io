@@ -15,7 +15,7 @@ We generally buy an asset on loan. In order to repay the loan, we have to pay Eq
 
 :::
 
-<!DOCTYPE html>
+
 <html>
 <head>
   <title>Loan EMI & Amortization Calculator</title>
