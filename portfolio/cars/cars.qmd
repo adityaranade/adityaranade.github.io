@@ -1,6 +1,6 @@
 ---
 title: "Predicting fuel consumption (MPG) of cars"
-subtitle: "ML models to predict fuel conumption of cars (MPG) using car information"
+subtitle: "ML models to predict fuel consumption of cars (MPG) using car information"
 author: "Aditya Ranade"
 highlight-style:
   light: github
